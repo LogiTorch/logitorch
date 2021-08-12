@@ -1,4 +1,4 @@
-# TorchTextLog
+# TorchTextLogic
 
 TorchTextLog is a pytorch-based library for logical reasoning in natural language, it consists of:
 - Textual logical reasoning datasets
