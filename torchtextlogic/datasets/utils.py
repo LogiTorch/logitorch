@@ -10,7 +10,7 @@ DATASET_ZIP_FOLDER_NAME = f"{DATASET_FOLDER_NAME}tmp"
 
 class DatasetNameError(Exception):
     """
-    Raised when the dataset name is wrong
+    An error is raised when the dataset name is wrong
     """
 
     def __init__(self):
@@ -19,7 +19,7 @@ class DatasetNameError(Exception):
 
 class FileSizeError(Exception):
     """
-    Raised when the downloaded dataset has a wrong size
+    An error is raised when the downloaded dataset has a wrong size
     """
 
     def __init__(self):
