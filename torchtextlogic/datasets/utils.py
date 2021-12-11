@@ -4,8 +4,9 @@ from zipfile import ZipFile
 import requests
 from tqdm import tqdm
 
-DATASET_FOLDER_NAME = "dataset/"
-DATASET_ZIP_FOLDER_NAME = f"{DATASET_FOLDER_NAME}tmp"
+CURRENT_PATH = os.getcwd()
+DATASET_FOLDER_NAME = f"{CURRENT_PATH}dataset/"
+DATASET_ZIP_FOLDER_NAME = f"{DATASET_FOLDER_NAME}tmp/"
 
 
 class DatasetNameError(Exception):
@@ -35,15 +36,18 @@ def download_dataset(url: str, dataset_name: str) -> None:
     :type dataset_name: str
     :raises FileSizeError: an error is raised if the dataset is not downloaded properly
     """
-    dataset_name_on_disk = f"{DATASET_ZIP_FOLDER_NAME}{dataset_name}"
+    if not os.path.exists(DATASET_FOLDER_NAME):
+        os.mkdir(DATASET_FOLDER_NAME)
 
-    if dataset_name_on_disk not in os.listdir(DATASET_ZIP_FOLDER_NAME):
+    dataset_zip_name_on_disk = f"{DATASET_ZIP_FOLDER_NAME}{dataset_name}"
+
+    if dataset_zip_name_on_disk not in os.listdir(DATASET_ZIP_FOLDER_NAME):
         req = requests.get(url, stream=True)
         total_size = int(req.headers["content-length"])
         block_size = 1024
         t = tqdm(total=total_size, unit="iB", unit_scale=True)
 
-        with open(dataset_name_on_disk, "wb") as fw:
+        with open(dataset_zip_name_on_disk, "wb") as fw:
             for data in req.iter_content(block_size):
                 t.update(len(data))
                 fw.write(data)
@@ -53,12 +57,23 @@ def download_dataset(url: str, dataset_name: str) -> None:
     try:
         if total_size != 0 and t.n != total_size:
             raise FileSizeError()
+        else:
+            __extract_dataset(dataset_zip_name_on_disk, dataset_name)
     except FileExistsError as err:
-        print(err.mesage)
+        print(err.message)
 
-        if os.path.exists(dataset_name_on_disk):
-            os.remove(dataset_name_on_disk)
+        if os.path.exists(dataset_zip_name_on_disk):
+            os.remove(dataset_zip_name_on_disk)
 
 
-def extract_dataset(dataset_name: str) -> None:
-    pass
+def __extract_dataset(dataset_zip_name_on_disk: str, dataset_name: str) -> None:
+    """Function to extract a dataset in zip extension
+
+    :param dataset_zip_name_on_disk: dataset in zip extension on disk
+    :type dataset_zip_name_on_disk: str
+    :param dataset_name: dataset name
+    :type dataset_name: str
+    """
+    dataset_name_on_disk = f"{DATASET_FOLDER_NAME}{dataset_name}"
+    with ZipFile(dataset_zip_name_on_disk, "r") as zip_file:
+        zip_file.extractall(dataset_name_on_disk)
