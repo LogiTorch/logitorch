@@ -105,3 +105,5 @@ ENV/
 # IDE settings
 .vscode/
 .idea/
+
+.DS_STORE
