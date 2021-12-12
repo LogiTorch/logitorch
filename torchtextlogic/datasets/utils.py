@@ -58,14 +58,14 @@ def download_dataset(url: str, dataset_name: str) -> None:
         if total_size != 0 and t.n != total_size:
             raise FileSizeError()
         else:
-            __extract_dataset(dataset_zip_name_on_disk, dataset_name)
+            __extract_dataset_zip(dataset_zip_name_on_disk, dataset_name)
     except FileExistsError as err:
         print(err.message)
         if os.path.exists(dataset_zip_name_on_disk):
             os.remove(dataset_zip_name_on_disk)
 
 
-def __extract_dataset(dataset_zip_name_on_disk: str, dataset_name: str) -> None:
+def __extract_dataset_zip(dataset_zip_name_on_disk: str, dataset_name: str) -> None:
     """Function to extract a dataset in zip extension
 
     :param dataset_zip_name_on_disk: dataset in zip extension on disk
