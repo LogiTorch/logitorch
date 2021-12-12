@@ -1,20 +1,25 @@
+from abc import ABC, abstractmethod
 from typing import Any, Tuple
 
-from abstract_dataset import AbstractDataset
+from torch.utils.data import Dataset
 
 
-class ControlDataset(AbstractDataset):
+class AbstractDataset(Dataset, ABC):
     def __init__(self) -> None:
         super().__init__()
 
+    @abstractmethod
     def read_dataset(self, dataset_name: str) -> None:
         pass
 
+    @abstractmethod
     def __getitem__(self, index: int) -> Tuple[str, Any]:
         pass
 
-    def __str__(self) -> str:
+    @abstractmethod
+    def __len__(self) -> int:
         pass
 
-    def __len__(self) -> int:
+    @abstractmethod
+    def __str__(self) -> str:
         pass
