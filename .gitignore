@@ -109,3 +109,5 @@ ENV/
 .DS_STORE
 
 try_package.py
+
+torchtextlogic_datasets/

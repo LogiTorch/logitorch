@@ -5,7 +5,7 @@ import requests
 from tqdm import tqdm
 
 CURRENT_PATH = os.getcwd()
-DATASETS_FOLDER_NAME = f"{CURRENT_PATH}/datasets/"
+DATASETS_FOLDER_NAME = f"{CURRENT_PATH}/torchtextlogic_datasets/"
 DATASETS_ZIP_FOLDER_NAME = f"{DATASETS_FOLDER_NAME}tmp/"
 
 
