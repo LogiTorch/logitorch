@@ -1,6 +1,6 @@
 from typing import Any, Tuple
 
-from abstract_dataset import AbstractTEDataset
+from torchtextlogic.datasets.abstract_dataset import AbstractTEDataset
 
 
 class ControlDataset(AbstractTEDataset):
@@ -10,7 +10,7 @@ class ControlDataset(AbstractTEDataset):
     def read_dataset(self, dataset_name: str) -> None:
         pass
 
-    def __getitem__(self, index: int) -> Tuple[str,str, Any]:
+    def __getitem__(self, index: int) -> Tuple[str, str, Any]:
         pass
 
     def __str__(self) -> str:

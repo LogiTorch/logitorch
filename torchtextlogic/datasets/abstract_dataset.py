@@ -21,13 +21,19 @@ class AbstractDataset(Dataset, ABC):
         pass
 
 
-class AbstractQADataset(AbstractDataset):
+class AbstractMCQADataset(AbstractDataset):
     @abstractmethod
     def __getitem__(self, index: int) -> Tuple[str, str, str, Any]:
         pass
 
 
-class AbstracTEDataset(AbstractDataset):
+class AbstractTEDataset(AbstractDataset):
+    @abstractmethod
+    def __getitem__(self, index: int) -> Tuple[str, str, Any]:
+        pass
+
+
+class AbstractQADataset(AbstractDataset):
     @abstractmethod
     def __getitem__(self, index: int) -> Tuple[str, str, Any]:
         pass
