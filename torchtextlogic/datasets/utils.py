@@ -1,4 +1,6 @@
+import json
 import os
+from typing import Any, Dict, List
 from zipfile import ZipFile
 
 import requests
@@ -63,6 +65,25 @@ def download_dataset(url: str, dataset_name: str) -> None:
         print(err.message)
         if os.path.exists(dataset_zip_name_on_disk):
             os.remove(dataset_zip_name_on_disk)
+
+
+def read_jsonl(dataset_src: str) -> List[Dict[str, Any]]:
+    """Function to read JSONL file
+
+    :param dataset_src: path of the dataset
+    :type dataset_src: str
+    :return: list of JSON objects
+    :rtype: List[Dict[str, Any]]
+    """
+    with open(dataset_src, "r", encoding="utf-8") as out:
+        jsonl = list(out)
+
+    json_list = []
+
+    for i in jsonl:
+        json_list.append(json.loads(i))
+
+    return json_list
 
 
 def __extract_dataset_zip(dataset_zip_name_on_disk: str, dataset_name: str) -> None:
