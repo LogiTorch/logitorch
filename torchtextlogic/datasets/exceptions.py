@@ -12,7 +12,7 @@ class DatasetNameError(Exception):
 
 class SplitSetError(Exception):
     """
-    An error is raised when the dataset name is wrong
+    An error is raised when the split set is wrong
     """
 
     def __init__(self):
