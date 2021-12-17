@@ -32,10 +32,10 @@ class RuleTakerDataset(AbstractQADataset):
                 raise DatasetNameError()
             if split_set not in SPLIT_SETS:
                 raise SplitSetError()
-        except DatasetNameError() as err:
+        except DatasetNameError as err:
             print(err.message)
             print(f"The RuleTaker datasets are: {RULETAKER_DATASETS}")
-        except SplitSetError() as err:
+        except SplitSetError as err:
             print(err.message)
 
         self.dataset_name = dataset_name
