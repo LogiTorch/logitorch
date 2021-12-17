@@ -4,29 +4,12 @@ from typing import Any, Dict, List
 from zipfile import ZipFile
 
 import requests
+from torchtextlogic.datasets.dataset_exceptions import FileSizeError
 from tqdm import tqdm
 
 CURRENT_PATH = os.getcwd()
 DATASETS_FOLDER_NAME = f"{CURRENT_PATH}/torchtextlogic_datasets/"
 DATASETS_ZIP_FOLDER_NAME = f"{DATASETS_FOLDER_NAME}tmp/"
-
-
-class DatasetNameError(Exception):
-    """
-    An error is raised when the dataset name is wrong
-    """
-
-    def __init__(self):
-        self.message = "DatasetNameError: Dataset name is wrong"
-
-
-class FileSizeError(Exception):
-    """
-    An error is raised when the downloaded dataset has a wrong size
-    """
-
-    def __init__(self):
-        self.message = "FileSizeError: Wrong file size"
 
 
 def download_dataset(url: str, dataset_name: str) -> None:

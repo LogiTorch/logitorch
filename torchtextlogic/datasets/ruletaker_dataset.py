@@ -1,10 +1,25 @@
+import os
 from typing import Any, Tuple
 
 from torchtextlogic.datasets.abstract_dataset import AbstractQADataset
+from torchtextlogic.datasets.utils import DATASETS_FOLDER_NAME, DATASETS_ZIP_FOLDER_NAME
+
+DATASET_ZIP_URL = "https://www.dropbox.com/s/4j6jcc7ld5rf2tf/ruletaker_dataset.zip?dl=1"
+DATASETS_NAMES = [
+    "bird_electricity",
+    "depth-0",
+    "depth-1",
+    "depth-2",
+    "depth-3",
+    "depth-3ext",
+    "depth-3ext-NatLang",
+    "depth-5",
+    "NatLang",
+]
 
 
 class RuleTakerDataset(AbstractQADataset):
-    def __init__(self) -> None:
+    def __init__(self, dataset_name: str, split_set: str) -> None:
         super().__init__()
 
     def read_dataset(self, dataset_name: str) -> None:
