@@ -78,12 +78,7 @@ def read_jsonl(dataset_src: str) -> List[Dict[str, Any]]:
     with open(dataset_src, "r", encoding="utf-8") as out:
         jsonl = list(out)
 
-    json_list = []
-
-    for i in jsonl:
-        json_list.append(json.loads(i))
-
-    return json_list
+    return [json.loads(i) for i in jsonl]
 
 
 def __extract_dataset_zip(dataset_zip_name_on_disk: str, dataset_name: str) -> None:
