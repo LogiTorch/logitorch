@@ -9,7 +9,7 @@ from tqdm import tqdm
 
 CURRENT_PATH = os.getcwd()
 DATASETS_FOLDER_NAME = f"{CURRENT_PATH}/torchtextlogic_datasets"
-DATASETS_ZIP_FOLDER_NAME = f"{DATASETS_FOLDER_NAME}/tmp/"
+DATASETS_ZIP_FOLDER_NAME = f"{DATASETS_FOLDER_NAME}/tmp"
 
 
 def download_dataset(url: str, dataset_name: str) -> None:
@@ -24,7 +24,7 @@ def download_dataset(url: str, dataset_name: str) -> None:
     if not os.path.exists(DATASETS_ZIP_FOLDER_NAME):
         os.makedirs(DATASETS_ZIP_FOLDER_NAME)
 
-    dataset_zip_name_on_disk = f"{DATASETS_ZIP_FOLDER_NAME}{dataset_name}.zip"
+    dataset_zip_name_on_disk = f"{DATASETS_ZIP_FOLDER_NAME}/{dataset_name}.zip"
 
     if dataset_zip_name_on_disk not in os.listdir(DATASETS_ZIP_FOLDER_NAME):
         req = requests.get(url, stream=True)
@@ -72,6 +72,6 @@ def __extract_dataset_zip(dataset_zip_name_on_disk: str, dataset_name: str) -> N
     :param dataset_name: dataset name
     :type dataset_name: str
     """
-    dataset_name_on_disk = f"{DATASETS_FOLDER_NAME}{dataset_name}"
+    dataset_name_on_disk = f"{DATASETS_FOLDER_NAME}/{dataset_name}"
     with ZipFile(dataset_zip_name_on_disk, "r") as zip_file:
         zip_file.extractall(dataset_name_on_disk)
