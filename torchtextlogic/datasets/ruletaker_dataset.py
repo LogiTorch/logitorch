@@ -5,7 +5,7 @@ from torchtextlogic.datasets.abstract_dataset import AbstractQADataset
 from torchtextlogic.datasets.utils import DATASETS_FOLDER_NAME, DATASETS_ZIP_FOLDER_NAME
 
 DATASET_ZIP_URL = "https://www.dropbox.com/s/4j6jcc7ld5rf2tf/ruletaker_dataset.zip?dl=1"
-DATASETS_NAMES = [
+RULETAKER_DATASETS= [
     "bird_electricity",
     "depth-0",
     "depth-1",
