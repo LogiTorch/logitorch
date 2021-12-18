@@ -6,7 +6,6 @@ from torchtextlogic.datasets.abstract_dataset import AbstractQADataset
 from torchtextlogic.datasets.exceptions import DatasetNameError, SplitSetError
 from torchtextlogic.datasets.utils import (
     DATASETS_FOLDER,
-    DATASETS_ZIP_FOLDER,
     download_dataset,
     read_jsonl,
 )
