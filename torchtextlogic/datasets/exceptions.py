@@ -1,3 +1,6 @@
+SPLIT_SETS = ["train", "val", "test"]
+
+
 class DatasetNameError(Exception):
     """
     An error is raised when the dataset name is wrong
@@ -13,7 +16,9 @@ class SplitSetError(Exception):
     """
 
     def __init__(self):
-        self.message = "SplitSetError: Dataset name is wrong"
+        self.message = (
+            f"SplitSetError: Dataset name is wrong\nThe split sets are: {SPLIT_SETS}"
+        )
 
 
 class FileSizeError(Exception):

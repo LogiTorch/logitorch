@@ -5,6 +5,7 @@ from torchtextlogic.datasets.abstract_dataset import AbstractQADataset
 from torchtextlogic.datasets.exceptions import DatasetNameError, SplitSetError
 from torchtextlogic.datasets.utils import (
     DATASETS_FOLDER,
+    SPLIT_SETS,
     download_dataset,
     read_jsonl,
 )
@@ -24,7 +25,6 @@ RULETAKER_SUB_DATASETS = [
     "depth-5",
     "NatLang",
 ]
-SPLIT_SETS = ["train", "dev", "test"]
 RULETAKER_DATASET_FOLDER = f"{DATASETS_FOLDER}/{RULETAKER_DATASET}/ruletaker"
 
 
@@ -34,26 +34,27 @@ class RuleTakerDataset(AbstractQADataset):
         try:
             if dataset_name not in RULETAKER_SUB_DATASETS:
                 raise DatasetNameError()
-            if split_set not in SPLIT_SETS:
+            if split_set == "val":
+                split_set = "dev"
+            elif split_set not in SPLIT_SETS:
                 raise SplitSetError()
+
+            if not os.path.exists(RULETAKER_DATASET_FOLDER):
+                download_dataset(RULETAKER_DATASET_ZIP_URL, RULETAKER_DATASET)
+
+            self.dataset_name = dataset_name
+            self.split_set = split_set
+            self.dataset_path = (
+                f"{RULETAKER_DATASET_FOLDER}/{self.dataset_name}/{self.split_set}.jsonl"
+            )
+            self.contexts, self.questions, self.labels = self.__read_dataset(
+                "context", "questions", "text", "label"
+            )
         except DatasetNameError as err:
             print(err.message)
             print(f"The RuleTaker datasets are: {RULETAKER_SUB_DATASETS}")
         except SplitSetError as err:
             print(err.message)
-            print(f"The split sets are: {SPLIT_SETS}")
-
-        if not os.path.exists(RULETAKER_DATASET_FOLDER):
-            download_dataset(RULETAKER_DATASET_ZIP_URL, RULETAKER_DATASET)
-
-        self.dataset_name = dataset_name
-        self.split_set = split_set
-        self.dataset_path = (
-            f"{RULETAKER_DATASET_FOLDER}/{self.dataset_name}/{self.split_set}.jsonl"
-        )
-        self.contexts, self.questions, self.labels = self.__read_dataset(
-            "context", "questions", "text", "label"
-        )
 
     def __read_dataset(
         self, contexts_key: str, questions_key: str, texts_key: str, labels_key: str

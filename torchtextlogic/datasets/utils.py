@@ -11,6 +11,8 @@ CURRENT_PATH = os.getcwd()
 DATASETS_FOLDER = f"{CURRENT_PATH}/torchtextlogic_datasets"
 DATASETS_ZIP_FOLDER = f"{DATASETS_FOLDER}/tmp"
 
+SPLIT_SETS = ["train", "val", "test"]
+
 
 def download_dataset(url: str, dataset_name: str) -> None:
     """Function to download datasets
