@@ -1,6 +1,3 @@
-from torchtextlogic.datasets.utils import SPLIT_SETS
-
-
 class DatasetNameError(Exception):
     """
     An error is raised when the dataset name is wrong
@@ -16,9 +13,7 @@ class SplitSetError(Exception):
     """
 
     def __init__(self):
-        self.message = (
-            f"SplitSetError: Dataset name is wrong\n The split sets are {SPLIT_SETS}"
-        )
+        self.message = "SplitSetError: Dataset name is wrong"
 
 
 class FileSizeError(Exception):

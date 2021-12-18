@@ -8,10 +8,8 @@ from torchtextlogic.datasets.exceptions import FileSizeError
 from tqdm import tqdm
 
 CURRENT_PATH = os.getcwd()
-DATASETS_FOLDER_NAME = f"{CURRENT_PATH}/torchtextlogic_datasets"
-DATASETS_ZIP_FOLDER_NAME = f"{DATASETS_FOLDER_NAME}/tmp"
-
-SPLIT_SETS = ["train", "val", "test"]
+DATASETS_FOLDER = f"{CURRENT_PATH}/torchtextlogic_datasets"
+DATASETS_ZIP_FOLDER = f"{DATASETS_FOLDER}/tmp"
 
 
 def download_dataset(url: str, dataset_name: str) -> None:
@@ -23,18 +21,18 @@ def download_dataset(url: str, dataset_name: str) -> None:
     :type dataset_name: str
     :raises FileSizeError: an error is raised if the dataset is not downloaded properly
     """
-    if not os.path.exists(DATASETS_ZIP_FOLDER_NAME):
-        os.makedirs(DATASETS_ZIP_FOLDER_NAME)
+    if not os.path.exists(DATASETS_ZIP_FOLDER):
+        os.makedirs(DATASETS_ZIP_FOLDER)
 
-    dataset_zip_name_on_disk = f"{DATASETS_ZIP_FOLDER_NAME}/{dataset_name}.zip"
+    dataset_zip_path = f"{DATASETS_ZIP_FOLDER}/{dataset_name}.zip"
 
-    if dataset_zip_name_on_disk not in os.listdir(DATASETS_ZIP_FOLDER_NAME):
+    if dataset_zip_path not in os.listdir(DATASETS_ZIP_FOLDER):
         req = requests.get(url, stream=True)
         total_size = int(req.headers["content-length"])
         block_size = 1024
         t = tqdm(total=total_size, unit="iB", unit_scale=True)
 
-        with open(dataset_zip_name_on_disk, "wb") as fw:
+        with open(dataset_zip_path, "wb") as fw:
             for data in req.iter_content(block_size):
                 t.update(len(data))
                 fw.write(data)
@@ -45,35 +43,35 @@ def download_dataset(url: str, dataset_name: str) -> None:
         if total_size != 0 and t.n != total_size:
             raise FileSizeError()
         else:
-            __extract_dataset_zip(dataset_zip_name_on_disk, dataset_name)
+            __extract_dataset_zip(dataset_zip_path, dataset_name)
     except FileSizeError as err:
         print(err.message)
-        if os.path.exists(dataset_zip_name_on_disk):
-            os.remove(dataset_zip_name_on_disk)
+        if os.path.exists(dataset_zip_path):
+            os.remove(dataset_zip_path)
 
 
-def read_jsonl(dataset_src: str) -> List[Dict[str, Any]]:
+def read_jsonl(dataset_path: str) -> List[Dict[str, Any]]:
     """Function to read JSONL file
 
-    :param dataset_src: path of the dataset
-    :type dataset_src: str
+    :param dataset_path: path of the dataset
+    :type dataset_path: str
     :return: list of JSON objects
     :rtype: List[Dict[str, Any]]
     """
-    with open(dataset_src, "r", encoding="utf-8") as out:
+    with open(dataset_path, "r", encoding="utf-8") as out:
         jsonl = list(out)
 
     return [json.loads(i) for i in jsonl]
 
 
-def __extract_dataset_zip(dataset_zip_name_on_disk: str, dataset_name: str) -> None:
+def __extract_dataset_zip(dataset_zip_path: str, dataset_name: str) -> None:
     """Function to extract a dataset in zip extension
 
-    :param dataset_zip_name_on_disk: dataset in zip extension on disk
-    :type dataset_zip_name_on_disk: str
+    :param dataset_zip_path: dataset in zip extension on disk
+    :type dataset_zip_path: str
     :param dataset_name: dataset name
     :type dataset_name: str
     """
-    dataset_name_on_disk = f"{DATASETS_FOLDER_NAME}/{dataset_name}"
-    with ZipFile(dataset_zip_name_on_disk, "r") as zip_file:
-        zip_file.extractall(dataset_name_on_disk)
+    dataset_path = f"{DATASETS_FOLDER}/{dataset_name}"
+    with ZipFile(dataset_zip_path, "r") as zip_file:
+        zip_file.extractall(dataset_path)

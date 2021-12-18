@@ -7,7 +7,7 @@ class ControlDataset(AbstractTEDataset):
     def __init__(self) -> None:
         super().__init__()
 
-    def read_dataset(self, dataset_name: str) -> None:
+    def __read_dataset(self) -> None:
         pass
 
     def __getitem__(self, index: int) -> Tuple[str, str, Any]:

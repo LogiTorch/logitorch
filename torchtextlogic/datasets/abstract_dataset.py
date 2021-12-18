@@ -9,10 +9,6 @@ class AbstractDataset(Dataset, ABC):
         super().__init__()
 
     @abstractmethod
-    def read_dataset(self, dataset_name: str) -> None:
-        pass
-
-    @abstractmethod
     def __len__(self) -> int:
         pass
 
