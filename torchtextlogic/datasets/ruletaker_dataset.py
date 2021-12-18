@@ -1,7 +1,6 @@
 import os
-from typing import Any, Dict, List, Tuple
+from typing import Any, List, Tuple
 
-from torch.utils import data
 from torchtextlogic.datasets.abstract_dataset import AbstractQADataset
 from torchtextlogic.datasets.exceptions import DatasetNameError, SplitSetError
 from torchtextlogic.datasets.utils import (
