@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import Any, Tuple
+from typing import Any, List, Tuple
 
 from torch.utils.data import Dataset
 
@@ -19,7 +19,7 @@ class AbstractDataset(Dataset, ABC):
 
 class AbstractMCQADataset(AbstractDataset):
     @abstractmethod
-    def __getitem__(self, index: int) -> Tuple[str, str, str, Any]:
+    def __getitem__(self, index: int) -> Tuple[str, str, List[str, str, str, str], Any]:
         pass
 
 
