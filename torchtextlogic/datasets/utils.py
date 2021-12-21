@@ -53,7 +53,7 @@ def download_dataset(url: str, dataset_name: str) -> None:
 
 
 def read_jsonl(dataset_path: str) -> List[Dict[str, Any]]:
-    """Function to read JSONL file
+    """Function to read a JSONL file
 
     :param dataset_path: path of the dataset
     :type dataset_path: str
@@ -67,7 +67,7 @@ def read_jsonl(dataset_path: str) -> List[Dict[str, Any]]:
 
 
 def read_json(dataset_path: str) -> List[Dict[str, Any]]:
-    """Function to read JSON file
+    """Function to read a JSON file
 
     :param dataset_path: path of the dataset
     :type dataset_path: str
