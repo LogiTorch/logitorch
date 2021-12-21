@@ -1,8 +1,8 @@
 import os
-from typing import Any, List, Tuple
+from typing import Any, List, Optional, Tuple
 
 from torchtextlogic.datasets.abstract_dataset import AbstractMCQADataset
-from torchtextlogic.datasets.exceptions import DatasetNameError, SplitSetError
+from torchtextlogic.datasets.exceptions import SplitSetError
 from torchtextlogic.datasets.utils import (
     DATASETS_FOLDER,
     SPLIT_SETS,
@@ -37,7 +37,7 @@ class ReClorDataset(AbstractMCQADataset):
     def __read_dataset(self) -> None:
         pass
 
-    def __getitem__(self, index: int) -> Tuple[str, str, List[str, str, str, str], Any]:
+    def __getitem__(self, index: int) -> Tuple[str, str, List[str], Optional[Any]]:
         pass
 
     def __str__(self) -> str:
