@@ -66,6 +66,20 @@ def read_jsonl(dataset_path: str) -> List[Dict[str, Any]]:
     return [json.loads(i) for i in jsonl]
 
 
+def read_json(dataset_path: str) -> List[Dict[str, Any]]:
+    """Function to read JSON file
+
+    :param dataset_path: path of the dataset
+    :type dataset_path: str
+    :return: list of JSON objects
+    :rtype: List[Dict[str, Any]]
+    """
+    with open(dataset_path, "r", encoding="utf-8") as out:
+        json_file = json.loads(out.read())
+
+    return json_file
+
+
 def __extract_dataset_zip(dataset_zip_path: str, dataset_name: str) -> None:
     """Function to extract a dataset in zip extension
 
