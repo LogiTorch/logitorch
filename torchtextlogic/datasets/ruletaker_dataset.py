@@ -11,7 +11,7 @@ from torchtextlogic.datasets.utils import (
 )
 
 RULETAKER_DATASET_ZIP_URL = (
-    "https://www.dropbox.com/s/4j6jcc7ld5rf2tf/ruletaker_dataset.zip?dl=1"
+    "https://www.dropbox.com/s/snofd1pxts3xfc9/ruletaker_dataset.zip?dl=1"
 )
 RULETAKER_DATASET = "ruletaker_dataset"
 RULETAKER_SUB_DATASETS = [
@@ -25,7 +25,7 @@ RULETAKER_SUB_DATASETS = [
     "depth-5",
     "NatLang",
 ]
-RULETAKER_DATASET_FOLDER = f"{DATASETS_FOLDER}/{RULETAKER_DATASET}/ruletaker"
+RULETAKER_DATASET_FOLDER = f"{DATASETS_FOLDER}/{RULETAKER_DATASET}"
 
 
 class RuleTakerDataset(AbstractQADataset):
