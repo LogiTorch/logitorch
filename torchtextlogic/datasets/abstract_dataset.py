@@ -10,26 +10,26 @@ class AbstractDataset(Dataset, ABC):
 
     @abstractmethod
     def __len__(self) -> int:
-        pass
+        raise NotImplementedError
 
     @abstractmethod
     def __str__(self) -> str:
-        pass
+        raise NotImplementedError
 
 
 class AbstractMCQADataset(AbstractDataset):
     @abstractmethod
     def __getitem__(self, index: int) -> Tuple[str, str, List[str], Optional[Any]]:
-        pass
+        raise NotImplementedError
 
 
 class AbstractTEDataset(AbstractDataset):
     @abstractmethod
     def __getitem__(self, index: int) -> Tuple[str, str, Any]:
-        pass
+        raise NotImplementedError
 
 
 class AbstractQADataset(AbstractDataset):
     @abstractmethod
     def __getitem__(self, index: int) -> Tuple[str, str, Any]:
-        pass
+        raise NotImplementedError
