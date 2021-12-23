@@ -4,7 +4,7 @@ from typing import Any, List, Optional, Tuple, Union
 from torch.utils.data import Dataset
 
 
-class AbstractDataset(Dataset, ABC):
+class AbstractLogicDataset(Dataset, ABC):
     def __init__(self) -> None:
         super().__init__()
 
@@ -17,7 +17,7 @@ class AbstractDataset(Dataset, ABC):
         raise NotImplementedError
 
 
-class AbstractMCQADataset(AbstractDataset):
+class AbstractMCQADataset(AbstractLogicDataset):
     @abstractmethod
     def __getitem__(
         self, index: int
@@ -25,13 +25,13 @@ class AbstractMCQADataset(AbstractDataset):
         raise NotImplementedError
 
 
-class AbstractTEDataset(AbstractDataset):
+class AbstractTEDataset(AbstractLogicDataset):
     @abstractmethod
     def __getitem__(self, index: int) -> Tuple[str, str, Any]:
         raise NotImplementedError
 
 
-class AbstractQADataset(AbstractDataset):
+class AbstractQADataset(AbstractLogicDataset):
     @abstractmethod
     def __getitem__(self, index: int) -> Tuple[str, str, Any]:
         raise NotImplementedError
