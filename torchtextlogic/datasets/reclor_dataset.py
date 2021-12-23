@@ -1,5 +1,5 @@
 import os
-from typing import Any, List, Optional, Tuple
+from typing import Any, List, Optional, Tuple, Union
 
 from torchtextlogic.datasets.abstract_dataset import AbstractMCQADataset
 from torchtextlogic.datasets.exceptions import SplitSetError
@@ -62,7 +62,9 @@ class ReClorDataset(AbstractMCQADataset):
 
         return contexts_list, questions_list, answers_list, labels_list
 
-    def __getitem__(self, index: int) -> Tuple[str, str, List[str], Optional[Any]]:
+    def __getitem__(
+        self, index: int
+    ) -> Union[Tuple[str, str, List[str], Any], Tuple[str, str, List[str]]]:
 
         if self.split_set == "test":
             return self.contexts[index], self.questions[index], self.answers[index]
