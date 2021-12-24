@@ -60,7 +60,7 @@ class RuleTakerDataset(AbstractQADataset):
         self,
         contexts_key: str,
         questions_key: str,
-        question_texts_key: str,
+        questions_text_key: str,
         labels_key: str,
     ) -> Tuple[List[str], List[str], List[str]]:
         data = read_jsonl(self.dataset_path)
@@ -71,7 +71,7 @@ class RuleTakerDataset(AbstractQADataset):
         for i in data:
             for q in i[questions_key]:
                 contexts_list.append(i[contexts_key])
-                questions_list.append(q[question_texts_key])
+                questions_list.append(q[questions_text_key])
                 labels_list.append(q[labels_key])
 
         return contexts_list, questions_list, labels_list
