@@ -18,16 +18,15 @@ ARLSAT_DATASET_FOLDER = f"{DATASETS_FOLDER}/{ARLSAT_DATASET}"
 
 
 class ARLSATDataset(AbstractMCQADataset):
-    """[summary]
+    """[summary]"""
 
-    """    
     def __init__(self, split_set: str) -> None:
         """[summary]
 
         :param split_set: [description]
         :type split_set: str
         :raises SplitSetError: [description]
-        """        
+        """
         super().__init__()
         try:
             if split_set == "dev":
@@ -73,7 +72,7 @@ class ARLSATDataset(AbstractMCQADataset):
         :type labels_key: str
         :return: [description]
         :rtype: Tuple[List[str], List[str], List[List[str]], List[str]]
-        """    
+        """
         data = read_json(self.dataset_path)
         contexts_list = []
         questions_list = []
@@ -99,7 +98,7 @@ class ARLSATDataset(AbstractMCQADataset):
         :type index: int
         :return: [description]
         :rtype: Tuple[str, str, List[str], Any]
-        """        
+        """
         return (
             self.contexts[index],
             self.questions[index],
@@ -112,7 +111,7 @@ class ARLSATDataset(AbstractMCQADataset):
 
         :return: [description]
         :rtype: str
-        """        
+        """
         return f"The {self.split_set} set of ARLSAT has {self.__len__()} instances"
 
     def __len__(self) -> int:
@@ -120,5 +119,5 @@ class ARLSATDataset(AbstractMCQADataset):
 
         :return: [description]
         :rtype: int
-        """        
+        """
         return len(self.contexts)
