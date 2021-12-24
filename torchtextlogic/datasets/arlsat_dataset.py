@@ -18,7 +18,16 @@ ARLSAT_DATASET_FOLDER = f"{DATASETS_FOLDER}/{ARLSAT_DATASET}"
 
 
 class ARLSATDataset(AbstractMCQADataset):
+    """[summary]
+
+    """    
     def __init__(self, split_set: str) -> None:
+        """[summary]
+
+        :param split_set: [description]
+        :type split_set: str
+        :raises SplitSetError: [description]
+        """        
         super().__init__()
         try:
             if split_set == "dev":
@@ -50,6 +59,21 @@ class ARLSATDataset(AbstractMCQADataset):
         answers_key: str,
         labels_key: str,
     ) -> Tuple[List[str], List[str], List[List[str]], List[str]]:
+        """[summary]
+
+        :param contexts_key: [description]
+        :type contexts_key: str
+        :param questions_key: [description]
+        :type questions_key: str
+        :param questions_text_key: [description]
+        :type questions_text_key: str
+        :param answers_key: [description]
+        :type answers_key: str
+        :param labels_key: [description]
+        :type labels_key: str
+        :return: [description]
+        :rtype: Tuple[List[str], List[str], List[List[str]], List[str]]
+        """    
         data = read_json(self.dataset_path)
         contexts_list = []
         questions_list = []
@@ -69,6 +93,13 @@ class ARLSATDataset(AbstractMCQADataset):
         return contexts_list, questions_list, answers_list, labels_list
 
     def __getitem__(self, index: int) -> Tuple[str, str, List[str], Any]:
+        """[summary]
+
+        :param index: [description]
+        :type index: int
+        :return: [description]
+        :rtype: Tuple[str, str, List[str], Any]
+        """        
         return (
             self.contexts[index],
             self.questions[index],
@@ -77,7 +108,17 @@ class ARLSATDataset(AbstractMCQADataset):
         )
 
     def __str__(self) -> str:
+        """[summary]
+
+        :return: [description]
+        :rtype: str
+        """        
         return f"The {self.split_set} set of ARLSAT has {self.__len__()} instances"
 
     def __len__(self) -> int:
+        """[summary]
+
+        :return: [description]
+        :rtype: int
+        """        
         return len(self.contexts)
