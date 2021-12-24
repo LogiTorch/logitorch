@@ -29,9 +29,7 @@ class ARLSATDataset(AbstractMCQADataset):
         """
         super().__init__()
         try:
-            if split_set == "dev":
-                split_set = "val"
-            elif split_set not in SPLIT_SETS:
+            if split_set not in SPLIT_SETS:
                 raise SplitSetError()
 
             if not os.path.exists(ARLSAT_DATASET_FOLDER):
