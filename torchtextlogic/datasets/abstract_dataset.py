@@ -10,11 +10,11 @@ class AbstractLogicDataset(Dataset, ABC):
 
     @abstractmethod
     def __len__(self) -> int:
-        raise NotImplementedError
+        raise NotImplementedError()
 
     @abstractmethod
     def __str__(self) -> str:
-        raise NotImplementedError
+        raise NotImplementedError()
 
 
 class AbstractMCQADataset(AbstractLogicDataset):
@@ -22,16 +22,16 @@ class AbstractMCQADataset(AbstractLogicDataset):
     def __getitem__(
         self, index: int
     ) -> Union[Tuple[str, str, List[str], Any], Tuple[str, str, List[str]]]:
-        raise NotImplementedError
+        raise NotImplementedError()
 
 
 class AbstractTEDataset(AbstractLogicDataset):
     @abstractmethod
     def __getitem__(self, index: int) -> Tuple[str, str, Any]:
-        raise NotImplementedError
+        raise NotImplementedError()
 
 
 class AbstractQADataset(AbstractLogicDataset):
     @abstractmethod
     def __getitem__(self, index: int) -> Tuple[str, str, Any]:
-        raise NotImplementedError
+        raise NotImplementedError()
