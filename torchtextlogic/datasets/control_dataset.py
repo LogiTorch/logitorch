@@ -15,8 +15,8 @@ CONTROL_DATASET_ZIP_URL = (
 )
 CONTROL_DATASET = "control_dataset"
 CONTROL_DATASET_FOLDER = f"{DATASETS_FOLDER}/{CONTROL_DATASET}"
-CONTROL_LABELS_TO_ID = {"c": 0, "e": 1, "n": 2}
-CONTROL_ID_TO_LABELS = {0: "c", 1: "e", 2: "n"}
+CONTROL_LABEL_TO_ID = {"c": 0, "e": 1, "n": 2}
+CONTROL_ID_TO_LABEL = {0: "c", 1: "e", 2: "n"}
 
 
 class ControlDataset(AbstractTEDataset):
@@ -49,7 +49,7 @@ class ControlDataset(AbstractTEDataset):
         for i in data:
             premises_list.append(i[premises_key])
             hypotheses_list.append(i[hypotheses_key])
-            labels_list.append(CONTROL_LABELS_TO_ID[i[labels_key]])
+            labels_list.append(CONTROL_LABEL_TO_ID[i[labels_key]])
 
         return premises_list, hypotheses_list, labels_list
 

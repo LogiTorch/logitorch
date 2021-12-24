@@ -15,6 +15,8 @@ ARLSAT_DATASET_ZIP_URL = (
 )
 ARLSAT_DATASET = "arlsat_dataset"
 ARLSAT_DATASET_FOLDER = f"{DATASETS_FOLDER}/{ARLSAT_DATASET}"
+ARLSAT_LABEL_TO_ID = {"A": 0, "B": 1, "C": 2, "D": 3, "E": 4}
+ARLSAT_ID_TO_LABEL = {0: "A", 1: "B", 2: "C", 3: "D", 4: "E"}
 
 
 class ARLSATDataset(AbstractMCQADataset):
@@ -55,7 +57,7 @@ class ARLSATDataset(AbstractMCQADataset):
         questions_text_key: str,
         answers_key: str,
         labels_key: str,
-    ) -> Tuple[List[str], List[str], List[List[str]], List[str]]:
+    ) -> Tuple[List[str], List[str], List[List[str]], List[int]]:
         """[summary]
 
         :param contexts_key: [description]
@@ -69,7 +71,7 @@ class ARLSATDataset(AbstractMCQADataset):
         :param labels_key: [description]
         :type labels_key: str
         :return: [description]
-        :rtype: Tuple[List[str], List[str], List[List[str]], List[str]]
+        :rtype: Tuple[List[str], List[str], List[List[str]], List[int]]
         """
         data = read_json(self.dataset_path)
         contexts_list = []
@@ -85,7 +87,7 @@ class ARLSATDataset(AbstractMCQADataset):
                 contexts_list.append(i[contexts_key])
                 questions_list.append(q[questions_text_key])
                 answers_list.append(tmp_answers)
-                labels_list.append(q[labels_key])
+                labels_list.append(ARLSAT_LABEL_TO_ID[q[labels_key]])
 
         return contexts_list, questions_list, answers_list, labels_list
 
