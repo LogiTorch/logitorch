@@ -91,7 +91,7 @@ class ARLSATDataset(AbstractMCQADataset):
 
         return contexts_list, questions_list, answers_list, labels_list
 
-    def __getitem__(self, index: int) -> Tuple[str, str, List[str], Any]:
+    def __getitem__(self, index: int) -> Tuple[str, str, List[str], int]:
         """[summary]
 
         :param index: [description]

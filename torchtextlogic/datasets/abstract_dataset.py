@@ -21,17 +21,17 @@ class AbstractMCQADataset(AbstractLogicDataset):
     @abstractmethod
     def __getitem__(
         self, index: int
-    ) -> Union[Tuple[str, str, List[str], Any], Tuple[str, str, List[str]]]:
+    ) -> Union[Tuple[str, str, List[str], int], Tuple[str, str, List[str]]]:
         raise NotImplementedError()
 
 
 class AbstractTEDataset(AbstractLogicDataset):
     @abstractmethod
-    def __getitem__(self, index: int) -> Tuple[str, str, Any]:
+    def __getitem__(self, index: int) -> Tuple[str, str, int]:
         raise NotImplementedError()
 
 
 class AbstractQADataset(AbstractLogicDataset):
     @abstractmethod
-    def __getitem__(self, index: int) -> Tuple[str, str, Any]:
+    def __getitem__(self, index: int) -> Tuple[str, str, int]:
         raise NotImplementedError()

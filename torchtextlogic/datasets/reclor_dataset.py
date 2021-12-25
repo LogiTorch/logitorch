@@ -62,7 +62,7 @@ class ReClorDataset(AbstractMCQADataset):
 
     def __getitem__(
         self, index: int
-    ) -> Union[Tuple[str, str, List[str], Any], Tuple[str, str, List[str]]]:
+    ) -> Union[Tuple[str, str, List[str], int], Tuple[str, str, List[str]]]:
 
         if self.split_set == "test":
             return self.contexts[index], self.questions[index], self.answers[index]

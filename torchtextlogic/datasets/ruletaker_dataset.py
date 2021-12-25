@@ -78,7 +78,7 @@ class RuleTakerDataset(AbstractQADataset):
 
         return contexts_list, questions_list, labels_list
 
-    def __getitem__(self, index: int) -> Tuple[str, str, Any]:
+    def __getitem__(self, index: int) -> Tuple[str, str, int]:
         return self.contexts[index], self.questions[index], self.labels[index]
 
     def __str__(self) -> str:

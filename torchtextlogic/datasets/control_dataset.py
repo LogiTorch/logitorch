@@ -53,7 +53,7 @@ class ControlDataset(AbstractTEDataset):
 
         return premises_list, hypotheses_list, labels_list
 
-    def __getitem__(self, index: int) -> Tuple[str, str, Any]:
+    def __getitem__(self, index: int) -> Tuple[str, str, int]:
         return self.premises[index], self.hypotheses[index], self.labels[index]
 
     def __str__(self) -> str:
