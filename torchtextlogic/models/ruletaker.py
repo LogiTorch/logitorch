@@ -8,7 +8,7 @@ class RuleTaker(pl.LightningModule):
     def __init__(self, pretrained_model: str) -> None:
         super().__init__()
         self.model = AutoModelForSequenceClassification.from_pretrained(
-            pretrained_model
+            pretrained_model, num_labels=2
         )
 
     def forward(self, x):
