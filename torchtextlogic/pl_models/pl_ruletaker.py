@@ -30,3 +30,14 @@ class PLRuleTaker(pl.LightningModule):
         y_pred = outputs.logits
         loss = self.cross_entropy_loss(y_pred, y)
         self.log("val_loss", loss, on_epoch=True)
+
+    def test_step(self, val_batch, batch_idx):
+        x, y = val_batch
+        outputs = self(**x)
+        y_pred = outputs.logits
+        loss = self.cross_entropy_loss(y_pred, y)
+        self.log("val_loss", loss, on_epoch=True)
+
+    def predict_step(self, batch, batch_idx, dataloader_idx=0):
+        outputs = self(**batch)
+        return outputs.logits
