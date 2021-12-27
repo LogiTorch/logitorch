@@ -28,6 +28,7 @@ class RuleTaker(pl.LightningModule):
 
     def validation_step(self, val_batch, batch_idx):
         x, y = val_batch
-        y_pred = self(**x)
+        outputs = self(**x)
+        y_pred = outputs.logits
         loss = self.cross_entropy_loss(y_pred, y)
         self.log("val_loss", loss, on_epoch=True)
