@@ -111,3 +111,5 @@ ENV/
 try_package.py
 
 torchtextlogic_datasets/
+
+lightning_logs/
