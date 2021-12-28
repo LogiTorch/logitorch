@@ -25,7 +25,7 @@ class ControlDataset(AbstractTEDataset):
 
         try:
             if split_set not in SPLIT_SETS:
-                raise SplitSetError()
+                raise SplitSetError(SPLIT_SETS)
 
             if not os.path.exists(CONTROL_DATASET_FOLDER):
                 download_dataset(CONTROL_DATASET_ZIP_URL, CONTROL_DATASET)

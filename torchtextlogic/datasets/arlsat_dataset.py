@@ -32,7 +32,7 @@ class ARLSATDataset(AbstractMCQADataset):
         super().__init__()
         try:
             if split_set not in SPLIT_SETS:
-                raise SplitSetError()
+                raise SplitSetError(SPLIT_SETS)
 
             if not os.path.exists(ARLSAT_DATASET_FOLDER):
                 download_dataset(ARLSAT_DATASET_ZIP_URL, ARLSAT_DATASET)

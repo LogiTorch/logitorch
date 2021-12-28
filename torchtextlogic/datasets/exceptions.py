@@ -1,4 +1,6 @@
-SPLIT_SETS = ["train", "val", "test"]
+from typing import List
+
+
 
 
 class DatasetNameError(Exception):
@@ -15,9 +17,9 @@ class SplitSetError(Exception):
     An error is raised when the split set is wrong
     """
 
-    def __init__(self):
+    def __init__(self, split_sets: List[str]):
         self.message = (
-            f"SplitSetError: Dataset name is wrong\nThe split sets are: {SPLIT_SETS}"
+            f"SplitSetError: Dataset name is wrong\nThe split sets are: {split_sets}"
         )
 
 

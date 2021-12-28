@@ -15,7 +15,7 @@ RULETAKER_DATASET_ZIP_URL = (
 )
 RULETAKER_DATASET = "ruletaker_dataset"
 RULETAKER_SUB_DATASETS = [
-    "bird_electricity",
+    "birds-electricity",
     "depth-0",
     "depth-1",
     "depth-2",
@@ -36,10 +36,12 @@ class RuleTakerDataset(AbstractQADataset):
         try:
             if dataset_name not in RULETAKER_SUB_DATASETS:
                 raise DatasetNameError()
+            if split_set != "test" and dataset_name == "birds-electricity":
+                raise SplitSetError(["test"])
             if split_set == "val":
                 split_set = "dev"
             elif split_set not in SPLIT_SETS:
-                raise SplitSetError()
+                raise SplitSetError(SPLIT_SETS)
 
             if not os.path.exists(RULETAKER_DATASET_FOLDER):
                 download_dataset(RULETAKER_DATASET_ZIP_URL, RULETAKER_DATASET)

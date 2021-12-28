@@ -19,7 +19,7 @@ class LogiQADataset(AbstractMCQADataset):
         super().__init__()
         try:
             if split_set not in SPLIT_SETS:
-                raise SplitSetError()
+                raise SplitSetError(SPLIT_SETS)
 
             if not os.path.exists(LOGIQA_DATASET_FOLDER):
                 download_dataset(LOGIQA_DATASET_ZIP_URL, LOGIQA_DATASET)
