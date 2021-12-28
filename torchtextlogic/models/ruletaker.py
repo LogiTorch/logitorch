@@ -1,6 +1,4 @@
-import pytorch_lightning as pl
 import torch.nn as nn
-from torch.optim import Adam
 from transformers import AutoModelForSequenceClassification
 
 
