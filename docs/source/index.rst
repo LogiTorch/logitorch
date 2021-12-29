@@ -11,7 +11,6 @@ Welcome to TorchTextLogic's documentation!
    :caption: Contents:
 
 
-
 Indices and tables
 ==================
 
