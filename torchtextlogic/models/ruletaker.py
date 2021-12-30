@@ -9,5 +9,5 @@ class RuleTaker(nn.Module):
             pretrained_model, num_labels=2
         )
 
-    def forward(self, **x):
+    def forward(self, **x: Dict[str, torch.Tensor]) -> SequenceClassifierOutput:
         return self.model(**x)
