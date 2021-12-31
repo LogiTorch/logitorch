@@ -1,8 +1,6 @@
 from typing import List
 
 
-
-
 class DatasetNameError(Exception):
     """
     An error is raised when the dataset name is wrong

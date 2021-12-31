@@ -2,10 +2,9 @@ from typing import Dict, Optional, Tuple
 
 import pytorch_lightning as pl
 import torch
-from torch.functional import Tensor
 import torch.nn as nn
 from torch.optim import Adam
-from torchtextlogic.models.ruletaker import RuleTaker  # type: ignore[no-redef]
+from torchtextlogic.models.ruletaker import RuleTaker
 from transformers.modeling_outputs import SequenceClassifierOutput
 
 
