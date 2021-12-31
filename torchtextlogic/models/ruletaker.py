@@ -1,5 +1,11 @@
+from __future__ import annotations
+
+from typing import Dict
+
+import torch
 import torch.nn as nn
 from transformers import AutoModelForSequenceClassification
+from transformers.modeling_outputs import SequenceClassifierOutput
 
 
 class RuleTaker(nn.Module):

@@ -1,3 +1,5 @@
+from typing import Dict, Tuple
+
 import torch
 from transformers import AutoTokenizer
 
@@ -6,7 +8,7 @@ class RuleTakerCollator:
     def __init__(self, pretrained_tokenizer: str) -> None:
         self.tokenizer = AutoTokenizer.from_pretrained(pretrained_tokenizer)
 
-    def __call__(self, batch):
+    def __call__(self, batch) -> Tuple[Dict[str, torch.Tensor], torch.Tensor]:
         contexts = []
         questions = []
         batch_y = []
