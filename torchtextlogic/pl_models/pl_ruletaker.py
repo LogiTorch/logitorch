@@ -2,6 +2,7 @@ from typing import Dict, Optional, Tuple
 
 import pytorch_lightning as pl
 import torch
+from torch.functional import Tensor
 import torch.nn as nn
 from torch.optim import Adam
 from torchtextlogic.models.ruletaker import RuleTaker  # type: ignore[no-redef]
@@ -21,7 +22,7 @@ class PLRuleTaker(pl.LightningModule):
     def configure_optimizers(self):
         return Adam(self.parameters(), lr=self.learning_rate)
 
-    def training_step(self, train_batch: ~torch.Tensor, batch_idx: int) -> torch.Tensor:  # type: ignore
+    def training_step(self, train_batch: Tuple[Dict[str, torch.Tensor], torch.Tensor], batch_idx: int) -> torch.Tensor:  # type: ignore
         x, y = train_batch
         outputs = self(**x)
         y_pred = outputs.logits
