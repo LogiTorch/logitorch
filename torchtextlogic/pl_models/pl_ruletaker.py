@@ -1,19 +1,17 @@
-from __future__ import annotations
-
 from typing import Dict, Optional, Tuple
 
 import pytorch_lightning as pl
 import torch
 import torch.nn as nn
 from torch.optim import Adam
-from torchtextlogic.models.ruletaker import RuleTaker # type: ignore[no-redef] 
+from torchtextlogic.models.ruletaker import RuleTaker  # type: ignore[no-redef]
 from transformers.modeling_outputs import SequenceClassifierOutput
 
 
 class PLRuleTaker(pl.LightningModule):
     def __init__(self, pretrained_model: str, learning_rate: float = 1e-3) -> None:
         super().__init__()
-        self.model = RuleTaker(pretrained_model) 
+        self.model = RuleTaker(pretrained_model)
         self.learning_rate = learning_rate
         self.cross_entropy_loss = nn.CrossEntropyLoss()
 
