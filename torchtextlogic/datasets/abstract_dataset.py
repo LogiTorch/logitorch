@@ -35,3 +35,9 @@ class AbstractQADataset(AbstractLogicDataset):
     @abstractmethod
     def __getitem__(self, index: int) -> Tuple[str, str, int]:
         raise NotImplementedError()
+
+
+class AbstractProofQADataset(AbstractLogicDataset):
+    @abstractmethod
+    def __getitem__(self, index: int) -> Tuple[str, str, str, int]:
+        raise NotImplementedError()

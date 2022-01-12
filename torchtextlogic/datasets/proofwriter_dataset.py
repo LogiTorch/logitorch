@@ -1,6 +1,7 @@
 import os
 from typing import List, Tuple
 
+from torchtextlogic.datasets.abstract_dataset import AbstractProofQADataset
 from torchtextlogic.datasets.exceptions import DatasetNameError, SplitSetError
 from torchtextlogic.datasets.utils import (
     DATASETS_FOLDER,
@@ -29,5 +30,20 @@ PROOFWRITER_LABEL_TO_ID = {False: 0, True: 1}
 PROOFWRITER_ID_TO_LABEL = {0: "False", 1: "True"}
 
 
-class ProofWriterDataset:
-    pass
+class ProofWriterDataset(AbstractProofQADataset):
+    def __init__(
+        self, dataset_name: str, split_set: str, open_world_assumption: bool = False
+    ) -> None:
+        pass
+
+    def __read_dataset(self):
+        pass
+
+    def __getitem__(self, index) -> Tuple[str, str, str, int]:
+        pass
+
+    def __str__(self) -> str:
+        pass
+
+    def __len__(self) -> int:
+        pass
