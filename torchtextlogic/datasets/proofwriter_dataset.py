@@ -1,7 +1,7 @@
 import os
 from typing import List, Tuple
 
-from torchtextlogic.datasets.abstract_dataset import AbstractProofQADataset
+from torchtextlogic.datasets.base_dataset import AbstractProofQADataset
 from torchtextlogic.datasets.exceptions import DatasetNameError, SplitSetError
 from torchtextlogic.datasets.utils import (
     DATASETS_FOLDER,
