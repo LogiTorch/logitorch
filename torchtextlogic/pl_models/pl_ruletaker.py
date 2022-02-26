@@ -4,13 +4,14 @@ import pytorch_lightning as pl
 import torch
 import torch.nn as nn
 from torch.optim import Adam
-from torchtextlogic.models.ruletaker import RuleTaker
 from transformers.modeling_outputs import SequenceClassifierOutput
+
+from torchtextlogic.models.ruletaker import RuleTaker
 
 
 class PLRuleTaker(pl.LightningModule):
-    """[summary]
-    """    
+    """[summary]"""
+
     def __init__(self, pretrained_model: str, learning_rate: float = 1e-3) -> None:
         """[summary]
 
@@ -18,7 +19,7 @@ class PLRuleTaker(pl.LightningModule):
         :type pretrained_model: str
         :param learning_rate: [description], defaults to 1e-3
         :type learning_rate: float, optional
-        """        
+        """
         super().__init__()
         self.model = RuleTaker(pretrained_model)
         self.learning_rate = learning_rate
@@ -29,7 +30,7 @@ class PLRuleTaker(pl.LightningModule):
 
         :return: [description]
         :rtype: SequenceClassifierOutput
-        """        
+        """
         return self.model(**x)
 
     def configure_optimizers(self):
@@ -44,7 +45,7 @@ class PLRuleTaker(pl.LightningModule):
         :type batch_idx: int
         :return: [description]
         :rtype: torch.Tensor
-        """        
+        """
         x, y = train_batch
         outputs = self(**x)
         y_pred = outputs.logits
@@ -59,7 +60,7 @@ class PLRuleTaker(pl.LightningModule):
         :type val_batch: Tuple[Dict[str, torch.Tensor], torch.Tensor]
         :param batch_idx: [description]
         :type batch_idx: int
-        """        
+        """
         x, y = val_batch
         outputs = self(**x)
         y_pred = outputs.logits
@@ -73,7 +74,7 @@ class PLRuleTaker(pl.LightningModule):
         :type val_batch: Tuple[Dict[str, torch.Tensor], torch.Tensor]
         :param batch_idx: [description]
         :type batch_idx: int
-        """        
+        """
         x, y = val_batch
         outputs = self(**x)
         y_pred = outputs.logits
@@ -91,6 +92,6 @@ class PLRuleTaker(pl.LightningModule):
         :type dataloader_idx: Optional[int], optional
         :return: [description]
         :rtype: torch.Tensor
-        """        
+        """
         outputs = self(**batch)
         return outputs.logits

@@ -4,8 +4,9 @@ from typing import Any, Dict, List
 from zipfile import ZipFile
 
 import requests
-from torchtextlogic.datasets.exceptions import FileSizeError
 from tqdm import tqdm
+
+from torchtextlogic.datasets.exceptions import FileSizeError
 
 CURRENT_PATH = os.getcwd()
 DATASETS_FOLDER = f"{CURRENT_PATH}/torchtextlogic_datasets"
