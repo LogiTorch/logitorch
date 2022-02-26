@@ -1,3 +1,6 @@
+import re
+from typing import List
+
 EXCPLICIT_CONNECTIVES = {
     "once",
     "although",
@@ -106,4 +109,40 @@ PUNCTUATION_DELIMETERS = {".", ",", ";", ":"}
 
 
 class DiscourseDelimiter:
-    pass
+    def __init__(self) -> None:
+        self.regex_explicit_connectives = "|".join(
+            rf"\b{conn}\b" for conn in EXCPLICIT_CONNECTIVES
+        )
+        self.regex_punctuation_delimiters = "|".join(
+            rf"\{punct}" for punct in PUNCTUATION_DELIMETERS
+        )
+
+    def graph_edu(self, edus: str):
+        pass
+
+    def split_edu(self, passage: str) -> str:
+        edu_explicit_connectives = "<CONNECTION>".join(
+            edu for edu in self.split_explicit_connectives(passage)
+        )
+        edus = "<PUNCT>".join(
+            edu for edu in self.split_punctuation_delimiters(edu_explicit_connectives)
+        )
+        return edus
+
+    def split_explicit_connectives(self, passage: str) -> List[str]:
+        split_passage = re.split(self.regex_explicit_connectives, passage)
+        split_passage = filter(None, split_passage)
+        split_passage = list(split_passage)
+        return split_passage
+
+    def split_punctuation_delimiters(self, passage: str) -> List[str]:
+        split_passage = re.split(self.regex_punctuation_delimiters, passage)
+        split_passage = filter(None, split_passage)
+        split_passage = list(split_passage)
+        return split_passage
+
+
+if __name__ == "__main__":
+    d = DiscourseDelimiter()
+    passage = "Digital systems are. the best information systems because error cannot occur in the emission of digital signals."
+    print(d.split_edu(passage))
