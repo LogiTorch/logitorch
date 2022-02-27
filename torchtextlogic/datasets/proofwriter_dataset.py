@@ -27,7 +27,7 @@ PROOFWRITER_SUB_DATASETS = [
 ]
 PROOFWRITER_DATASET_FOLDER = f"{DATASETS_FOLDER}/{PROOFWRITER_DATASET}"
 PROOFWRITER_LABEL_TO_ID = {False: 0, True: 1}
-PROOFWRITER_ID_TO_LABEL = {0: "False", 1: "True"}
+PROOFWRITER_ID_TO_LABEL = {0: "False", 1: "True", 2: "Unknown"}
 
 
 class ProofWriterDataset(AbstractProofQADataset):
