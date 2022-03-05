@@ -37,3 +37,12 @@ class TaskError(Exception):
 
     def __init__(self, tasks: List[str]):
         self.message = f"TaskError: Task is wrong\nThe tasks are: {tasks}"
+
+
+class AbductionClosedWorldAssumptionError(Exception):
+    """
+    An error is raised when the abduction task is chosen in a closed-world assumption setting
+    """
+
+    def __init__(self):
+        self.message = "AbductionClosedWolrdAssumptionError: Abduction task exists only in open-world assumption (OWA) setting"
