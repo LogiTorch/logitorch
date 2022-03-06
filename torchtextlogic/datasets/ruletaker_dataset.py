@@ -26,7 +26,7 @@ RULETAKER_SUB_DATASETS = [
     "NatLang",
 ]
 RULETAKER_DATASET_FOLDER = f"{DATASETS_FOLDER}/{RULETAKER_DATASET}"
-RULETAKER_LABEL_TO_ID = {False: 0, True: 1}
+RULETAKER_LABEL_TO_ID = {"False": 0, "True": 1}
 RULETAKER_ID_TO_LABEL = {0: "False", 1: "True"}
 
 
@@ -76,7 +76,7 @@ class RuleTakerDataset(AbstractQADataset):
             for q in i[questions_key]:
                 contexts_list.append(i[contexts_key])
                 questions_list.append(q[questions_text_key])
-                labels_list.append(RULETAKER_LABEL_TO_ID[q[labels_key]])
+                labels_list.append(RULETAKER_LABEL_TO_ID[q[str(labels_key)]])
 
         return contexts_list, questions_list, labels_list
 

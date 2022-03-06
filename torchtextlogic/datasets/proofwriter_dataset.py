@@ -36,7 +36,7 @@ PROOFWRITER_TASKS = [
     "abduction",
 ]
 PROOFWRITER_DATASET_FOLDER = f"{DATASETS_FOLDER}/{PROOFWRITER_DATASET}"
-PROOFWRITER_LABEL_TO_ID = {False: 0, True: 1, "Unknown": 2}
+PROOFWRITER_LABEL_TO_ID = {"False": 0, "True": 1, "Unknown": 2}
 PROOFWRITER_ID_TO_LABEL = {0: "False", 1: "True", 2: "Unknown"}
 
 
