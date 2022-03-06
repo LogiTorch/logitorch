@@ -36,7 +36,7 @@ class TaskError(Exception):
     """
 
     def __init__(self):
-        self.message = f"TaskError: Task is not found\n"
+        self.message = "TaskError: Task is not found\n"
 
 
 class AbductionClosedWorldAssumptionError(Exception):

@@ -131,18 +131,16 @@ class DiscourseDelimiter:
 
     def split_explicit_connectives(self, passage: str) -> List[str]:
         split_passage = re.split(self.regex_explicit_connectives, passage)
-        split_passage = filter(None, split_passage)
-        split_passage = list(split_passage)
+        split_passage = [x for x in split_passage if x.strip()]
         return split_passage
 
     def split_punctuation_delimiters(self, passage: str) -> List[str]:
         split_passage = re.split(self.regex_punctuation_delimiters, passage)
-        split_passage = filter(None, split_passage)
-        split_passage = list(split_passage)
+        split_passage = [x for x in split_passage if x.strip()]
         return split_passage
 
 
 if __name__ == "__main__":
     d = DiscourseDelimiter()
-    passage = "Digital systems are. the best information systems because error cannot occur in the emission of digital signals."
+    passage = "Digital systems. are the best information systems because  error cannot occur in the emission of digital signals"
     print(d.split_edu(passage))
