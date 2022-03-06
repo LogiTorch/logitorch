@@ -3,6 +3,7 @@ from typing import List, Tuple
 
 from torchtextlogic.datasets.base_dataset import AbstractProofQADataset
 from torchtextlogic.datasets.exceptions import (
+    AbductionClosedWorldAssumptionError,
     DatasetNameError,
     SplitSetError,
     TaskError,
@@ -72,6 +73,9 @@ class ProofWriterDataset(AbstractProofQADataset):
             if open_world_assumption:
                 self.world_assumption = "OWA"
 
+            if self.world_assumption == "CWA" and self.task == "abduction":
+                raise AbductionClosedWorldAssumptionError()
+
             self.task = task
             self.dataset_path = f"{PROOFWRITER_DATASET_FOLDER}/{self.world_assumption}/{self.dataset_name}/{self.split_set}.jsonl"
 
@@ -92,6 +96,8 @@ class ProofWriterDataset(AbstractProofQADataset):
         except TaskError as err:
             print(err.message)
             print(f"The ProofWriter tasks are: {PROOFWRITER_TASKS}")
+        except AbductionClosedWorldAssumptionError as err:
+            print(err.message)
 
     def __read_dataset_proof_generation_all(self):
         pass
