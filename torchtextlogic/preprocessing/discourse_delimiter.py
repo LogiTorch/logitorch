@@ -117,14 +117,11 @@ class DiscourseDelimiter:
             rf"\{punct}" for punct in PUNCTUATION_DELIMETERS
         )
 
-    def graph_edu(self, edus: str):
-        pass
-
     def split_edu(self, passage: str) -> str:
         edu_explicit_connectives = "<CONNECTION>".join(
             edu for edu in self.split_explicit_connectives(passage)
         )
-        edus = "<PUNCT>".join(
+        edus = " <PUNCT>".join(
             edu for edu in self.split_punctuation_delimiters(edu_explicit_connectives)
         )
         return edus
@@ -142,5 +139,5 @@ class DiscourseDelimiter:
 
 if __name__ == "__main__":
     d = DiscourseDelimiter()
-    passage = "Digital systems. are the best information systems because  error cannot occur in the emission of digital signals"
+    passage = "Digital systems. are the best information systems because  error cannot occur in the emission of digital signals."
     print(d.split_edu(passage))
