@@ -118,7 +118,7 @@ class DiscourseDelimiter:
         )
 
     def split_edu(self, passage: str) -> str:
-        edu_explicit_connectives = "<CONNECTION>".join(
+        edu_explicit_connectives = "<CONNECTIVE>".join(
             edu for edu in self.split_explicit_connectives(passage)
         )
         edus = " <PUNCT>".join(
