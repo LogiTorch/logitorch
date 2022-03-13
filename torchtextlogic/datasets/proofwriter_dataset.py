@@ -68,16 +68,16 @@ class ProofWriterDataset(AbstractProofQADataset):
 
             self.dataset_name = dataset_name
             self.split_set = split_set
-
+            self.task = task
             self.world_assumption = "CWA"
+            
             if open_world_assumption:
                 self.world_assumption = "OWA"
 
+            self.dataset_path = f"{PROOFWRITER_DATASET_FOLDER}/{self.world_assumption}/{self.dataset_name}/{self.split_set}.jsonl"
+
             if self.world_assumption == "CWA" and self.task == "abduction":
                 raise AbductionClosedWorldAssumptionError()
-
-            self.task = task
-            self.dataset_path = f"{PROOFWRITER_DATASET_FOLDER}/{self.world_assumption}/{self.dataset_name}/{self.split_set}.jsonl"
 
             if self.task == "proof_generation_all":
                 self.__read_dataset_proof_generation_all()
