@@ -1,5 +1,5 @@
 import os
-from typing import List, Tuple
+from typing import List, Tuple, Union
 
 from torchtextlogic.datasets.base_dataset import AbstractProofQADataset
 from torchtextlogic.datasets.exceptions import (
@@ -70,22 +70,26 @@ class ProofWriterDataset(AbstractProofQADataset):
             self.split_set = split_set
             self.task = task
             self.world_assumption = "CWA"
-            
+
             if open_world_assumption:
                 self.world_assumption = "OWA"
-
-            self.dataset_path = f"{PROOFWRITER_DATASET_FOLDER}/{self.world_assumption}/{self.dataset_name}/{self.split_set}.jsonl"
 
             if self.world_assumption == "CWA" and self.task == "abduction":
                 raise AbductionClosedWorldAssumptionError()
 
             if self.task == "proof_generation_all":
+                self.dataset_path = f"{PROOFWRITER_DATASET_FOLDER}/{self.world_assumption}/{self.dataset_name}/meta-{self.split_set}.jsonl"
                 self.__read_dataset_proof_generation_all()
             elif self.task == "proof_generation_iter":
+                self.dataset_path = f"{PROOFWRITER_DATASET_FOLDER}/{self.world_assumption}/{self.dataset_name}/meta-stage{self.split_set}.jsonl"
                 self.__read_dataset_proof_generation_iter()
             elif self.task == "implication_enumeration":
-                self.__read_dataset_implication_enumeration()
+                self.dataset_path = f"{PROOFWRITER_DATASET_FOLDER}/{self.world_assumption}/{self.dataset_name}/meta-{self.split_set}.jsonl"
+                self.__read_dataset_implication_enumeration(
+                    "triples", "rules", "allInferences"
+                )
             elif self.task == "abduction":
+                self.dataset_path = f"{PROOFWRITER_DATASET_FOLDER}/{self.world_assumption}/{self.dataset_name}/meta-abduct-{self.split_set}.jsonl"
                 self.__read_dataset_abduction()
 
         except DatasetNameError as err:
@@ -102,16 +106,38 @@ class ProofWriterDataset(AbstractProofQADataset):
     def __read_dataset_proof_generation_all(self):
         pass
 
-    def __read_dataset_proof_generation_iter(self):
-        pass
+    def __read_dataset_proof_generation_iter(
+        self, triples_key: str, rules_key: str, labels_key: str
+    ) -> Tuple[List[str], List[str]]:
+        data = read_jsonl(self.dataset_path)
+        contexts_list = []
+        labels_list = []
 
-    def __read_dataset_implication_enumeration(self):
+        for i in data:
+            triples = []
+            rules = []
+            inferences = []
+
+            for t, val in i[triples_key].items():
+                triples.append(f"{t}: {val['text']}")
+            for r, val in i[rules_key].items():
+                rules.append(f"{r}: {val['text']}")
+            for val in i[labels_key]:
+                inferences.append(val["text"])
+
+            tmp_context = triples + rules
+            contexts_list.append("\n".join(tmp_context))
+            labels_list.append("\n".join(inferences))
+
+        return contexts_list, labels_list
+
+    def __read_dataset_implication_enumeration():
         pass
 
     def __read_dataset_abduction(self):
         pass
 
-    def __getitem__(self, index) -> Tuple[str, str, str, int]:
+    def __getitem__(self, index: int) -> Union[Tuple[str, str, str], Tuple[str, str]]:
         pass
 
     def __str__(self) -> str:

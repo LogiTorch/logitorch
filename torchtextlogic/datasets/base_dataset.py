@@ -39,5 +39,7 @@ class AbstractQADataset(BaseLogicDataset):
 
 class AbstractProofQADataset(BaseLogicDataset):
     @abstractmethod
-    def __getitem__(self, index: int) -> Tuple[str, str, str, int]:
+    def __getitem__(
+        self, index: int
+    ) -> Union[Tuple[str, str, str], Tuple[str, str, str]]:
         raise NotImplementedError()
