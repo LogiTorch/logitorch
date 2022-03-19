@@ -104,7 +104,10 @@ class ProofWriterDataset(AbstractProofQADataset):
             print(err.message)
 
     def __read_dataset_proof_generation_all(self):
-        pass
+        data = read_jsonl(self.dataset_path)
+        context_list = []
+        questions_list = []
+        labels_list = []
 
     def __read_dataset_proof_generation_iter(
         self, triples_key: str, rules_key: str, labels_key: str
@@ -131,11 +134,11 @@ class ProofWriterDataset(AbstractProofQADataset):
 
         return contexts_list, labels_list
 
-    def __read_dataset_implication_enumeration():
-        pass
+    def __read_dataset_implication_enumeration(self):
+        data = read_jsonl(self.dataset_path)
 
     def __read_dataset_abduction(self):
-        pass
+        data = read_jsonl(self.dataset_path)
 
     def __getitem__(self, index: int) -> Union[Tuple[str, str, str], Tuple[str, str]]:
         pass
