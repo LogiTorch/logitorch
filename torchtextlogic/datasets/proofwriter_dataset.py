@@ -79,7 +79,9 @@ class ProofWriterDataset(AbstractProofQADataset):
 
             if self.task == "proof_generation_all":
                 self.dataset_path = f"{PROOFWRITER_DATASET_FOLDER}/{self.world_assumption}/{self.dataset_name}/meta-{self.split_set}.jsonl"
-                self.__read_dataset_proof_generation_all()
+                self.__read_dataset_proof_generation_all(
+                    "triples", "rules", "questions", "answer", "proofsWithIntermediates"
+                )
             elif self.task == "proof_generation_iter":
                 self.dataset_path = f"{PROOFWRITER_DATASET_FOLDER}/{self.world_assumption}/{self.dataset_name}/meta-stage{self.split_set}.jsonl"
                 self.__read_dataset_proof_generation_iter()
@@ -103,14 +105,40 @@ class ProofWriterDataset(AbstractProofQADataset):
         except AbductionClosedWorldAssumptionError as err:
             print(err.message)
 
-    def __read_dataset_proof_generation_all(self):
+    def __read_dataset_proof_generation_all(
+        self,
+        triples_key: str,
+        rules_key: str,
+        questions_key: str,
+        answers_key: str,
+        proofs_key: str,
+    ):
         data = read_jsonl(self.dataset_path)
-        context_list = []
+        contexts_list = []
         questions_list = []
         labels_list = []
 
+        for i in data:
+            triples = []
+            rules = []
+            questions = []
+            answers = []
+            proofs = []
+
+            for t, val in i[triples_key].items():
+                triples.append(f"{t}: {val['text']}")
+            for r, val in i[rules_key].items():
+                rules.append(f"{r}: {val['text']}")
+            for val in i[proofs_key]:
+                proofs.append(val["text"])
+
+            tmp_context = triples + rules
+            tmp_label = answers + proofs
+            contexts_list.append("\n".join(tmp_context))
+            labels_list.append("\n".join(proofs))
+
     def __read_dataset_proof_generation_iter(
-        self, triples_key: str, rules_key: str, labels_key: str
+        self, triples_key: str, rules_key: str, proofs_key: str
     ) -> Tuple[List[str], List[str]]:
         data = read_jsonl(self.dataset_path)
         contexts_list = []
@@ -125,7 +153,7 @@ class ProofWriterDataset(AbstractProofQADataset):
                 triples.append(f"{t}: {val['text']}")
             for r, val in i[rules_key].items():
                 rules.append(f"{r}: {val['text']}")
-            for val in i[labels_key]:
+            for val in i[proofs_key]:
                 inferences.append(val["text"])
 
             tmp_context = triples + rules
