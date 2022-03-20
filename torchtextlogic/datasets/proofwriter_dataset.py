@@ -112,7 +112,7 @@ class ProofWriterDataset(AbstractProofQADataset):
         questions_key: str,
         answers_key: str,
         proofs_key: str,
-    ):
+    ) -> Tuple[List[str], List[str], List[str]]:
         data = read_jsonl(self.dataset_path)
         contexts_list = []
         questions_list = []
@@ -122,20 +122,36 @@ class ProofWriterDataset(AbstractProofQADataset):
             triples = []
             rules = []
             questions = []
-            answers = []
-            proofs = []
+            answers_with_proofs = []
 
             for t, val in i[triples_key].items():
                 triples.append(f"{t}: {val['text']}")
+
             for r, val in i[rules_key].items():
                 rules.append(f"{r}: {val['text']}")
-            for val in i[proofs_key]:
-                proofs.append(val["text"])
+
+            for q in i[questions_key].values():
+                questions.append(q["question"])
+                if proofs_key in q:
+                    tmp_proof = ""
+                    for nbr, p in enumerate(q[proofs_key]):
+                        tmp_proof += f"Proof {nbr}: {p['representation']} ; "
+                        if len(p["intermediates"]) > 0:
+                            tmp_proof += "with "
+                            for intr, val in p["intermediates"].items():
+                                tmp_proof += f"{intr} = {val['text']} ; "
+                        tmp_proof += "\n"
+
+                answers_with_proofs.append(f"Answer: {q[answers_key]}\n{tmp_proof}")
 
             tmp_context = triples + rules
-            tmp_label = answers + proofs
-            contexts_list.append("\n".join(tmp_context))
-            labels_list.append("\n".join(proofs))
+
+            for q, ap in zip(questions, answers_with_proofs):
+                contexts_list.append("\n".join(tmp_context))
+                questions_list.append(q)
+                labels_list.append(ap)
+
+        return contexts_list, questions_list, labels_list
 
     def __read_dataset_proof_generation_iter(
         self, triples_key: str, rules_key: str, proofs_key: str
