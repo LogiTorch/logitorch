@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import Dict
+from typing import Dict, List
 
 import torch
 import torch.nn as nn
@@ -17,3 +17,6 @@ class RuleTaker(nn.Module):
 
     def forward(self, **x: Dict[str, torch.Tensor]) -> SequenceClassifierOutput:
         return self.model(**x)
+
+    def predict(self, **x: Dict[str, torch.Tensor]) -> List[str]:
+        pass
