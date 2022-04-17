@@ -10,6 +10,26 @@ TorchTextLogic is a PyTorch-based library for logical reasoning in natural langu
 
 ## Documentation
 
+## Features
+
+### Datasets
+
+Datasets implemented in TorchTextLogic:
+
+- [AR-LSAT](https://arxiv.org/abs/2104.06598)
+- [ConTRoL](https://arxiv.org/abs/2011.04864)
+- [LogiQA](https://arxiv.org/abs/2007.08124)
+- [ReClor](https://arxiv.org/abs/2002.04326)
+- [RuleTaker](https://arxiv.org/abs/2002.05867)
+- [ProofWriter](https://arxiv.org/abs/2012.13048)
+  
+### Models
+
+Models implemented in TorchTextLogic:
+
+- [RuleTaker](https://arxiv.org/abs/2002.05867)
+- [ProofWriter](https://arxiv.org/abs/2012.13048)
+  
 ## Example Usage
 
 ```python
@@ -26,4 +46,3 @@ train_dataloader = DataLoader(dataset, 3, collate_fn=ruletaker_collate_fn)
 trainer = pl.Trainer(accelerator="gpu", gpus=1)
 trainer.fit(model, train_dataloader)    
 ```
-
