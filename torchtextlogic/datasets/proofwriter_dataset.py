@@ -83,13 +83,13 @@ class ProofWriterDataset(AbstractProofQADataset):
                     "triples", "rules", "questions", "answer", "proofsWithIntermediates"
                 )
             elif self.task == "proof_generation_iter":
-                self.dataset_path = f"{PROOFWRITER_DATASET_FOLDER}/{self.world_assumption}/{self.dataset_name}/meta-stage{self.split_set}.jsonl"
-                self.__read_dataset_proof_generation_iter()
-            elif self.task == "implication_enumeration":
-                self.dataset_path = f"{PROOFWRITER_DATASET_FOLDER}/{self.world_assumption}/{self.dataset_name}/meta-{self.split_set}.jsonl"
-                self.__read_dataset_implication_enumeration(
+                self.dataset_path = f"{PROOFWRITER_DATASET_FOLDER}/{self.world_assumption}/{self.dataset_name}/meta-stage-{self.split_set}.jsonl"
+                self.__read_dataset_proof_generation_iter(
                     "triples", "rules", "allInferences"
                 )
+            elif self.task == "implication_enumeration":
+                self.dataset_path = f"{PROOFWRITER_DATASET_FOLDER}/{self.world_assumption}/{self.dataset_name}/meta-{self.split_set}.jsonl"
+                self.__read_dataset_implication_enumeration()
             elif self.task == "abduction":
                 self.dataset_path = f"{PROOFWRITER_DATASET_FOLDER}/{self.world_assumption}/{self.dataset_name}/meta-abduct-{self.split_set}.jsonl"
                 self.__read_dataset_abduction()
