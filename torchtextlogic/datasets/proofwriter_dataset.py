@@ -80,7 +80,7 @@ class ProofWriterDataset(AbstractProofQADataset):
             if self.task == "proof_generation_all":
                 self.dataset_path = f"{PROOFWRITER_DATASET_FOLDER}/{self.world_assumption}/{self.dataset_name}/meta-{self.split_set}.jsonl"
                 self.__read_dataset_proof_generation_all(
-                    "triples", "rules", "questions", "answer", "proofsWithIntermediates"
+                    "triples", "rules", "questions"
                 )
             elif self.task == "proof_generation_iter":
                 self.dataset_path = f"{PROOFWRITER_DATASET_FOLDER}/{self.world_assumption}/{self.dataset_name}/meta-stage-{self.split_set}.jsonl"
@@ -92,7 +92,7 @@ class ProofWriterDataset(AbstractProofQADataset):
                 self.__read_dataset_implication_enumeration()
             elif self.task == "abduction":
                 self.dataset_path = f"{PROOFWRITER_DATASET_FOLDER}/{self.world_assumption}/{self.dataset_name}/meta-abduct-{self.split_set}.jsonl"
-                self.__read_dataset_abduction()
+                self.__read_dataset_abduction("triples", "rules", "abductions")
 
         except DatasetNameError as err:
             print(err.message)
@@ -110,14 +110,13 @@ class ProofWriterDataset(AbstractProofQADataset):
         triples_key: str,
         rules_key: str,
         questions_key: str,
-        answers_key: str,
-        proofs_key: str,
     ) -> Tuple[List[str], List[str], List[str]]:
         data = read_jsonl(self.dataset_path)
         contexts_list = []
         questions_list = []
         labels_list = []
 
+        proofs_key = "proofsWithIntermediates"
         for i in data:
             triples = []
             rules = []
@@ -142,7 +141,7 @@ class ProofWriterDataset(AbstractProofQADataset):
                                 tmp_proof += f"{intr} = {val['text']} ; "
                         tmp_proof += "\n"
 
-                answers_with_proofs.append(f"Answer: {q[answers_key]}\n{tmp_proof}")
+                answers_with_proofs.append(f"Answer: {q['answer']}\n{tmp_proof}")
 
             tmp_context = triples + rules
 
@@ -181,8 +180,34 @@ class ProofWriterDataset(AbstractProofQADataset):
     def __read_dataset_implication_enumeration(self):
         data = read_jsonl(self.dataset_path)
 
-    def __read_dataset_abduction(self):
+    def __read_dataset_abduction(
+        self, triples_key: str, rules_key: str, abductions_key: str
+    ) -> Tuple[List[str], List[str], List[str]]:
         data = read_jsonl(self.dataset_path)
+        contexts_list = []
+        questions_list = []
+        labels_list = []
+
+        for i in data:
+            triples = []
+            rules = []
+            questions = []
+            answers_with_proofs = []
+
+            for t, val in i[triples_key].items():
+                triples.append(f"{t}: {val['text']}")
+
+            for r, val in i[rules_key].items():
+                rules.append(f"{r}: {val['text']}")
+
+            for abduc in i[abductions_key].values():
+                questions.append(abduc["question"])
+                if len(abduc["answers"]) > 0:
+                    for answer in abduc["answers"]:
+                        print(answer)
+                else:
+                    print("None")
+            break
 
     def __getitem__(self, index: int) -> Union[Tuple[str, str, str], Tuple[str, str]]:
         pass
