@@ -5,5 +5,5 @@ class OutOfRangeError(Exception):
 
     def __init__(self, min_value: float, max_value: float):
         self.message = (
-            f"OutOfRangeError: The range must betwen [{min_value}, {max_value}]"
+            f"OutOfRangeError: The value must be betwen [{min_value}, {max_value}]"
         )
