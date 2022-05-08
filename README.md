@@ -6,13 +6,13 @@ TorchTextLogic is a PyTorch-based library for logical reasoning in natural langu
 - Implementations of different logical reasoning neural architectures
 - A simple and clean API that can be used with PyTorch Lightning
 
-## Installation
+## 📦 Installation
 
-## Documentation
+## 📖 Documentation
 
-## Features
+## 🖥️ Features
 
-### Datasets
+### 📋 Datasets
 
 Datasets implemented in TorchTextLogic:
 
@@ -23,7 +23,7 @@ Datasets implemented in TorchTextLogic:
 - [RuleTaker](https://arxiv.org/abs/2002.05867)
 - [ProofWriter](https://arxiv.org/abs/2012.13048)
   
-### Models
+### 🤖 Models
 
 Models implemented in TorchTextLogic:
 
