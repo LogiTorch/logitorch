@@ -30,7 +30,7 @@ Models implemented in TorchTextLogic:
 - [RuleTaker](https://arxiv.org/abs/2002.05867)
 - [ProofWriter](https://arxiv.org/abs/2012.13048)
   
-## Example Usage
+## 🧪 Example Usage
 
 ```python
 from torchtextlogic.datasets.reclor_dataset import ReClorDataset
