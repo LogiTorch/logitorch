@@ -20,14 +20,15 @@ ARLSAT_ID_TO_LABEL = {0: "A", 1: "B", 2: "C", 3: "D", 4: "E"}
 
 
 class ARLSATDataset(AbstractMCQADataset):
-    """[summary]"""
-
     def __init__(self, split_set: str) -> None:
-        """[summary]
+        """
+        The function takes in a string as an argument and checks if it is in the list of split sets. If
+        it is not, it raises an error. If it is, it checks if the dataset folder exists. If it does not,
+        it downloads the dataset. It then sets the split set to the argument passed in, sets the dataset
+        path to the dataset folder and the split set, and reads the dataset
 
-        :param split_set: [description]
+        :param split_set: The split set to use
         :type split_set: str
-        :raises SplitSetError: [description]
         """
         super().__init__()
         try:
@@ -58,20 +59,20 @@ class ARLSATDataset(AbstractMCQADataset):
         answers_key: str,
         labels_key: str,
     ) -> Tuple[List[str], List[str], List[List[str]], List[int]]:
-        """[summary]
+        """
+        It reads a json file and returns a tuple of lists
 
-        :param contexts_key: [description]
+        :param contexts_key: str,
         :type contexts_key: str
-        :param questions_key: [description]
+        :param questions_key: str,
         :type questions_key: str
-        :param questions_text_key: [description]
+        :param questions_text_key: str = "question"
         :type questions_text_key: str
-        :param answers_key: [description]
+        :param answers_key: str = "answers"
         :type answers_key: str
-        :param labels_key: [description]
+        :param labels_key: str,
         :type labels_key: str
-        :return: [description]
-        :rtype: Tuple[List[str], List[str], List[List[str]], List[int]]
+        :return: A tuple of lists.
         """
         data = read_json(self.dataset_path)
         contexts_list = []
@@ -92,12 +93,13 @@ class ARLSATDataset(AbstractMCQADataset):
         return contexts_list, questions_list, answers_list, labels_list
 
     def __getitem__(self, index: int) -> Tuple[str, str, List[str], int]:
-        """[summary]
+        """
+        The function takes in an index and returns a tuple of the context, question, answer, and label at
+        that index
 
-        :param index: [description]
+        :param index: The index of the data point in the dataset
         :type index: int
-        :return: [description]
-        :rtype: Tuple[str, str, List[str], Any]
+        :return: A tuple of the context, question, answer, and label.
         """
         return (
             self.contexts[index],
@@ -107,17 +109,18 @@ class ARLSATDataset(AbstractMCQADataset):
         )
 
     def __str__(self) -> str:
-        """[summary]
+        """
+        The function returns a string that says "The [split_set] set of ARLSAT has [number of instances]
+        instances"
 
-        :return: [description]
-        :rtype: str
+        The function takes in the split_set as an argument
+        :return: The length of the dataset
         """
         return f"The {self.split_set} set of ARLSAT has {self.__len__()} instances"
 
     def __len__(self) -> int:
-        """[summary]
-
-        :return: [description]
-        :rtype: int
+        """
+        This function returns the length of the contexts list
+        :return: The length of the contexts list.
         """
         return len(self.contexts)

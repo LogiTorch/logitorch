@@ -16,6 +16,11 @@ LOGIQA_ID_TO_LABEL = {0: "a", 1: "b", 2: "c", 3: "d"}
 
 class LogiQADataset(AbstractMCQADataset):
     def __init__(self, split_set: str) -> None:
+        """
+        The function takes in a string as an argument and returns None.
+        :param split_set: The split set to use
+        :type split_set: str
+        """
         super().__init__()
         try:
             if split_set not in SPLIT_SETS:
@@ -36,6 +41,10 @@ class LogiQADataset(AbstractMCQADataset):
             print(err.message)
 
     def __read_dataset(self) -> Tuple[List[str], List[str], List[List[str]], List[int]]:
+        """
+        It reads the dataset and returns a tuple of 4 lists: contexts, questions, answers, and labels
+        :return: A tuple of lists.
+        """
         with open(self.dataset_path, "r", encoding="utf-8") as out:
             data = out.read().split("\n\n")
         contexts_list = []
@@ -55,6 +64,13 @@ class LogiQADataset(AbstractMCQADataset):
         return contexts_list, questions_list, answers_list, labels_list
 
     def __getitem__(self, index: int) -> Tuple[str, str, List[str], int]:
+        """
+        This function returns a tuple of the context, question, answer, and label for the given index
+
+        :param index: The index of the data point in the dataset
+        :type index: int
+        :return: A tuple of the context, question, answer, and label.
+        """
         return (
             self.contexts[index],
             self.questions[index],
@@ -63,7 +79,16 @@ class LogiQADataset(AbstractMCQADataset):
         )
 
     def __str__(self) -> str:
+        """
+        This function returns a string that contains the name of the split set and the number of
+        instances in the split set
+        :return: The number of instances in the dataset.
+        """
         return f"The {self.split_set} set of LogiQA has {self.__len__()} instances"
 
     def __len__(self) -> int:
+        """
+        This function returns the length of the contexts list
+        :return: The length of the contexts list.
+        """
         return len(self.contexts)
