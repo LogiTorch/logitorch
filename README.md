@@ -16,19 +16,31 @@ TorchTextLogic is a PyTorch-based library for logical reasoning in natural langu
 
 Datasets implemented in TorchTextLogic:
 
-- [AR-LSAT](https://arxiv.org/abs/2104.06598)
-- [ConTRoL](https://arxiv.org/abs/2011.04864)
-- [LogiQA](https://arxiv.org/abs/2007.08124)
-- [ReClor](https://arxiv.org/abs/2002.04326)
-- [RuleTaker](https://arxiv.org/abs/2002.05867)
-- [ProofWriter](https://arxiv.org/abs/2012.13048)
+- [x] [AR-LSAT](https://arxiv.org/abs/2104.06598)
+- [x] [ConTRoL](https://arxiv.org/abs/2011.04864)
+- [x] [LogiQA](https://arxiv.org/abs/2007.08124)
+- [x] [ReClor](https://arxiv.org/abs/2002.04326)
+- [x] [RuleTaker](https://arxiv.org/abs/2002.05867)
+- [x] [ProofWriter](https://arxiv.org/abs/2012.13048)
+- [ ] [SNLI](https://arxiv.org/abs/1508.05326)
+- [ ] [MultiNLI](https://arxiv.org/abs/1704.05426)
+- [ ] [RTE](https://tac.nist.gov/publications/2010/additional.papers/RTE6_overview.proceedings.pdf)
+- [ ] [Negated SNLI](https://aclanthology.org/2020.emnlp-main.732/)
+- [ ] [Negated MultiNLI](https://aclanthology.org/2020.emnlp-main.732/)
+- [ ] [Negated RTE](https://aclanthology.org/2020.emnlp-main.732/)
   
 ### 🤖 Models
 
 Models implemented in TorchTextLogic:
 
-- [RuleTaker](https://arxiv.org/abs/2002.05867)
-- [ProofWriter](https://arxiv.org/abs/2012.13048)
+- [x]  [RuleTaker](https://arxiv.org/abs/2002.05867)
+- [x]  [ProofWriter](https://arxiv.org/abs/2012.13048)
+- [ ]  [PRover](https://arxiv.org/abs/2010.02830)
+- [ ]  [FaiRR](https://arxiv.org/abs/2203.10261)
+- [ ]  [DAGN](https://arxiv.org/abs/2103.14349)
+- [ ]  [Focal Reasoner](https://arxiv.org/abs/2105.10334)
+- [ ]  [AdaLoGN](https://arxiv.org/abs/2203.08992)
+- [ ]  [Logiformer](https://arxiv.org/abs/2205.00731)
   
 ## 🧪 Example Usage
 
