@@ -37,6 +37,7 @@ Models implemented in TorchTextLogic:
 - [x]  [ProofWriter](https://arxiv.org/abs/2012.13048)
 - [ ]  [PRover](https://arxiv.org/abs/2010.02830)
 - [ ]  [FaiRR](https://arxiv.org/abs/2203.10261)
+- [ ]  [LReasoner](https://arxiv.org/abs/2105.03659)
 - [ ]  [DAGN](https://arxiv.org/abs/2103.14349)
 - [ ]  [Focal Reasoner](https://arxiv.org/abs/2105.10334)
 - [ ]  [AdaLoGN](https://arxiv.org/abs/2203.08992)
