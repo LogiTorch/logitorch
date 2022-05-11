@@ -22,7 +22,7 @@ Datasets implemented in TorchTextLogic:
 - [x] [ReClor](https://arxiv.org/abs/2002.04326)
 - [x] [RuleTaker](https://arxiv.org/abs/2002.05867)
 - [x] [ProofWriter](https://arxiv.org/abs/2012.13048)
-- [ ] [SNLI](https://arxiv.org/abs/1508.05326)
+- [x] [SNLI](https://arxiv.org/abs/1508.05326)
 - [ ] [MultiNLI](https://arxiv.org/abs/1704.05426)
 - [ ] [RTE](https://tac.nist.gov/publications/2010/additional.papers/RTE6_overview.proceedings.pdf)
 - [ ] [Negated SNLI](https://aclanthology.org/2020.emnlp-main.732/)
