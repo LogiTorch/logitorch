@@ -13,6 +13,7 @@ DATASETS_FOLDER = f"{CURRENT_PATH}/torchtextlogic_datasets"
 DATASETS_ZIP_FOLDER = f"{DATASETS_FOLDER}/tmp"
 
 SPLIT_SETS = ["train", "val", "test"]
+SPLIT_SETS_TRAIN_VAL = ["train", "val"]
 
 
 def download_dataset(url: str, dataset_name: str) -> None:

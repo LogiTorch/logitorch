@@ -1,7 +1,7 @@
 import os
 from typing import List, Tuple, Union
 
-from datasets.base import AbstractProofQADataset
+from torchtextlogic.datasets.base import AbstractProofQADataset
 from torchtextlogic.datasets.exceptions import (
     AbductionClosedWorldAssumptionError,
     DatasetNameError,
