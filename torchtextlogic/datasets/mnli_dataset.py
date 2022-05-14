@@ -18,7 +18,7 @@ MNLI_LABEL_TO_ID = {"entailment": 0, "neutral": 1, "contradiction": 2}
 MNLI_ID_TO_LABEL = {0: "entailment", 1: "neutral", 2: "contradiction"}
 
 
-class RTEDataset(AbstractTEDataset):
+class MNLIDataset(AbstractTEDataset):
     def __init__(self, split_set: str) -> None:
         super().__init__()
 
