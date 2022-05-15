@@ -25,8 +25,8 @@ Datasets implemented in TorchTextLogic:
 - [x] [SNLI](https://arxiv.org/abs/1508.05326)
 - [x] [MultiNLI](https://arxiv.org/abs/1704.05426)
 - [x] [RTE](https://tac.nist.gov/publications/2010/additional.papers/RTE6_overview.proceedings.pdf)
-- [ ] [Negated SNLI](https://aclanthology.org/2020.emnlp-main.732/)
-- [ ] [Negated MultiNLI](https://aclanthology.org/2020.emnlp-main.732/)
+- [] [Negated SNLI](https://aclanthology.org/2020.emnlp-main.732/)
+- [x] [Negated MultiNLI](https://aclanthology.org/2020.emnlp-main.732/)
 - [ ] [Negated RTE](https://aclanthology.org/2020.emnlp-main.732/)
   
 ### 🤖 Models
