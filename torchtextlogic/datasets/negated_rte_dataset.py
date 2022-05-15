@@ -6,23 +6,23 @@ import pandas as pd
 from torchtextlogic.datasets.base import AbstractTEDataset
 from torchtextlogic.datasets.utils import DATASETS_FOLDER, download_dataset
 
-NEGATED_SNLI_DATASET_ZIP_URL = (
-    "https://www.dropbox.com/s/dkdiagvxtzrmlxm/negated_snli_dataset.zip?dl=1"
+NEGATED_RTE_DATASET_ZIP_URL = (
+    "https://www.dropbox.com/s/5pfv5y6snw389uc/negated_rte_dataset.zip?dl=1"
 )
-NEGATED_SNLI_DATASET = "negated_snli_dataset"
-NEGATED_SNLI_DATASET_FOLDER = f"{DATASETS_FOLDER}/{NEGATED_SNLI_DATASET}"
-NEGATED_SNLI_LABEL_TO_ID = {"entailment": 0, "neutral": 1, "contradiction": 2}
-NEGATED_SNLI_ID_TO_LABEL = {0: "entailment", 1: "neutral", 2: "contradiction"}
+NEGATED_RTE_DATASET = "negated_rte_dataset"
+NEGATED_RTE_DATASET_FOLDER = f"{DATASETS_FOLDER}/{NEGATED_RTE_DATASET}"
+NEGATED_RTE_LABEL_TO_ID = {"entailment": 0, "not_entailment": 1}
+NEGATED_RTE_ID_TO_LABEL = {0: "entailment", 1: "not_entailment"}
 
 
-class NegatedSNLIDataset(AbstractTEDataset):
+class NegatedRTEDataset(AbstractTEDataset):
     def __init__(self) -> None:
         super().__init__()
 
-        if not os.path.exists(NEGATED_SNLI_DATASET_FOLDER):
-            download_dataset(NEGATED_SNLI_DATASET_ZIP_URL, NEGATED_SNLI_DATASET)
+        if not os.path.exists(NEGATED_RTE_DATASET_FOLDER):
+            download_dataset(NEGATED_RTE_DATASET_ZIP_URL, NEGATED_RTE_DATASET)
 
-        self.dataset_path = f"{NEGATED_SNLI_DATASET_FOLDER}/test.txt"
+        self.dataset_path = f"{NEGATED_RTE_DATASET_FOLDER}/test.txt"
         self.premises, self.hypotheses, self.labels = self.__read_dataset(
             "Text", "Hypothesis", "gold_label"
         )
@@ -42,7 +42,7 @@ class NegatedSNLIDataset(AbstractTEDataset):
         ):
             premises_list.append(premise)
             hypotheses_list.append(hypothesis)
-            labels_list.append(NEGATED_SNLI_LABEL_TO_ID[label])
+            labels_list.append(NEGATED_RTE_LABEL_TO_ID[label])
 
         return premises_list, hypotheses_list, labels_list
 
@@ -50,7 +50,7 @@ class NegatedSNLIDataset(AbstractTEDataset):
         return self.premises[index], self.hypotheses[index], self.labels[index]
 
     def __str__(self) -> str:
-        return f"The test set of the Negated SNLI has {self.__len__()} instances"
+        return f"The test set of the Negated RTE has {self.__len__()} instances"
 
     def __len__(self) -> int:
         return len(self.premises)
