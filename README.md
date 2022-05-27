@@ -28,6 +28,8 @@ Datasets implemented in TorchTextLogic:
 - [x] [Negated SNLI](https://aclanthology.org/2020.emnlp-main.732/)
 - [x] [Negated MultiNLI](https://aclanthology.org/2020.emnlp-main.732/)
 - [x] [Negated RTE](https://aclanthology.org/2020.emnlp-main.732/)
+- [ ] [PARARULE Plus](https://github.com/Strong-AI-Lab/PARARULE-Plus)
+- [ ] [AbductionRules](https://arxiv.org/abs/2203.12186)
   
 ### 🤖 Models
 
