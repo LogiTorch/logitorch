@@ -8,6 +8,7 @@ logging.disable(sys.maxsize)
 
 
 class CoreferenceResolution:
+
     def __init__(self) -> None:
         self.model = pretrained.load_predictor("coref-spanbert")
 
