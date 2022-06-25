@@ -37,7 +37,7 @@ Models implemented in TorchTextLogic:
 
 - [x]  [RuleTaker](https://arxiv.org/abs/2002.05867)
 - [x]  [ProofWriter](https://arxiv.org/abs/2012.13048)
-- [ ]  [BERRNOT](https://arxiv.org/abs/2105.03519)
+- [ ]  [BERTNOT](https://arxiv.org/abs/2105.03519)
 - [ ]  [PRover](https://arxiv.org/abs/2010.02830)
 - [ ]  [FaiRR](https://arxiv.org/abs/2203.10261)
 - [ ]  [LReasoner](https://arxiv.org/abs/2105.03659)
