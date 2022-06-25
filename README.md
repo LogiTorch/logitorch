@@ -30,13 +30,14 @@ Datasets implemented in TorchTextLogic:
 - [x] [Negated RTE](https://aclanthology.org/2020.emnlp-main.732/)
 - [ ] [PARARULE Plus](https://github.com/Strong-AI-Lab/PARARULE-Plus)
 - [ ] [AbductionRules](https://arxiv.org/abs/2203.12186)
-  
+
 ### 🤖 Models
 
 Models implemented in TorchTextLogic:
 
 - [x]  [RuleTaker](https://arxiv.org/abs/2002.05867)
 - [x]  [ProofWriter](https://arxiv.org/abs/2012.13048)
+- [ ]  [BERRNOT](https://arxiv.org/abs/2105.03519)
 - [ ]  [PRover](https://arxiv.org/abs/2010.02830)
 - [ ]  [FaiRR](https://arxiv.org/abs/2203.10261)
 - [ ]  [LReasoner](https://arxiv.org/abs/2105.03659)
@@ -45,7 +46,7 @@ Models implemented in TorchTextLogic:
 - [ ]  [AdaLoGN](https://arxiv.org/abs/2203.08992)
 - [ ]  [Logiformer](https://arxiv.org/abs/2205.00731)
 - [ ]  [LogiGAN](https://arxiv.org/abs/2205.08794)
-  
+
 ## 🧪 Example Usage
 
 ```python
@@ -60,5 +61,5 @@ ruletaker_collate_fn = RuleTakerCollator("roberta-base")
 model = PLRuleTaker("roberta-base")
 train_dataloader = DataLoader(dataset, 3, collate_fn=ruletaker_collate_fn)
 trainer = pl.Trainer(accelerator="gpu", gpus=1)
-trainer.fit(model, train_dataloader)    
+trainer.fit(model, train_dataloader)
 ```
