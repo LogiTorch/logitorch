@@ -50,7 +50,7 @@ Models implemented in TorchTextLogic:
 ## 🧪 Example Usage
 
 ```python
-from torchtextlogic.datasets.reclor_dataset import ReClorDataset
+from torchtextlogic.datasets.qa.ruletaker_dataset import RuleTakerDataset
 from torchtextlogic.pl_models.pl_ruletaker import PLRuleTaker
 from torchtextlogic.data_collators.ruletaker_collator import RuleTakerCollator
 from torch.utils.data.dataloader import DataLoader
