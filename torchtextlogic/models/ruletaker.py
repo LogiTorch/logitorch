@@ -4,39 +4,28 @@ from typing import Dict, List
 
 import torch
 import torch.nn as nn
-from transformers import AutoModelForSequenceClassification
+from transformers import AutoModelForSequenceClassification, AutoTokenizer
 from transformers.modeling_outputs import SequenceClassifierOutput
 
 
 class RuleTaker(nn.Module):
     def __init__(self, pretrained_model: str) -> None:
-        """
-        This function takes in a pretrained model and returns a model with the number of labels set to 2
-
-        :param pretrained_model: str = "bert-base-uncased"
-        :type pretrained_model: str
-        """
         super().__init__()
         self.model = AutoModelForSequenceClassification.from_pretrained(
             pretrained_model, num_labels=2
         )
+        self.tokenizer = AutoTokenizer.from_pretrained(pretrained_model)
 
-    def forward(self, **x: Dict[str, torch.Tensor]) -> SequenceClassifierOutput:
-        """
-        The function takes a dictionary of tensors as input and returns a SequenceClassifierOutput
-        object
+    def forward(
+        self, x: torch.Tensor, y: torch.Tensor = None
+    ) -> SequenceClassifierOutput:
+        if y is not None:
+            return self.model(**x, labels=y)
+        return self.model(**x, decoder_input_ids=x["input_ids"])
 
-        :param :
-        :type : Dict[str, torch.Tensor]
-        :return: The model is being returned.
-        """
-        return self.model(**x)
-
-    def predict(self, **x: Dict[str, torch.Tensor]) -> List[str]:
-        """
-        The function takes a dictionary of tensors as input and returns a list of strings
-
-        :param : **x**: A dictionary of input tensors
-        :type : Dict[str, torch.Tensor]
-        """
-        pass
+    def predict(self, x: str, device: str = "cpu") -> int:
+        with torch.no_grad():
+            tokenized_x = self.tokenizer(x, padding=True, return_tensors="pt")
+            logits = self.model(**tokenized_x.to(device)).logits
+            output = logits.argmax().item()
+            return output
