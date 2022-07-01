@@ -89,7 +89,9 @@ class ProofWriterDataset(AbstractProofQADataset):
                 )
             elif self.task == "implication_enumeration":
                 self.dataset_path = f"{PROOFWRITER_DATASET_FOLDER}/{self.world_assumption}/{self.dataset_name}/meta-{self.split_set}.jsonl"
-                self.__read_dataset_implication_enumeration()
+                self.__read_dataset_implication_enumeration(
+                    "triples", "rules", "proofDetails"
+                )
             elif self.task == "abduction":
                 self.dataset_path = f"{PROOFWRITER_DATASET_FOLDER}/{self.world_assumption}/{self.dataset_name}/meta-abduct-{self.split_set}.jsonl"
                 self.__read_dataset_abduction("triples", "rules", "abductions")
@@ -110,7 +112,13 @@ class ProofWriterDataset(AbstractProofQADataset):
         triples_key: str,
         rules_key: str,
         questions_key: str,
-    ) -> Tuple[List[str], List[str], List[str], List[str], List[str]]:
+    ) -> Tuple[
+        List[List[str]],
+        List[List[str]],
+        List[List[str]],
+        List[List[str]],
+        List[List[str]],
+    ]:
         data = read_jsonl(self.dataset_path)
         triples_list = []
         rules_list = []
@@ -136,7 +144,7 @@ class ProofWriterDataset(AbstractProofQADataset):
                 questions.append(q["question"])
                 if proofs_key in q:
                     tmp_proof = []
-                    for _, p in enumerate(q[proofs_key]):
+                    for p in q[proofs_key]:
                         str_proof = f"{p['representation']}"
                         if len(p["intermediates"]) > 0:
                             str_proof += " ; "
@@ -155,18 +163,23 @@ class ProofWriterDataset(AbstractProofQADataset):
                 labels_list.append(l)
                 proofs_list.append(p)
 
-        print(
-            triples_list[0],
-            rules_list[0],
-            questions_list[0],
-            labels_list[0],
-            proofs_list[0],
-        )
+        # print(
+        #     triples_list[0],
+        #     rules_list[0],
+        #     questions_list[0],
+        #     labels_list[0],
+        #     proofs_list[0],
+        # )
         return triples_list, rules_list, questions_list, labels_list, proofs_list
 
     def __read_dataset_proof_generation_iter(
         self, triples_key: str, rules_key: str, proofs_key: str
-    ) -> Tuple[List[str], List[str], List[Optional[str]], List[Optional[str]]]:
+    ) -> Tuple[
+        List[List[str]],
+        List[List[str]],
+        List[List[Optional[str]]],
+        List[List[Optional[str]]],
+    ]:
         data = read_jsonl(self.dataset_path)
         triples_list = []
         rules_list = []
@@ -200,12 +213,49 @@ class ProofWriterDataset(AbstractProofQADataset):
         # print(triples_list[30], rules_list[30], labels_list[30], proofs_list[30])
         return triples_list, rules_list, labels_list, proofs_list
 
-    def __read_dataset_implication_enumeration(self):
+    def __read_dataset_implication_enumeration(
+        self, triples_key: str, rules_key: str, labels_key: str
+    ) -> Tuple[List[List[str]], List[List[str]], List[List[Optional[str]]]]:
         data = read_jsonl(self.dataset_path)
+        triples_list = []
+        rules_list = []
+        labels_list = []
+
+        for i in data:
+            triples = []
+            rules = []
+            labels = []
+
+            for t, val in i[triples_key].items():
+                triples.append(f"{t}: {val['text']}")
+
+            for r, val in i[rules_key].items():
+                rules.append(f"{r}: {val['text']}")
+
+            for p in i[labels_key]:
+                labels.append(p["text"])
+
+            triples_list.append(triples)
+            rules_list.append(rules)
+
+            if len(labels) > 0:
+                labels_list.append(labels)
+            else:
+                labels_list.append([None])
+
+        print(triples_list[30], rules_list[30], labels_list[30])
+
+        return triples_list, rules_list, labels_list
 
     def __read_dataset_abduction(
         self, triples_key: str, rules_key: str, abductions_key: str
-    ) -> Tuple[List[str], List[str], List[str]]:
+    ) -> Tuple[
+        List[List[str]],
+        List[List[str]],
+        List[List[str]],
+        List[List[Optional[str]]],
+        List[List[Optional[str]]],
+    ]:
         data = read_jsonl(self.dataset_path)
         triples_list = []
         rules_list = []
