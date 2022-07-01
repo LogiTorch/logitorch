@@ -79,22 +79,43 @@ class ProofWriterDataset(AbstractProofQADataset):
 
             if self.task == "proof_generation_all":
                 self.dataset_path = f"{PROOFWRITER_DATASET_FOLDER}/{self.world_assumption}/{self.dataset_name}/meta-{self.split_set}.jsonl"
-                self.__read_dataset_proof_generation_all(
+                (
+                    self.triples,
+                    self.rules,
+                    self.questions,
+                    self.labels,
+                    self.proofs,
+                ) = self.__read_dataset_proof_generation_all(
                     "triples", "rules", "questions"
                 )
             elif self.task == "proof_generation_iter":
                 self.dataset_path = f"{PROOFWRITER_DATASET_FOLDER}/{self.world_assumption}/{self.dataset_name}/meta-stage-{self.split_set}.jsonl"
-                self.__read_dataset_proof_generation_iter(
+                (
+                    self.triples,
+                    self.rules,
+                    self.labels,
+                    self.proofs,
+                ) = self.__read_dataset_proof_generation_iter(
                     "triples", "rules", "allInferences"
                 )
             elif self.task == "implication_enumeration":
                 self.dataset_path = f"{PROOFWRITER_DATASET_FOLDER}/{self.world_assumption}/{self.dataset_name}/meta-{self.split_set}.jsonl"
-                self.__read_dataset_implication_enumeration(
+                (
+                    self.triples,
+                    self.rules,
+                    self.labels,
+                ) = self.__read_dataset_implication_enumeration(
                     "triples", "rules", "proofDetails"
                 )
             elif self.task == "abduction":
                 self.dataset_path = f"{PROOFWRITER_DATASET_FOLDER}/{self.world_assumption}/{self.dataset_name}/meta-abduct-{self.split_set}.jsonl"
-                self.__read_dataset_abduction("triples", "rules", "abductions")
+                (
+                    self.triples,
+                    self.rules,
+                    self.questions,
+                    self.labels,
+                    self.proofs,
+                ) = self.__read_dataset_abduction("triples", "rules", "abductions")
 
         except DatasetNameError as err:
             print(err.message)
@@ -301,11 +322,35 @@ class ProofWriterDataset(AbstractProofQADataset):
         # print(triples_list[2150], rules_list[1250], questions_list[1250], labels_list[1250], proofs_list[1250])
         return triples_list, rules_list, questions_list, labels_list, proofs_list
 
-    def __getitem__(self, index: int) -> Union[Tuple[str, str, str], Tuple[str, str]]:
-        pass
+    def __getitem__(
+        self, index: int
+    ) -> Union[
+        Tuple[
+            List[str], List[str], List[str], List[Optional[str]], List[Optional[str]]
+        ],
+        Tuple[List[str], List[str], List[Optional[str]], List[Optional[str]]],
+        Tuple[List[str], List[str], List[Optional[str]]],
+    ]:
+        if self.task == "proof_generation_all" or self.task == "abduction":
+            return (
+                self.triples[index],
+                self.rules[index],
+                self.questions[index],
+                self.labels[index],
+                self.proofs[index],
+            )
+        elif self.task == "proof_generation_iter":
+            return (
+                self.triples[index],
+                self.rules[index],
+                self.labels[index],
+                self.proofs[index],
+            )
+        else:
+            return self.triples[index], self.rules[index], self.labels[index]
 
     def __str__(self) -> str:
-        pass
+        return f'The {self.split_set} set of {self.dataset_name}\'s ProofWriter for the task of "{self.task}" has {self.__len__()} instances'
 
     def __len__(self) -> int:
-        pass
+        return len(self.triples)
