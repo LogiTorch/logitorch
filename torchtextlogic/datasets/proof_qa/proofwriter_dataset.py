@@ -1,5 +1,5 @@
 import os
-from typing import List, Tuple, Union
+from typing import List, Optional, Tuple, Union
 
 from torchtextlogic.datasets.base import AbstractProofQADataset
 from torchtextlogic.datasets.exceptions import (
@@ -110,18 +110,21 @@ class ProofWriterDataset(AbstractProofQADataset):
         triples_key: str,
         rules_key: str,
         questions_key: str,
-    ) -> Tuple[List[str], List[str], List[str]]:
+    ) -> Tuple[List[str], List[str], List[str], List[str], List[str]]:
         data = read_jsonl(self.dataset_path)
-        contexts_list = []
+        triples_list = []
+        rules_list = []
         questions_list = []
         labels_list = []
+        proofs_list = []
 
         proofs_key = "proofsWithIntermediates"
         for i in data:
             triples = []
             rules = []
             questions = []
-            answers_with_proofs = []
+            proofs = []
+            labels = []
 
             for t, val in i[triples_key].items():
                 triples.append(f"{t}: {val['text']}")
@@ -132,37 +135,49 @@ class ProofWriterDataset(AbstractProofQADataset):
             for q in i[questions_key].values():
                 questions.append(q["question"])
                 if proofs_key in q:
-                    tmp_proof = ""
-                    for nbr, p in enumerate(q[proofs_key]):
-                        tmp_proof += f"Proof {nbr}: {p['representation']} ; "
+                    tmp_proof = []
+                    for _, p in enumerate(q[proofs_key]):
+                        str_proof = f"{p['representation']}"
                         if len(p["intermediates"]) > 0:
-                            tmp_proof += "with "
+                            str_proof += " ; "
+                            str_proof += "with "
                             for intr, val in p["intermediates"].items():
-                                tmp_proof += f"{intr} = {val['text']} ; "
-                        tmp_proof += "\n"
+                                str_proof += f"{intr} = {val['text']}"
+                        tmp_proof.append(str_proof)
 
-                answers_with_proofs.append(f"Answer: {q['answer']}\n{tmp_proof}")
+                labels.append(q["answer"])
+                proofs.append(tmp_proof)
 
-            tmp_context = triples + rules
-
-            for q, ap in zip(questions, answers_with_proofs):
-                contexts_list.append("\n".join(tmp_context))
+            for q, l, p in zip(questions, labels, proofs):
+                triples_list.append(triples)
+                rules_list.append(rules)
                 questions_list.append(q)
-                labels_list.append(ap)
+                labels_list.append(l)
+                proofs_list.append(p)
 
-        return contexts_list, questions_list, labels_list
+        print(
+            triples_list[0],
+            rules_list[0],
+            questions_list[0],
+            labels_list[0],
+            proofs_list[0],
+        )
+        return triples_list, rules_list, questions_list, labels_list, proofs_list
 
     def __read_dataset_proof_generation_iter(
         self, triples_key: str, rules_key: str, proofs_key: str
-    ) -> Tuple[List[str], List[str]]:
+    ) -> Tuple[List[str], List[str], List[Optional[str]], List[Optional[str]]]:
         data = read_jsonl(self.dataset_path)
-        contexts_list = []
+        triples_list = []
+        rules_list = []
         labels_list = []
+        proofs_list = []
 
         for i in data:
             triples = []
             rules = []
             inferences = []
+            proofs = []
 
             for t, val in i[triples_key].items():
                 triples.append(f"{t}: {val['text']}")
@@ -170,12 +185,20 @@ class ProofWriterDataset(AbstractProofQADataset):
                 rules.append(f"{r}: {val['text']}")
             for val in i[proofs_key]:
                 inferences.append(val["text"])
+                proofs.append(val["proofs"])
 
-            tmp_context = triples + rules
-            contexts_list.append("\n".join(tmp_context))
-            labels_list.append("\n".join(inferences))
+            triples_list.append(triples)
+            rules_list.append(rules)
 
-        return contexts_list, labels_list
+            if len(inferences) > 0:
+                labels_list.append(inferences)
+                proofs_list.append(proofs)
+            else:
+                labels_list.append([None])
+                proofs_list.append([None])
+
+        # print(triples_list[30], rules_list[30], labels_list[30], proofs_list[30])
+        return triples_list, rules_list, labels_list, proofs_list
 
     def __read_dataset_implication_enumeration(self):
         data = read_jsonl(self.dataset_path)
@@ -184,15 +207,18 @@ class ProofWriterDataset(AbstractProofQADataset):
         self, triples_key: str, rules_key: str, abductions_key: str
     ) -> Tuple[List[str], List[str], List[str]]:
         data = read_jsonl(self.dataset_path)
-        contexts_list = []
+        triples_list = []
+        rules_list = []
         questions_list = []
         labels_list = []
+        proofs_list = []
 
         for i in data:
             triples = []
             rules = []
             questions = []
-            answers_with_proofs = []
+            labels = []
+            proofs = []
 
             for t, val in i[triples_key].items():
                 triples.append(f"{t}: {val['text']}")
@@ -202,12 +228,28 @@ class ProofWriterDataset(AbstractProofQADataset):
 
             for abduc in i[abductions_key].values():
                 questions.append(abduc["question"])
+                tmp_labels = []
+                tmp_proofs = []
                 if len(abduc["answers"]) > 0:
                     for answer in abduc["answers"]:
-                        print(answer)
+                        tmp_labels.append(answer["text"])
+                        tmp_proofs.append(answer["proof"])
                 else:
-                    print("None")
-            break
+                    tmp_labels.append(None)
+                    tmp_proofs.append(None)
+
+                labels.append(tmp_labels)
+                proofs.append(tmp_proofs)
+
+            for q, l, p in zip(questions, labels, proofs):
+                triples_list.append(triples)
+                rules_list.append(rules)
+                questions_list.append(q)
+                labels_list.append(l)
+                proofs_list.append(p)
+
+        # print(triples_list[2150], rules_list[1250], questions_list[1250], labels_list[1250], proofs_list[1250])
+        return triples_list, rules_list, questions_list, labels_list, proofs_list
 
     def __getitem__(self, index: int) -> Union[Tuple[str, str, str], Tuple[str, str]]:
         pass
