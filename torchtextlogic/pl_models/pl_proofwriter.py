@@ -27,13 +27,13 @@ class PLProofWriter(pl.LightningModule):
         self.learning_rate = learning_rate
         self.cross_entropy_loss = nn.CrossEntropyLoss()
 
-    def forward(self, **x: Dict[str, torch.Tensor]) -> SequenceClassifierOutput:  # type: ignore
+    def forward(self, x: Dict[str, torch.Tensor]) -> SequenceClassifierOutput:  # type: ignore
         """[summary]
 
         :return: [description]
         :rtype: SequenceClassifierOutput
         """
-        return self.model(**x)
+        return self.model(x)
 
     def configure_optimizers(self):
         return Adam(self.parameters(), lr=self.learning_rate)
@@ -49,7 +49,7 @@ class PLProofWriter(pl.LightningModule):
         :rtype: torch.Tensor
         """
         x, y = train_batch
-        outputs = self(**x)
+        outputs = self(x)
         y_pred = outputs.logits
         loss = self.cross_entropy_loss(y_pred, y)
         self.log("train_loss", loss, on_epoch=True)
@@ -64,7 +64,7 @@ class PLProofWriter(pl.LightningModule):
         :type batch_idx: int
         """
         x, y = val_batch
-        outputs = self(**x)
+        outputs = self(x)
         y_pred = outputs.logits
         loss = self.cross_entropy_loss(y_pred, y)
         self.log("val_loss", loss, on_epoch=True)
@@ -78,7 +78,7 @@ class PLProofWriter(pl.LightningModule):
         :type batch_idx: int
         """
         x, y = val_batch
-        outputs = self(**x)
+        outputs = self(x)
         y_pred = outputs.logits
         loss = self.cross_entropy_loss(y_pred, y)
         self.log("val_loss", loss, on_epoch=True)
@@ -95,5 +95,5 @@ class PLProofWriter(pl.LightningModule):
         :return: [description]
         :rtype: torch.Tensor
         """
-        outputs = self(**batch)
+        outputs = self(batch)
         return outputs.logits

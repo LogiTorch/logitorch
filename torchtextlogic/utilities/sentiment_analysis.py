@@ -1,3 +1,4 @@
+from typing import Optional
 from textblob import TextBlob
 
 from utilities.exceptions import OutOfRangeError
@@ -7,7 +8,7 @@ class SentimentAnalysisTextBlob:
     def __init__(self) -> None:
         self.textblob_analyzer = TextBlob
 
-    def sentiment(self, passage: str, threshold_polarity: float = 0.0) -> str:
+    def sentiment(self, passage: str, threshold_polarity: float = 0.0) -> Optional[str]:
         """_summary_
 
         :param passage: _description_
@@ -27,3 +28,4 @@ class SentimentAnalysisTextBlob:
             return "Negative"
         except OutOfRangeError as err:
             print(err.message)
+        return None

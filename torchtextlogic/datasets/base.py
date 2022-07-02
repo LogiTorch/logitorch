@@ -41,5 +41,9 @@ class AbstractProofQADataset(BaseLogicDataset):
     @abstractmethod
     def __getitem__(
         self, index: int
-    ) -> Union[Tuple[str, str, str], Tuple[str, str, str]]:
+    ) -> Union[
+        Tuple[List[str], List[str], List[str], List[str], List[str]],
+        Tuple[List[str], List[str], List[str], List[str]],
+        Tuple[List[str], List[str], List[str]],
+    ]:
         raise NotImplementedError()

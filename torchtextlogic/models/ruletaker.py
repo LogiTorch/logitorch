@@ -21,7 +21,7 @@ class RuleTaker(nn.Module):
     ) -> SequenceClassifierOutput:
         if y is not None:
             return self.model(**x, labels=y)
-        return self.model(**x, decoder_input_ids=x["input_ids"])
+        return self.model(**x)
 
     def predict(self, x: str, device: str = "cpu") -> int:
         with torch.no_grad():

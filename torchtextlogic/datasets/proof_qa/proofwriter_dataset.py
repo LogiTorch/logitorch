@@ -195,12 +195,7 @@ class ProofWriterDataset(AbstractProofQADataset):
 
     def __read_dataset_proof_generation_iter(
         self, triples_key: str, rules_key: str, proofs_key: str
-    ) -> Tuple[
-        List[List[str]],
-        List[List[str]],
-        List[List[Optional[str]]],
-        List[List[Optional[str]]],
-    ]:
+    ) -> Tuple[List[List[str]], List[List[str]], List[List[str]], List[List[str]],]:
         data = read_jsonl(self.dataset_path)
         triples_list = []
         rules_list = []
@@ -236,7 +231,7 @@ class ProofWriterDataset(AbstractProofQADataset):
 
     def __read_dataset_implication_enumeration(
         self, triples_key: str, rules_key: str, labels_key: str
-    ) -> Tuple[List[List[str]], List[List[str]], List[List[Optional[str]]]]:
+    ) -> Tuple[List[List[str]], List[List[str]], List[List[str]]]:
         data = read_jsonl(self.dataset_path)
         triples_list = []
         rules_list = []
@@ -274,8 +269,8 @@ class ProofWriterDataset(AbstractProofQADataset):
         List[List[str]],
         List[List[str]],
         List[List[str]],
-        List[List[Optional[str]]],
-        List[List[Optional[str]]],
+        List[List[str]],
+        List[List[str]],
     ]:
         data = read_jsonl(self.dataset_path)
         triples_list = []
@@ -325,11 +320,9 @@ class ProofWriterDataset(AbstractProofQADataset):
     def __getitem__(
         self, index: int
     ) -> Union[
-        Tuple[
-            List[str], List[str], List[str], List[Optional[str]], List[Optional[str]]
-        ],
-        Tuple[List[str], List[str], List[Optional[str]], List[Optional[str]]],
-        Tuple[List[str], List[str], List[Optional[str]]],
+        Tuple[List[str], List[str], List[str], List[str], List[str]],
+        Tuple[List[str], List[str], List[str], List[str]],
+        Tuple[List[str], List[str], List[str]],
     ]:
         if self.task == "proof_generation_all" or self.task == "abduction":
             return (
