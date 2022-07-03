@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import List, Tuple, Union
+from typing import Dict, List, Tuple, Union
 
 from torch.utils.data import Dataset
 
@@ -42,8 +42,8 @@ class AbstractProofQADataset(BaseLogicDataset):
     def __getitem__(
         self, index: int
     ) -> Union[
-        Tuple[List[str], List[str], List[str], List[str], List[str]],
-        Tuple[List[str], List[str], List[str], List[str]],
-        Tuple[List[str], List[str], List[str]],
+        Tuple[Dict[str, str], Dict[str, str], List[str], List[str], List[str]],
+        Tuple[Dict[str, str], Dict[str, str], List[str], List[str]],
+        Tuple[Dict[str, str], Dict[str, str], List[str]],
     ]:
         raise NotImplementedError()

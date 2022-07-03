@@ -1,5 +1,5 @@
 import os
-from typing import List, Optional, Tuple, Union
+from typing import Dict, List, Optional, Tuple, Union
 
 from torchtextlogic.datasets.base import AbstractProofQADataset
 from torchtextlogic.datasets.exceptions import (
@@ -134,8 +134,8 @@ class ProofWriterDataset(AbstractProofQADataset):
         rules_key: str,
         questions_key: str,
     ) -> Tuple[
-        List[List[str]],
-        List[List[str]],
+        List[Dict[str, str]],
+        List[Dict[str, str]],
         List[List[str]],
         List[List[str]],
         List[List[str]],
@@ -195,7 +195,12 @@ class ProofWriterDataset(AbstractProofQADataset):
 
     def __read_dataset_proof_generation_iter(
         self, triples_key: str, rules_key: str, proofs_key: str
-    ) -> Tuple[List[List[str]], List[List[str]], List[List[str]], List[List[str]],]:
+    ) -> Tuple[
+        List[Dict[str, str]],
+        List[Dict[str, str]],
+        List[List[str]],
+        List[List[str]],
+    ]:
         data = read_jsonl(self.dataset_path)
         triples_list = []
         rules_list = []
@@ -231,7 +236,7 @@ class ProofWriterDataset(AbstractProofQADataset):
 
     def __read_dataset_implication_enumeration(
         self, triples_key: str, rules_key: str, labels_key: str
-    ) -> Tuple[List[List[str]], List[List[str]], List[List[str]]]:
+    ) -> Tuple[List[Dict[str, str]], List[Dict[str, str]], List[List[str]]]:
         data = read_jsonl(self.dataset_path)
         triples_list = []
         rules_list = []
@@ -266,8 +271,8 @@ class ProofWriterDataset(AbstractProofQADataset):
     def __read_dataset_abduction(
         self, triples_key: str, rules_key: str, abductions_key: str
     ) -> Tuple[
-        List[List[str]],
-        List[List[str]],
+        List[Dict[str, str]],
+        List[Dict[str, str]],
         List[List[str]],
         List[List[str]],
         List[List[str]],
@@ -320,9 +325,9 @@ class ProofWriterDataset(AbstractProofQADataset):
     def __getitem__(
         self, index: int
     ) -> Union[
-        Tuple[List[str], List[str], List[str], List[str], List[str]],
-        Tuple[List[str], List[str], List[str], List[str]],
-        Tuple[List[str], List[str], List[str]],
+        Tuple[Dict[str, str], Dict[str, str], List[str], List[str], List[str]],
+        Tuple[Dict[str, str], Dict[str, str], List[str], List[str]],
+        Tuple[Dict[str, str], Dict[str, str], List[str]],
     ]:
         if self.task == "proof_generation_all" or self.task == "abduction":
             return (
