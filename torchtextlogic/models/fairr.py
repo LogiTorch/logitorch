@@ -1,3 +1,4 @@
+from turtle import forward
 import torch
 import torch.nn as nn
 from transformers import (
@@ -13,8 +14,8 @@ class RuleSelector(nn.Module):
         super().__init__()
         self.model = RobertaModel.from_pretrained(pretrained_roberta_model)
         self.tokenizer = RobertaTokenizer.from_pretrained(pretrained_roberta_model)
-        out_dim = self.model.config.hidden_size
-        self.classifier = nn.Linear(out_dim, 1)
+        self.out_dim = self.model.config.hidden_size
+        self.classifier = nn.Linear(self.out_dim, 1)
         self.dropout = nn.Dropout(cls_dropout)
 
         nn.init.xavier_normal_(self.classifier.weight)
@@ -33,6 +34,16 @@ class FactSelector(nn.Module):
         super().__init__()
         self.model = RobertaModel.from_pretrained(pretrained_roberta_model)
         self.tokenizer = RobertaTokenizer.from_pretrained(pretrained_roberta_model)
+        self.out_dim = self.model.config.hidden_size
+        self.classifier = nn.Linear(self.out_dim, 1)
+
+        self.dropout = nn.Dropout(self.model.config.hidden_dropout_prob)
+
+        nn.init.xavier_normal_(self.classifier.weight)
+        self.classifier.bias.data.zero_()
+
+    def forward(self, x, y=None):
+        pass
 
 
 class KnowledgeComposer(nn.Module):
