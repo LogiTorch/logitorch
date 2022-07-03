@@ -149,17 +149,17 @@ class ProofWriterDataset(AbstractProofQADataset):
 
         proofs_key = "proofsWithIntermediates"
         for i in data:
-            triples = []
-            rules = []
+            triples = {}
+            rules = {}
             questions = []
             proofs = []
             labels = []
 
             for t, val in i[triples_key].items():
-                triples.append(f"{t}: {val['text']}")
+                triples[t] = val["text"]
 
             for r, val in i[rules_key].items():
-                rules.append(f"{r}: {val['text']}")
+                rules[r] = val["text"]
 
             for q in i[questions_key].values():
                 questions.append(q["question"])
@@ -203,15 +203,15 @@ class ProofWriterDataset(AbstractProofQADataset):
         proofs_list = []
 
         for i in data:
-            triples = []
-            rules = []
+            triples = {}
+            rules = {}
             inferences = []
             proofs = []
 
             for t, val in i[triples_key].items():
-                triples.append(f"{t}: {val['text']}")
+                triples[t] = val["text"]
             for r, val in i[rules_key].items():
-                rules.append(f"{r}: {val['text']}")
+                rules[r] = val["text"]
             for val in i[proofs_key]:
                 inferences.append(val["text"])
                 proofs.append(val["proofs"])
@@ -238,15 +238,15 @@ class ProofWriterDataset(AbstractProofQADataset):
         labels_list = []
 
         for i in data:
-            triples = []
-            rules = []
+            triples = {}
+            rules = {}
             labels = []
 
             for t, val in i[triples_key].items():
-                triples.append(f"{t}: {val['text']}")
+                triples[t] = val["text"]
 
             for r, val in i[rules_key].items():
-                rules.append(f"{r}: {val['text']}")
+                rules[r] = val["text"]
 
             for p in i[labels_key]:
                 labels.append(p["text"])
@@ -280,17 +280,17 @@ class ProofWriterDataset(AbstractProofQADataset):
         proofs_list = []
 
         for i in data:
-            triples = []
-            rules = []
+            triples = {}
+            rules = {}
             questions = []
             labels = []
             proofs = []
 
             for t, val in i[triples_key].items():
-                triples.append(f"{t}: {val['text']}")
+                triples[t] = val["text"]
 
             for r, val in i[rules_key].items():
-                rules.append(f"{r}: {val['text']}")
+                rules[r] = val["text"]
 
             for abduc in i[abductions_key].values():
                 questions.append(abduc["question"])
