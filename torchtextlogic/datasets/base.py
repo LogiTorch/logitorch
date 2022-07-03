@@ -42,6 +42,9 @@ class AbstractProofQADataset(BaseLogicDataset):
     def __getitem__(
         self, index: int
     ) -> Union[
+        Tuple[
+            Dict[str, str], Dict[str, str], List[str], List[str], List[str], List[str]
+        ],
         Tuple[Dict[str, str], Dict[str, str], List[str], List[str], List[str]],
         Tuple[Dict[str, str], Dict[str, str], List[str], List[str]],
         Tuple[Dict[str, str], Dict[str, str], List[str]],

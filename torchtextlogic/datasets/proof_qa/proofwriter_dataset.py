@@ -85,6 +85,7 @@ class ProofWriterDataset(AbstractProofQADataset):
                     self.questions,
                     self.labels,
                     self.proofs,
+                    self.proofs_intermerdiates,
                 ) = self.__read_dataset_proof_generation_all(
                     "triples", "rules", "questions"
                 )
@@ -139,6 +140,7 @@ class ProofWriterDataset(AbstractProofQADataset):
         List[List[str]],
         List[List[str]],
         List[List[str]],
+        List[List[str]],
     ]:
         data = read_jsonl(self.dataset_path)
         triples_list = []
@@ -146,13 +148,15 @@ class ProofWriterDataset(AbstractProofQADataset):
         questions_list = []
         labels_list = []
         proofs_list = []
+        proofs_intermediates_list = []
 
-        proofs_key = "proofsWithIntermediates"
+        proofs_intermediates_key = "proofsWithIntermediates"
         for i in data:
             triples = {}
             rules = {}
             questions = []
             proofs = []
+            proofs_intermediates = []
             labels = []
 
             for t, val in i[triples_key].items():
@@ -163,9 +167,9 @@ class ProofWriterDataset(AbstractProofQADataset):
 
             for q in i[questions_key].values():
                 questions.append(q["question"])
-                if proofs_key in q:
+                if proofs_intermediates_key in q:
                     tmp_proof = []
-                    for p in q[proofs_key]:
+                    for p in q[proofs_intermediates_key]:
                         str_proof = f"{p['representation']}"
                         if len(p["intermediates"]) > 0:
                             str_proof += " ; "
@@ -175,14 +179,16 @@ class ProofWriterDataset(AbstractProofQADataset):
                         tmp_proof.append(str_proof)
 
                 labels.append(q["answer"])
-                proofs.append(tmp_proof)
+                proofs.append(q["proofs"])
+                proofs_intermediates.append(tmp_proof)
 
-            for q, l, p in zip(questions, labels, proofs):
+            for q, l, p, p_i in zip(questions, labels, proofs, proofs_intermediates):
                 triples_list.append(triples)
                 rules_list.append(rules)
                 questions_list.append(q)
                 labels_list.append(l)
                 proofs_list.append(p)
+                proofs_intermediates_list.append(p_i)
 
         # print(
         #     triples_list[0],
@@ -191,7 +197,14 @@ class ProofWriterDataset(AbstractProofQADataset):
         #     labels_list[0],
         #     proofs_list[0],
         # )
-        return triples_list, rules_list, questions_list, labels_list, proofs_list
+        return (
+            triples_list,
+            rules_list,
+            questions_list,
+            labels_list,
+            proofs_list,
+            proofs_intermediates_list,
+        )
 
     def __read_dataset_proof_generation_iter(
         self, triples_key: str, rules_key: str, proofs_key: str
@@ -325,11 +338,23 @@ class ProofWriterDataset(AbstractProofQADataset):
     def __getitem__(
         self, index: int
     ) -> Union[
+        Tuple[
+            Dict[str, str], Dict[str, str], List[str], List[str], List[str], List[str]
+        ],
         Tuple[Dict[str, str], Dict[str, str], List[str], List[str], List[str]],
         Tuple[Dict[str, str], Dict[str, str], List[str], List[str]],
         Tuple[Dict[str, str], Dict[str, str], List[str]],
     ]:
-        if self.task == "proof_generation_all" or self.task == "abduction":
+        if self.task == "proof_generation_all":
+            return (
+                self.triples[index],
+                self.rules[index],
+                self.questions[index],
+                self.labels[index],
+                self.proofs[index],
+                self.proofs_intermerdiates[index],
+            )
+        elif self.task == "abduction":
             return (
                 self.triples[index],
                 self.rules[index],
