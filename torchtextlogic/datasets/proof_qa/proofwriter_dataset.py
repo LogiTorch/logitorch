@@ -1,4 +1,5 @@
 import os
+import re
 from typing import Dict, List, Optional, Tuple, Union
 
 from torchtextlogic.datasets.base import AbstractProofQADataset
@@ -371,6 +372,124 @@ class ProofWriterDataset(AbstractProofQADataset):
             )
         else:
             return self.triples[index], self.rules[index], self.labels[index]
+
+    def __str__(self) -> str:
+        return f'The {self.split_set} set of {self.dataset_name}\'s ProofWriter for the task of "{self.task}" has {self.__len__()} instances'
+
+    def __len__(self) -> int:
+        return len(self.triples)
+
+
+class FaiRRProofWriterDataset:
+    def __init__(
+        self,
+        dataset_name: str,
+        split_set: str,
+        open_world_assumption: bool = False,
+    ) -> None:
+        try:
+            if dataset_name not in PROOFWRITER_SUB_DATASETS:
+                raise DatasetNameError()
+            if split_set != "test" and dataset_name == "birds-electricity":
+                raise SplitSetError(["test"])
+
+            if split_set == "val":
+                split_set = "dev"
+            elif split_set not in SPLIT_SETS:
+                raise SplitSetError(SPLIT_SETS)
+
+            if not os.path.exists(PROOFWRITER_DATASET_FOLDER):
+                download_dataset(PROOFWRITER_DATASET_ZIP_URL, PROOFWRITER_DATASET)
+
+            self.dataset_name = dataset_name
+            self.split_set = split_set
+            self.world_assumption = "CWA"
+
+            if open_world_assumption:
+                self.world_assumption = "OWA"
+
+            self.dataset_path = f"{PROOFWRITER_DATASET_FOLDER}/{self.world_assumption}/{self.dataset_name}/meta-stage-{self.split_set}.jsonl"
+            self.no_staged_dataset_path = f"{PROOFWRITER_DATASET_FOLDER}/{self.world_assumption}/{self.dataset_name}/meta-{self.split_set}.jsonl"
+            (
+                self.triples,
+                self.rules,
+                self.questions,
+                self.labels,
+                self.proofs,
+            ) = self.__read_dataset_proof_generation_iter(
+                "triples", "rules", "allInferences"
+            )
+
+        except DatasetNameError as err:
+            print(err.message)
+            print(f"The ProofWriter datasets are: {PROOFWRITER_SUB_DATASETS}")
+        except SplitSetError as err:
+            print(err.message)
+
+    def __read_dataset_proof_generation_iter(
+        self, triples_key: str, rules_key: str, proofs_key: str
+    ) -> Tuple[
+        List[Dict[str, str]],
+        List[Dict[str, str]],
+        List[List[str]],
+        List[List[str]],
+    ]:
+        data = read_jsonl(self.dataset_path)
+        no_staged_data = read_jsonl(self.no_staged_dataset_path)
+        questions = {}
+
+        for i in no_staged_data:
+            questions_tmp = []
+            for q in i["questions"].values():
+                questions_tmp.append(q["question"])
+            questions[i["id"]] = questions_tmp
+
+        triples_list = []
+        rules_list = []
+        questions_list = []
+        labels_list = []
+        proofs_list = []
+
+        for i in data:
+
+            id = re.sub("-add[0-9]+", "", i["id"])
+
+            for q in questions[id]:
+                triples = {}
+                rules = {}
+                inferences = []
+                proofs = []
+
+                for t, val in i[triples_key].items():
+                    triples[t] = val["text"]
+                for r, val in i[rules_key].items():
+                    rules[r] = val["text"]
+                for val in i[proofs_key]:
+                    inferences.append(val["text"])
+                    proofs.append(val["proofs"])
+
+                triples_list.append(triples)
+                rules_list.append(rules)
+                questions_list.append(q)
+
+                if len(inferences) > 0:
+                    labels_list.append(inferences)
+                    proofs_list.append(proofs)
+                else:
+                    labels_list.append([None])
+                    proofs_list.append([None])
+
+        return triples_list, rules_list, questions_list, labels_list, proofs_list
+
+    def __getitem__(self, index: int):
+
+        return (
+            self.triples[index],
+            self.rules[index],
+            self.questions[index],
+            self.labels[index],
+            self.proofs[index],
+        )
 
     def __str__(self) -> str:
         return f'The {self.split_set} set of {self.dataset_name}\'s ProofWriter for the task of "{self.task}" has {self.__len__()} instances'
