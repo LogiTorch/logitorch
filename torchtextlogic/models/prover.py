@@ -62,8 +62,8 @@ class PRover(nn.Module):
 
 # PRover("roberta-base")
 
-x = torch.tensor([1, 2, 3])
-print(x.repeat(4, 2, 1))
+# x = torch.tensor([1, 2, 3])
+# print(x.repeat(4, 2, 1))
 
 
 class Node:
