@@ -9,7 +9,7 @@ from transformers.modeling_outputs import SequenceClassifierOutput
 from torchtextlogic.models.proofwriter import ProofWriter
 
 
-class PLProofWriter(pl.LightningModule):
+class ProofWriterTrainer(pl.LightningModule):
     """[summary]"""
 
     def __init__(

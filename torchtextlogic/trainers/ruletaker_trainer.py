@@ -9,7 +9,7 @@ from transformers.modeling_outputs import SequenceClassifierOutput
 from torchtextlogic.models.ruletaker import RuleTaker
 
 
-class PLRuleTaker(pl.LightningModule):
+class RuleTakerTrainer(pl.LightningModule):
     """[summary]"""
 
     def __init__(self, pretrained_model: str, learning_rate: float = 1e-3) -> None:
