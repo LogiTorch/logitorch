@@ -1,5 +1,6 @@
 import torch
 import torch.nn as nn
+from torch.nn import CrossEntropyLoss
 from torch.nn.init import xavier_normal
 from transformers import RobertaModel
 from transformers.models.roberta.modeling_roberta import RobertaClassificationHead
@@ -7,7 +8,7 @@ from transformers.models.roberta.modeling_roberta import RobertaClassificationHe
 
 class _NodeClassificationHead(nn.Module):
     def __init__(self, config):
-        super(self).__init__()
+        super().__init__()
         self.dense = nn.Linear(config.hidden_size, config.hidden_size)
         self.dropout = nn.Dropout(config.hidden_dropout_prob)
         self.out_proj = nn.Linear(config.hidden_size, config.num_labels)
@@ -23,7 +24,7 @@ class _NodeClassificationHead(nn.Module):
 
 class _EdgeClassificationHead(nn.Module):
     def __init__(self, config):
-        super(self).__init__()
+        super().__init__()
         self.dense = nn.Linear(3 * config.hidden_size, config.hidden_size)
         self.dropout = nn.Dropout(config.hidden_dropout_prob)
         self.out_proj = nn.Linear(config.hidden_size, config.num_labels)
@@ -41,6 +42,7 @@ class PRover(nn.Module):
     def __init__(self, pretrained_roberta_model: str, num_labels: int = 2) -> None:
         super().__init__()
         self.num_labels = 2
+        self.num_labels_edge = 2
         self.encoder = RobertaModel.from_pretrained(pretrained_roberta_model)
         self.config = self.encoder.config
         self.naf_layer = nn.Linear(self.config.hidden_size, self.config.hidden_size)
@@ -48,92 +50,111 @@ class PRover(nn.Module):
         self.classifier_node = _NodeClassificationHead(self.config)
         self.classifier_edge = _EdgeClassificationHead(self.config)
 
-        xavier_normal(self.naf_layer)
+        # xavier_normal(self.naf_layer)
         # xavier_normal(self.classifier_node)
         # xavier_normal(self.classifier_edge)
 
-    def forward(self, x, y=None):
-        outputs = self.encoder(x)
+    def forward(
+        self, x, proof_offsets=None, node_labels=None, edge_labels=None, qa_labels=None
+    ):
+        outputs = self.encoder(**x)
         sequence_outputs = outputs[0]
         cls_outputs = sequence_outputs[:, 0, :]
         naf_outputs = self.naf_layer(cls_outputs)
         logits = self.classifier(sequence_outputs)
 
+        max_node_length = node_labels.shape[1]
+        max_edge_length = edge_labels.shape[1]
+        batch_size = node_labels.shape[0]
+        embedding_dim = sequence_outputs.shape[2]
 
-# PRover("roberta-base")
+        print(max_node_length)
+        print(max_edge_length)
+        batch_node_embedding = torch.zeros((batch_size, max_node_length, embedding_dim))
+        batch_edge_embedding = torch.zeros(
+            (batch_size, max_edge_length, 3 * embedding_dim)
+        )
 
-# x = torch.tensor([1, 2, 3])
-# print(x.repeat(4, 2, 1))
-
-
-class Node:
-    def __init__(self, head):
-        self.head = head
-
-    def __str__(self):
-        return str(self.head)
-
-
-def get_proof_graph(proof_str):
-    stack = []
-    last_open = 0
-    last_open_index = 0
-    pop_list = []
-    all_edges = []
-    all_nodes = []
-
-    proof_str = proof_str.replace("(", " ( ")
-    proof_str = proof_str.replace(")", " ) ")
-    proof_str = proof_str.split()
-
-    should_join = False
-    for i in range(len(proof_str)):
-
-        _s = proof_str[i]
-        x = _s.strip()
-        if len(x) == 0:
-            continue
-
-        if x == "(":
-            stack.append((x, i))
-            last_open = len(stack) - 1
-            last_open_index = i
-        elif x == ")":
-            for j in range(last_open + 1, len(stack)):
-                if isinstance(stack[j][0], Node):
-                    pop_list.append((stack[j][1], stack[j][0]))
-
-            stack = stack[:last_open]
-            for j in range((len(stack))):
-                if stack[j][0] == "(":
-                    last_open = j
-                    last_open_index = stack[j][1]
-
-        elif x == "[" or x == "]":
-            pass
-        elif x == "->":
-            should_join = True
-        else:
-            # terminal
-            if x not in all_nodes:
-                all_nodes.append(x)
-
-            if should_join:
-
-                new_pop_list = []
-                # Choose which ones to add the node to
-                for (index, p) in pop_list:
-                    if index < last_open_index:
-                        new_pop_list.append((index, p))
+        for batch_index in range(batch_size):
+            prev_index = 1
+            sample_node_embedding = None
+            count = 0
+            for offset in proof_offsets[batch_index]:
+                if offset == 0:
+                    break
+                else:
+                    rf_embedding = torch.mean(
+                        sequence_outputs[batch_index, prev_index : (offset + 1), :],
+                        dim=0,
+                    ).unsqueeze(0)
+                    prev_index = offset + 1
+                    count += 1
+                    if sample_node_embedding is None:
+                        sample_node_embedding = rf_embedding
                     else:
-                        all_edges.append((p.head, x))
-                pop_list = new_pop_list
+                        sample_node_embedding = torch.cat(
+                            (sample_node_embedding, rf_embedding), dim=0
+                        )
 
-            stack.append((Node(x), i))
+            # Add the NAF output at the end
+            sample_node_embedding = torch.cat(
+                (sample_node_embedding, naf_outputs[batch_index].unsqueeze(0)), dim=0
+            )
 
-            should_join = False
+            repeat1 = sample_node_embedding.unsqueeze(0).repeat(
+                len(sample_node_embedding), 1, 1
+            )
+            repeat2 = sample_node_embedding.unsqueeze(1).repeat(
+                1, len(sample_node_embedding), 1
+            )
+            sample_edge_embedding = torch.cat(
+                (repeat1, repeat2, (repeat1 - repeat2)), dim=2
+            )
 
-    return all_nodes, all_edges
+            sample_edge_embedding = sample_edge_embedding.view(
+                -1, sample_edge_embedding.shape[-1]
+            )
 
+            # Append 0s at the end (these will be ignored for loss)
+            sample_node_embedding = torch.cat(
+                (
+                    sample_node_embedding,
+                    torch.zeros((max_node_length - count - 1, embedding_dim)),
+                ),
+                dim=0,
+            )
+            print(sample_node_embedding)
 
-print(get_proof_graph("[(((triple1 triple11) -> rule2))"))
+            sample_edge_embedding = torch.cat(
+                (
+                    sample_edge_embedding,
+                    torch.zeros(
+                        (
+                            max_edge_length - len(sample_edge_embedding),
+                            3 * embedding_dim,
+                        )
+                    ),
+                ),
+                dim=0,
+            )
+
+            batch_node_embedding[batch_index, :, :] = sample_node_embedding
+            batch_edge_embedding[batch_index, :, :] = sample_edge_embedding
+
+        node_logits = self.classifier_node(batch_node_embedding)
+        edge_logits = self.classifier_edge(batch_edge_embedding)
+
+        outputs = (logits, node_logits, edge_logits) + outputs[2:]
+        if qa_labels is not None:
+            loss_fct = CrossEntropyLoss()
+            qa_loss = loss_fct(logits.view(-1, self.num_labels), qa_labels.view(-1))
+            node_loss = loss_fct(
+                node_logits.view(-1, self.num_labels), node_labels.view(-1)
+            )
+            edge_loss = loss_fct(
+                edge_logits.view(-1, self.num_labels_edge), edge_labels.view(-1)
+            )
+            total_loss = qa_loss + node_loss + edge_loss
+            outputs = (total_loss, qa_loss, node_loss, edge_loss) + outputs
+
+        return outputs
