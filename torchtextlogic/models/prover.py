@@ -68,8 +68,10 @@ class PRover(nn.Module):
         batch_size = node_labels.shape[0]
         embedding_dim = sequence_outputs.shape[2]
 
-        print(max_node_length)
-        print(max_edge_length)
+        # print(max_node_length)
+        # print(max_edge_length)
+        # print(batch_size)
+        # print(embedding_dim)
         batch_node_embedding = torch.zeros((batch_size, max_node_length, embedding_dim))
         batch_edge_embedding = torch.zeros(
             (batch_size, max_edge_length, 3 * embedding_dim)
@@ -79,7 +81,7 @@ class PRover(nn.Module):
             prev_index = 1
             sample_node_embedding = None
             count = 0
-            for offset in proof_offsets[batch_index]:
+            for offset in proof_offsets[batch_index][1:]:
                 if offset == 0:
                     break
                 else:
@@ -100,7 +102,6 @@ class PRover(nn.Module):
             sample_node_embedding = torch.cat(
                 (sample_node_embedding, naf_outputs[batch_index].unsqueeze(0)), dim=0
             )
-
             repeat1 = sample_node_embedding.unsqueeze(0).repeat(
                 len(sample_node_embedding), 1, 1
             )
@@ -115,15 +116,16 @@ class PRover(nn.Module):
                 -1, sample_edge_embedding.shape[-1]
             )
 
-            # Append 0s at the end (these will be ignored for loss)
-            sample_node_embedding = torch.cat(
-                (
-                    sample_node_embedding,
-                    torch.zeros((max_node_length - count - 1, embedding_dim)),
-                ),
-                dim=0,
-            )
-            print(sample_node_embedding)
+            if sample_node_embedding.shape[0] < max_node_length:
+                # Append 0s at the end (these will be ignored for loss)
+                sample_node_embedding = torch.cat(
+                    (
+                        sample_node_embedding,
+                        torch.zeros((max_node_length - count - 1, embedding_dim)),
+                    ),
+                    dim=0,
+                )
+            # print(sample_node_embedding.shape)
 
             sample_edge_embedding = torch.cat(
                 (
@@ -138,6 +140,10 @@ class PRover(nn.Module):
                 dim=0,
             )
 
+            # print(max_edge_length)
+            # print(len(sample_edge_embedding))
+            # print(sample_edge_embedding.shape)
+
             batch_node_embedding[batch_index, :, :] = sample_node_embedding
             batch_edge_embedding[batch_index, :, :] = sample_edge_embedding
 
@@ -151,6 +157,8 @@ class PRover(nn.Module):
             node_loss = loss_fct(
                 node_logits.view(-1, self.num_labels), node_labels.view(-1)
             )
+            # print(edge_logits.view(-1, self.num_labels_edge))
+            # print(edge_labels.view(-1))
             edge_loss = loss_fct(
                 edge_logits.view(-1, self.num_labels_edge), edge_labels.view(-1)
             )

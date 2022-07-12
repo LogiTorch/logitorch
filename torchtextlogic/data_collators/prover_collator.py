@@ -189,7 +189,7 @@ class PRoverProofWriterCollator:
             proof_offsets.append(torch.tensor(proof_offset))
             node_label, edge_label = self.get_node_edge_label_constrained(i)
             node_labels.append(torch.tensor(node_label))
-            edge_labels.append(torch.tensor(edge_label))
+            edge_labels.append(torch.LongTensor(edge_label))
             labels.append(PROOFWRITER_LABEL_TO_ID[str(i[3])])
 
         tokenized_batch = self.tokenizer(
