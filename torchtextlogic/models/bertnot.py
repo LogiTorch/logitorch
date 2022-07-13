@@ -1,3 +1,4 @@
+from models.exceptions import TaskError
 import torch.nn as nn
 from transformers import BertModel
 from transformers.models.bert.modeling_bert import BertOnlyMLMHead
@@ -18,11 +19,19 @@ class BERTNOT(nn.Module):
             self.encoder.config.hidden_size, num_labels
         )
 
-    def forward(self, x, y=None, task="mlm", loss=None):
-        pass
+    def forward(self, x, y=None, task="mlm"):
+        try:
+            if task != "mlm" or task != "te":
+                raise TaskError()
+        except TaskError as err:
+            print(err.message())
 
     def predict(self, x, task="mlm"):
-        pass
+        try:
+            if task != "mlm" or task != "te":
+                raise TaskError()
+        except TaskError as err:
+            print(err.message())
 
 
 model = BERTNOT("bert-base-uncased")
