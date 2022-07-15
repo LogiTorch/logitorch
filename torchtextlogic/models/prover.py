@@ -1,3 +1,5 @@
+from data_collators.prover_collator import PRoverProofWriterCollator
+import numpy as np
 import torch
 import torch.nn as nn
 from torch.nn import CrossEntropyLoss
@@ -43,6 +45,7 @@ class PRover(nn.Module):
         super().__init__()
         self.num_labels = 2
         self.num_labels_edge = 2
+        self.proofwriter_collator = PRoverProofWriterCollator(pretrained_roberta_model)
         self.encoder = RobertaModel.from_pretrained(pretrained_roberta_model)
         self.config = self.encoder.config
         self.naf_layer = nn.Linear(self.config.hidden_size, self.config.hidden_size)
@@ -55,7 +58,14 @@ class PRover(nn.Module):
         # xavier_normal(self.classifier_edge)
 
     def forward(
-        self, x, proof_offsets=None, node_labels=None, edge_labels=None, qa_labels=None
+        self,
+        x,
+        proof_offsets=None,
+        max_node_length=None,
+        max_edge_length=None,
+        node_labels=None,
+        edge_labels=None,
+        qa_labels=None,
     ):
         outputs = self.encoder(**x)
         sequence_outputs = outputs[0]
@@ -63,9 +73,15 @@ class PRover(nn.Module):
         naf_outputs = self.naf_layer(cls_outputs)
         logits = self.classifier(sequence_outputs)
 
-        max_node_length = node_labels.shape[1]
-        max_edge_length = edge_labels.shape[1]
-        batch_size = node_labels.shape[0]
+        if max_node_length is None:
+            max_node_length = node_labels.shape[1]
+
+        if max_edge_length is None:
+            max_edge_length = edge_labels.shape[1]
+        if node_labels is None:
+            batch_size = 1
+        else:
+            batch_size = node_labels.shape[0]
         embedding_dim = sequence_outputs.shape[2]
 
         # print(max_node_length)
@@ -127,6 +143,9 @@ class PRover(nn.Module):
                 )
             # print(sample_node_embedding.shape)
 
+            # print(max_edge_length)
+            # print(sample_edge_embedding.shape[0])
+
             sample_edge_embedding = torch.cat(
                 (
                     sample_edge_embedding,
@@ -166,3 +185,41 @@ class PRover(nn.Module):
             outputs = (total_loss, qa_loss, node_loss, edge_loss) + outputs
 
         return outputs
+
+    def predict(self, triples, rules, question, device: str = "cpu"):
+        with torch.no_grad():
+            context_tokens = []
+            proof_offset = []
+            sentences = ["<s>"]
+
+            nfact = len(triples)
+            nrule = len(rules)
+            node_length = nfact + nrule + 1
+            edge_length = node_length**2
+
+            for s in triples.values():
+                sentences.append(s)
+            for s in rules.values():
+                sentences.append(s)
+            for s in sentences:
+                sentence_tokens = self.proofwriter_collator.tokenizer.tokenize(s)
+                context_tokens.extend(sentence_tokens)
+                proof_offset.append(len(context_tokens))
+            sentences.append("</s>")
+            sentences.append("</s>")
+            sentences.append(question)
+            sentences.append("</s>")
+            context = "".join(sentences)
+            proofs_offsets = torch.tensor([proof_offset])
+
+            tokenized_context = self.proofwriter_collator.tokenizer(
+                [context], add_special_tokens=False, padding=True, return_tensors="pt"
+            )
+            logits = self(
+                tokenized_context.to(device),
+                proofs_offsets.to(device),
+                node_length,
+                edge_length,
+            )
+            qa_label = logits[0].argmax()
+            return qa_label.item()

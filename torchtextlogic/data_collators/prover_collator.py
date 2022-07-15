@@ -164,8 +164,8 @@ class PRoverProofWriterCollator:
         return node_label, list(edge_label.flatten())
 
     def __call__(self, batch):
-        context = []
-        proof_offsets = []
+        contexts = []
+        proofs_offsets = []
         node_labels = []
         edge_labels = []
         labels = []
@@ -185,19 +185,19 @@ class PRoverProofWriterCollator:
             sentences.append("</s>")
             sentences.append(i[2])
             sentences.append("</s>")
-            context.append("".join(sentences))
-            proof_offsets.append(torch.tensor(proof_offset))
+            contexts.append("".join(sentences))
+            proofs_offsets.append(torch.tensor(proof_offset))
             node_label, edge_label = self.get_node_edge_label_constrained(i)
             node_labels.append(torch.tensor(node_label))
             edge_labels.append(torch.LongTensor(edge_label))
             labels.append(PROOFWRITER_LABEL_TO_ID[str(i[3])])
 
         tokenized_batch = self.tokenizer(
-            context, add_special_tokens=False, padding=True, return_tensors="pt"
+            contexts, add_special_tokens=False, padding=True, return_tensors="pt"
         )
-        proof_offsets = pad_sequence(proof_offsets, batch_first=True)
+        proofs_offsets = pad_sequence(proofs_offsets, batch_first=True)
         node_labels = pad_sequence(node_labels, batch_first=True, padding_value=-100)
         edge_labels = pad_sequence(edge_labels, batch_first=True, padding_value=-100)
         labels = torch.tensor(labels)
 
-        return tokenized_batch, proof_offsets, node_labels, edge_labels, labels
+        return tokenized_batch, proofs_offsets, node_labels, edge_labels, labels

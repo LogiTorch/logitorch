@@ -45,35 +45,43 @@ class BERTNOT(nn.Module):
             if task == "mlm":
                 outputs = self.encoder(**x)
                 logits = self.mlm_classifier(outputs[0])
-                if loss == "cross_entropy":
-                    loss = self.cross_entopy_loss(
-                        logits.view(-1, self.encoder.config.vocab_size), y.view(-1)
-                    )
-                    return (loss, logits)
-                elif loss == "unlikelihood":
-                    loss = self.unlikelihood_loss(
-                        logits.view(-1, self.encoder.config.vocab_size), y.view(-1)
-                    )
-                    return (loss, logits)
+
+                if y is not None:
+                    if loss == "cross_entropy":
+                        loss = self.cross_entopy_loss(
+                            logits.view(-1, self.encoder.config.vocab_size), y.view(-1)
+                        )
+                        return (loss, logits)
+                    elif loss == "unlikelihood":
+                        loss = self.unlikelihood_loss(
+                            logits.view(-1, self.encoder.config.vocab_size), y.view(-1)
+                        )
+                        return (loss, logits)
+                    else:
+                        original_outputs = self.original_bert(**x)[0]
+                        mask_token_indexes = torch.ne(y, -100)
+                        original_outputs = original_outputs[mask_token_indexes]
+                        original_probs = self.original_bert_softmax(original_outputs)
+
+                        pred_probs = self.log_softmax(logits[mask_token_indexes])
+
+                        loss = self.kl_loss(pred_probs, original_probs)
+
+                        return (loss, logits)
                 else:
-                    original_outputs = self.original_bert(**x)[0]
-                    mask_token_indexes = torch.ne(y, -100)
-                    original_outputs = original_outputs[mask_token_indexes]
-                    original_probs = self.original_bert_softmax(original_outputs)
-
-                    pred_probs = self.log_softmax(logits[mask_token_indexes])
-
-                    loss = self.kl_loss(pred_probs, original_probs)
-
-                    return (loss, logits)
+                    return logits
             else:
                 outputs = self.encoder(**x)
                 sequence_outputs = self.dropout(outputs[0])
                 logits = self.sequence_classifier(sequence_outputs)
-                loss = self.cross_entopy_loss(
-                    logits.view(-1, self.num_labels), y.view(-1)
-                )
-                return (loss, logits)
+
+                if y is not None:
+                    loss = self.cross_entopy_loss(
+                        logits.view(-1, self.num_labels), y.view(-1)
+                    )
+                    return (loss, logits)
+                else:
+                    return logits
 
         except TaskError as err:
             print(err.message)
