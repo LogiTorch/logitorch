@@ -1,14 +1,8 @@
 import os
 from typing import List, Tuple
 
-from torchtextlogic.datasets.base import AbstractQADataset
 from torchtextlogic.datasets.exceptions import DatasetNameError, SplitSetError
-from torchtextlogic.datasets.utils import (
-    DATASETS_FOLDER,
-    SPLIT_SETS,
-    download_dataset,
-    read_jsonl,
-)
+from torchtextlogic.datasets.utils import DATASETS_FOLDER, download_dataset, read_jsonl
 
 WIKI20K_DATASET_ZIP_URL = (
     "https://www.dropbox.com/s/yeh70n6etbg0a95/wiki20k_dataset.zip?dl=1"
@@ -29,7 +23,7 @@ class Wiki20KDataset:
 
             self.dataset_name = dataset_name
             self.dataset_path = f"{WIKI20K_DATASET_FOLDER}/{self.dataset_name}.jsonl"
-            self.sentences, self.labels = self.__read_dataset("sentence", "label", None)
+            self.sentences, self.labels = self.__read_dataset("sentence", "label", size)
         except DatasetNameError as err:
             print(err.message)
             print(f"The RuleTaker datasets are: {WIKI20K_SUB_DATASETS}")
@@ -61,4 +55,4 @@ class Wiki20KDataset:
         )
 
     def __len__(self) -> int:
-        return len(self.contexts)
+        return len(self.sentences)
