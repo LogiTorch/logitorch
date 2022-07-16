@@ -1,4 +1,3 @@
-from data_collators.prover_collator import PRoverProofWriterCollator
 import numpy as np
 import torch
 import torch.nn as nn
@@ -6,6 +5,8 @@ from torch.nn import CrossEntropyLoss
 from torch.nn.init import xavier_normal
 from transformers import RobertaModel
 from transformers.models.roberta.modeling_roberta import RobertaClassificationHead
+
+from data_collators.prover_collator import PRoverProofWriterCollator
 
 
 class _NodeClassificationHead(nn.Module):
@@ -221,5 +222,5 @@ class PRover(nn.Module):
                 node_length,
                 edge_length,
             )
-            qa_label = logits[0].argmax()
-            return qa_label.item()
+            pred_qa_label = logits[0].argmax()
+            return pred_qa_label.item()

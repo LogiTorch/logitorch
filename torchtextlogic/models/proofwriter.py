@@ -45,8 +45,8 @@ class ProofWriter(nn.Module):
                 remove_invalid_values=True,
             )
 
-            output = self.tokenizer.decode(
+            pred = self.tokenizer.decode(
                 beam_output, skip_special_tokens=True, clean_up_tokenization_spaces=True
             )
 
-        return output
+        return pred

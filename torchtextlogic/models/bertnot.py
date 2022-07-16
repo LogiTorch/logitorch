@@ -1,7 +1,14 @@
 import torch
 import torch.nn as nn
-from transformers import BertForMaskedLM, BertModel
-from transformers.models.bert.modeling_bert import BertOnlyMLMHead
+from transformers import (
+    BertConfig,
+    BertForMaskedLM,
+    BertModel,
+    BertPreTrainedModel,
+    BertTokenizer,
+    PreTrainedModel,
+)
+from transformers.models.bert.modeling_bert import BertLMPredictionHead, BertOnlyMLMHead
 
 from losses.unlikelihood_loss import UnlikelihoodLoss
 from models.exceptions import LossError, TaskError
@@ -10,17 +17,15 @@ from models.exceptions import LossError, TaskError
 class BERTNOT(nn.Module):
     def __init__(self, pretrained_bert_model: str, num_labels: int = 2) -> None:
         super().__init__()
-        self.encoder = BertModel.from_pretrained(pretrained_bert_model)
-        self.mlm_classifier = BertOnlyMLMHead(self.encoder.config)
+        self.model = BertForMaskedLM.from_pretrained(pretrained_bert_model)
+
         classifier_dropout = (
-            self.encoder.config.classifier_dropout
-            if self.encoder.config.classifier_dropout is not None
-            else self.encoder.config.hidden_dropout_prob
+            self.model.config.classifier_dropout
+            if self.model.config.classifier_dropout is not None
+            else self.model.config.hidden_dropout_prob
         )
         self.dropout = nn.Dropout(classifier_dropout)
-        self.sequence_classifier = nn.Linear(
-            self.encoder.config.hidden_size, num_labels
-        )
+        self.sequence_classifier = nn.Linear(self.model.config.hidden_size, num_labels)
 
         self.original_bert = BertForMaskedLM.from_pretrained(pretrained_bert_model)
 
@@ -35,6 +40,8 @@ class BERTNOT(nn.Module):
         self.unlikelihood_loss = UnlikelihoodLoss()
         self.kl_loss = nn.KLDivLoss(reduction="sum")
 
+        self.tokenizer = BertTokenizer.from_pretrained(pretrained_bert_model)
+
     def forward(self, x, y=None, task="mlm", loss="cross_entropy"):
         try:
             if task not in self.tasks:
@@ -43,18 +50,18 @@ class BERTNOT(nn.Module):
                 raise LossError(self.losses)
 
             if task == "mlm":
-                outputs = self.encoder(**x)
-                logits = self.mlm_classifier(outputs[0])
+                outputs = self.model(**x)
+                logits = outputs.logits
 
                 if y is not None:
                     if loss == "cross_entropy":
                         loss = self.cross_entopy_loss(
-                            logits.view(-1, self.encoder.config.vocab_size), y.view(-1)
+                            logits.view(-1, self.model.config.vocab_size), y.view(-1)
                         )
                         return (loss, logits)
                     elif loss == "unlikelihood":
                         loss = self.unlikelihood_loss(
-                            logits.view(-1, self.encoder.config.vocab_size), y.view(-1)
+                            logits.view(-1, self.model.config.vocab_size), y.view(-1)
                         )
                         return (loss, logits)
                     else:
@@ -71,8 +78,9 @@ class BERTNOT(nn.Module):
                 else:
                     return logits
             else:
-                outputs = self.encoder(**x)
-                sequence_outputs = self.dropout(outputs[0])
+                outputs = self.model.bert(**x)[0]
+                cls_representation = outputs[:, 0, :]
+                sequence_outputs = self.dropout(cls_representation)
                 logits = self.sequence_classifier(sequence_outputs)
 
                 if y is not None:
@@ -88,7 +96,18 @@ class BERTNOT(nn.Module):
 
     def predict(self, x: str, task="mlm", device="cpu"):
         try:
-            if task != "mlm" or task != "te":
-                raise TaskError()
+            if task not in self.tasks:
+                raise TaskError(self.tasks)
+            tokenized_x = self.tokenizer(x, return_tensors="pt")
+            logits = self(tokenized_x.to(device), task=task)
+            if task == "mlm":
+                mask_token_indexes = (
+                    tokenized_x.input_ids == self.tokenizer.mask_token_id
+                )[0].nonzero(as_tuple=True)[0]
+                predicted_token_id = logits[0, mask_token_indexes].argmax(axis=-1)
+                return self.tokenizer.decode(predicted_token_id)
+            else:
+                pred = logits.argmax().item()
+                return pred
         except TaskError as err:
             print(err.message)
