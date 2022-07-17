@@ -1,12 +1,8 @@
 import torch
 import torch.nn as nn
 from transformers import (
-    BertConfig,
     BertForMaskedLM,
-    BertModel,
-    BertPreTrainedModel,
     BertTokenizer,
-    PreTrainedModel,
 )
 from transformers.models.bert.modeling_bert import BertLMPredictionHead, BertOnlyMLMHead
 
@@ -32,13 +28,13 @@ class BERTNOT(nn.Module):
         self.tasks = ["mlm", "te"]
         self.losses = ["cross_entropy", "unlikelihood", "kl"]
 
-        self.num_labels = 2
+        self.num_labels = num_labels
         self.original_bert_softmax = nn.Softmax(dim=1)
         self.log_softmax = nn.LogSoftmax(dim=1)
 
         self.cross_entopy_loss = nn.CrossEntropyLoss()
         self.unlikelihood_loss = UnlikelihoodLoss()
-        self.kl_loss = nn.KLDivLoss(reduction="sum")
+        self.kl_loss = nn.KLDivLoss(reduction="mean")
 
         self.tokenizer = BertTokenizer.from_pretrained(pretrained_bert_model)
 
@@ -94,11 +90,16 @@ class BERTNOT(nn.Module):
         except TaskError as err:
             print(err.message)
 
-    def predict(self, x: str, task="mlm", device="cpu"):
+    def predict(self, context: str, hypothesis: str = None, task="mlm", device="cpu"):
         try:
             if task not in self.tasks:
                 raise TaskError(self.tasks)
-            tokenized_x = self.tokenizer(x, return_tensors="pt")
+
+            if hypothesis is None:
+                tokenized_x = self.tokenizer(context, return_tensors="pt")
+            else:
+                tokenized_x = self.tokenizer(context, hypothesis, return_tensors="pt")
+
             logits = self(tokenized_x.to(device), task=task)
             if task == "mlm":
                 mask_token_indexes = (

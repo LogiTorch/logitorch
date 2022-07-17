@@ -35,3 +35,30 @@ class BERTNOTWiki20KCollator:
         batch_y = pad_sequence(labels, batch_first=True, padding_value=-100)
 
         return batch_x, batch_y
+
+
+class BERTNOTTextualEntailment:
+    def __init__(self, pretrained_tokenizer: str) -> None:
+        self.tokenizer = AutoTokenizer.from_pretrained(pretrained_tokenizer)
+
+    def __call__(self, batch):
+        """
+        It takes a batch of data, and returns a batch of data that is tokenized and padded
+        :param batch: a batch of data from the dataset
+        :return: The input_ids of the labels
+        """
+        premises = []
+        hypotheses = []
+        labels = []
+
+        for p, h, l in batch:
+            premises.append(p)
+            hypotheses.append(h)
+            labels.append(l)
+
+        batch_x = self.tokenizer(
+            premises, hypotheses, padding=True, return_tensors="pt"
+        )
+        batch_y = torch.tensor(labels)
+
+        return batch_x, batch_y
