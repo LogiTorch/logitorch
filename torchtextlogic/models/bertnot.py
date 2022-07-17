@@ -1,9 +1,7 @@
 import torch
 import torch.nn as nn
-from transformers import (
-    BertForMaskedLM,
-    BertTokenizer,
-)
+from torch.nn.init import xavier_normal_
+from transformers import BertForMaskedLM, BertTokenizer
 
 from losses.unlikelihood_loss import UnlikelihoodLoss
 from models.exceptions import LossError, TaskError
@@ -36,6 +34,8 @@ class BERTNOT(nn.Module):
         self.kl_loss = nn.KLDivLoss(reduction="mean")
 
         self.tokenizer = BertTokenizer.from_pretrained(pretrained_bert_model)
+
+        xavier_normal_(self.sequence_classifier.weight)
 
     def forward(self, x, y=None, task="mlm", loss="cross_entropy"):
         try:

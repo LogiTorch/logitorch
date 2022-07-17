@@ -2,7 +2,7 @@ import numpy as np
 import torch
 import torch.nn as nn
 from torch.nn import CrossEntropyLoss
-from torch.nn.init import xavier_normal
+from torch.nn.init import xavier_normal_
 from transformers import RobertaModel
 from transformers.models.roberta.modeling_roberta import RobertaClassificationHead
 
@@ -15,6 +15,9 @@ class _NodeClassificationHead(nn.Module):
         self.dense = nn.Linear(config.hidden_size, config.hidden_size)
         self.dropout = nn.Dropout(config.hidden_dropout_prob)
         self.out_proj = nn.Linear(config.hidden_size, config.num_labels)
+
+        xavier_normal_(self.dense.weight)
+        xavier_normal_(self.out_proj)
 
     def forward(self, features, **kwargs):
         x = self.dropout(features)
@@ -31,6 +34,9 @@ class _EdgeClassificationHead(nn.Module):
         self.dense = nn.Linear(3 * config.hidden_size, config.hidden_size)
         self.dropout = nn.Dropout(config.hidden_dropout_prob)
         self.out_proj = nn.Linear(config.hidden_size, config.num_labels)
+
+        xavier_normal_(self.dense.weight)
+        xavier_normal_(self.out_proj)
 
     def forward(self, features, **kwargs):
         x = self.dropout(features)

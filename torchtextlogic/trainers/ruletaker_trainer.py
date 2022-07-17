@@ -20,7 +20,7 @@ class RuleTakerTrainer(pl.LightningModule):
         return self.model(x)
 
     def configure_optimizers(self):
-        return Adam(self.parameters(), lr=self.learning_rate)
+        return Adam(self.model.parameters(), lr=self.learning_rate)
 
     def training_step(self, train_batch: Tuple[Dict[str, torch.Tensor], torch.Tensor], batch_idx: int) -> torch.Tensor:  # type: ignore
         x, y = train_batch
