@@ -4,7 +4,6 @@ from transformers import (
     BertForMaskedLM,
     BertTokenizer,
 )
-from transformers.models.bert.modeling_bert import BertLMPredictionHead, BertOnlyMLMHead
 
 from losses.unlikelihood_loss import UnlikelihoodLoss
 from models.exceptions import LossError, TaskError

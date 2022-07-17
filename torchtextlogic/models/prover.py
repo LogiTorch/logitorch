@@ -44,8 +44,8 @@ class _EdgeClassificationHead(nn.Module):
 class PRover(nn.Module):
     def __init__(self, pretrained_roberta_model: str, num_labels: int = 2) -> None:
         super().__init__()
-        self.num_labels = 2
-        self.num_labels_edge = 2
+        self.num_labels = num_labels
+        self.num_labels_edge = num_labels
         self.proofwriter_collator = PRoverProofWriterCollator(pretrained_roberta_model)
         self.encoder = RobertaModel.from_pretrained(pretrained_roberta_model)
         self.config = self.encoder.config
