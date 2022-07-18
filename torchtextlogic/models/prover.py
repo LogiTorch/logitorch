@@ -48,7 +48,9 @@ class _EdgeClassificationHead(nn.Module):
 
 
 class PRover(nn.Module):
-    def __init__(self, pretrained_roberta_model: str, num_labels: int = 2) -> None:
+    def __init__(
+        self, pretrained_roberta_model: str, num_labels: int = 2, device: str = "cpu"
+    ) -> None:
         super().__init__()
         self.num_labels = num_labels
         self.num_labels_edge = num_labels
@@ -59,6 +61,7 @@ class PRover(nn.Module):
         self.classifier = RobertaClassificationHead(self.config)
         self.classifier_node = _NodeClassificationHead(self.config)
         self.classifier_edge = _EdgeClassificationHead(self.config)
+        self.device = device
 
         # xavier_normal(self.naf_layer)
         # xavier_normal(self.classifier_node)
@@ -96,10 +99,12 @@ class PRover(nn.Module):
         # print(max_edge_length)
         # print(batch_size)
         # print(embedding_dim)
-        batch_node_embedding = torch.zeros((batch_size, max_node_length, embedding_dim))
+        batch_node_embedding = torch.zeros(
+            (batch_size, max_node_length, embedding_dim)
+        ).to(self.device)
         batch_edge_embedding = torch.zeros(
             (batch_size, max_edge_length, 3 * embedding_dim)
-        )
+        ).to(self.device)
 
         for batch_index in range(batch_size):
             prev_index = 1
@@ -145,7 +150,9 @@ class PRover(nn.Module):
                 sample_node_embedding = torch.cat(
                     (
                         sample_node_embedding,
-                        torch.zeros((max_node_length - count - 1, embedding_dim)),
+                        torch.zeros((max_node_length - count - 1, embedding_dim)).to(
+                            self.device
+                        ),
                     ),
                     dim=0,
                 )
@@ -162,7 +169,7 @@ class PRover(nn.Module):
                             max_edge_length - len(sample_edge_embedding),
                             3 * embedding_dim,
                         )
-                    ),
+                    ).to(self.device),
                 ),
                 dim=0,
             )
