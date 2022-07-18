@@ -17,7 +17,7 @@ class _NodeClassificationHead(nn.Module):
         self.out_proj = nn.Linear(config.hidden_size, config.num_labels)
 
         xavier_normal_(self.dense.weight)
-        xavier_normal_(self.out_proj)
+        xavier_normal_(self.out_proj.weight)
 
     def forward(self, features, **kwargs):
         x = self.dropout(features)
@@ -36,7 +36,7 @@ class _EdgeClassificationHead(nn.Module):
         self.out_proj = nn.Linear(config.hidden_size, config.num_labels)
 
         xavier_normal_(self.dense.weight)
-        xavier_normal_(self.out_proj)
+        xavier_normal_(self.out_proj.weight)
 
     def forward(self, features, **kwargs):
         x = self.dropout(features)
@@ -68,11 +68,11 @@ class PRover(nn.Module):
         self,
         x,
         proof_offsets=None,
-        max_node_length=None,
-        max_edge_length=None,
         node_labels=None,
         edge_labels=None,
         qa_labels=None,
+        max_node_length=None,
+        max_edge_length=None,
     ):
         outputs = self.encoder(**x)
         sequence_outputs = outputs[0]
@@ -85,6 +85,7 @@ class PRover(nn.Module):
 
         if max_edge_length is None:
             max_edge_length = edge_labels.shape[1]
+
         if node_labels is None:
             batch_size = 1
         else:
@@ -225,8 +226,8 @@ class PRover(nn.Module):
             logits = self(
                 tokenized_context.to(device),
                 proofs_offsets.to(device),
-                node_length,
-                edge_length,
+                max_node_length=node_length,
+                max_edge_length=edge_length,
             )
             pred_qa_label = logits[0].argmax()
             return pred_qa_label.item()

@@ -9,7 +9,7 @@ from transformers.modeling_outputs import SequenceClassifierOutput
 from torchtextlogic.models.ruletaker import RuleTaker
 
 
-class RuleTakerTrainer(pl.LightningModule):
+class PLRuleTaker(pl.LightningModule):
     def __init__(self, pretrained_model: str, learning_rate: float = 1e-3) -> None:
         super().__init__()
         self.model = RuleTaker(pretrained_model)
@@ -18,6 +18,9 @@ class RuleTakerTrainer(pl.LightningModule):
 
     def forward(self, x: Dict[str, torch.Tensor]) -> SequenceClassifierOutput:  # type: ignore
         return self.model(x)
+
+    def predict(self, x: str, device: str = "cpu"):
+        return self.model.predict(x, device)
 
     def configure_optimizers(self):
         return Adam(self.model.parameters(), lr=self.learning_rate)

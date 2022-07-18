@@ -7,15 +7,15 @@ from torchtextlogic.data_collators.proofwriter_collator import (
 )
 from torchtextlogic.datasets.proof_qa.proofwriter_dataset import ProofWriterDataset
 from torchtextlogic.models.proofwriter import ProofWriter
-from trainers.proofwriter_trainer import ProofWriterTrainer
-from trainers.prover_trainer import PRoverTrainer
-from trainers.ruletaker_trainer import RuleTakerTrainer
+from pl_models.proofwriter import PLProofWriter
+from pl_models.prover import PLPRover
+from pl_models.ruletaker import PLRuleTaker
 
 dataset = ProofWriterDataset("depth-5", "train", "proof_generation_all")
 
 collator_fn = ProofWriterProofGenerationAllCollator("t5-base")
 train_dataloader = DataLoader(dataset, 20, collate_fn=collator_fn)
-model = ProofWriterTrainer("t5-base")
+model = PLProofWriter("t5-base")
 # cnt = 0
 
 

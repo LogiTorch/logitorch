@@ -7,7 +7,7 @@ from torch.optim import Adam
 from torchtextlogic.models.prover import PRover
 
 
-class PRoverTrainer(pl.LightningModule):
+class PLPRover(pl.LightningModule):
     def __init__(
         self,
         pretrained_model: str = "roberta-base",
@@ -21,6 +21,9 @@ class PRoverTrainer(pl.LightningModule):
 
     def forward(self, x, proof_offsets=None, node_labels=None, edge_labels=None, qa_labels=None):  # type: ignore
         return self.model(x, proof_offsets, node_labels, edge_labels, qa_labels)
+
+    def predict(self, triples, rules, question, device: str = "cpu"):
+        return self.model.predict(triples, rules, question, device)
 
     def configure_optimizers(self):
         return Adam(

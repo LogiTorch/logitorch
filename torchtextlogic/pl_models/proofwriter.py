@@ -9,7 +9,7 @@ from transformers.modeling_outputs import SequenceClassifierOutput
 from torchtextlogic.models.proofwriter import ProofWriter
 
 
-class ProofWriterTrainer(pl.LightningModule):
+class PLProofWriter(pl.LightningModule):
     def __init__(
         self, pretrained_model: str = "t5-large", learning_rate: float = None
     ) -> None:
@@ -19,6 +19,16 @@ class ProofWriterTrainer(pl.LightningModule):
 
     def forward(self, x, y) -> SequenceClassifierOutput:  # type: ignore
         return self.model(x, y)
+
+    def predict(
+        self,
+        x: str,
+        prompt: str = None,
+        num_beams: int = 5,
+        max_length: int = 120,
+        device: str = "cpu",
+    ):
+        return self.model.predict(x, prompt, num_beams, num_beams, max_length, device)
 
     def configure_optimizers(self):
         return Adafactor(

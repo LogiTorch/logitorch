@@ -10,7 +10,7 @@ from torchtextlogic.datasets.mlm.wiki20k_dataset import Wiki20KDataset
 from torchtextlogic.models.bertnot import BERTNOT
 
 
-class BERTNOTPreTrainer(pl.LightningModule):
+class PLBERTNOTPreTrain(pl.LightningModule):
     def __init__(
         self,
         pretrained_model: str,
@@ -106,10 +106,10 @@ class BERTNOTPreTrainer(pl.LightningModule):
         loss_kl_wiki20k, _ = self(x, y, loss="kl")
         loss += loss_kl_wiki20k
 
-        self.log_dict({"Accumulated loss": loss}, prog_bar=True)
+        self.log_dict({"val_loss": loss}, prog_bar=True)
 
 
-class BERTNOTTrainer(pl.LightningModule):
+class PLBERTNOT(pl.LightningModule):
     def __init__(
         self,
         load_path_model: str = None,
@@ -132,6 +132,9 @@ class BERTNOTTrainer(pl.LightningModule):
             return self.model(x, y, task="te")
         return self.model(x, y, task="te")
 
+    def predict(self, context: str, hypothesis: str = None, task="mlm", device="cpu"):
+        return self.model.predict(context, hypothesis, task, device)
+
     def configure_optimizers(self):
         paramaters = [
             {"params": self.model.model.parameters()},
@@ -142,10 +145,10 @@ class BERTNOTTrainer(pl.LightningModule):
     def training_step(self, train_batch: Tuple[Dict[str, torch.Tensor], torch.Tensor], batch_idx: int):  # type: ignore
         x, y = train_batch
         loss, _ = self(x, y)
-        self.log_dict({"loss": loss}, prog_bar=True, on_epoch=True)
+        self.log_dict({"train_loss": loss}, prog_bar=True, on_epoch=True)
         return loss
 
     def validation_step(self, val_batch: Tuple[Dict[str, torch.Tensor], torch.Tensor], batch_idx: int) -> None:  # type: ignore
         x, y = val_batch
         loss, _ = self(x, y)
-        self.log_dict({"loss": loss}, prog_bar=True, on_epoch=True)
+        self.log_dict({"val_loss": loss}, prog_bar=True, on_epoch=True)
