@@ -11,7 +11,7 @@ from trainers.proofwriter_trainer import ProofWriterTrainer
 from trainers.prover_trainer import PRoverTrainer
 from trainers.ruletaker_trainer import RuleTakerTrainer
 
-dataset = ProofWriterDataset("depth-2", "val", "proof_generation_all")
+dataset = ProofWriterDataset("depth-5", "train", "proof_generation_all")
 
 collator_fn = ProofWriterProofGenerationAllCollator("t5-base")
 train_dataloader = DataLoader(dataset, 20, collate_fn=collator_fn)
