@@ -2,7 +2,6 @@ from typing import Dict, Tuple
 
 import pytorch_lightning as pl
 import torch
-import torch.nn as nn
 from transformers import Adafactor
 from transformers.modeling_outputs import SequenceClassifierOutput
 

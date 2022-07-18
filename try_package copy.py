@@ -2,14 +2,14 @@ import pytorch_lightning as pl
 from torch.utils.data.dataloader import DataLoader
 
 from data_collators.ruletaker_collator import RuleTakerProofWriterCollator
+from pl_models.proofwriter import PLProofWriter
+from pl_models.prover import PLPRover
+from pl_models.ruletaker import PLRuleTaker
 from torchtextlogic.data_collators.proofwriter_collator import (
     ProofWriterProofGenerationAllCollator,
 )
 from torchtextlogic.datasets.proof_qa.proofwriter_dataset import ProofWriterDataset
 from torchtextlogic.models.proofwriter import ProofWriter
-from pl_models.proofwriter import PLProofWriter
-from pl_models.prover import PLPRover
-from pl_models.ruletaker import PLRuleTaker
 
 dataset = ProofWriterDataset("depth-5", "train", "proof_generation_all")
 

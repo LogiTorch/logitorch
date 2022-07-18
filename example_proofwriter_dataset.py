@@ -1,15 +1,18 @@
-from data_collators.ruletaker_collator import RuleTakerProofWriterCollator
-from pl_models.prover import PLPRover
-from pl_models.ruletaker import PLRuleTaker
-from torchtextlogic.data_collators.prover_collator import PRoverProofWriterCollator
-from torchtextlogic.datasets.proof_qa.proofwriter_dataset import ProofWriterDataset
+import pytorch_lightning as pl
+from pytorch_lightning.callbacks import ModelCheckpoint
+from torch.utils.data.dataloader import DataLoader
+
 from torchtextlogic.data_collators.proofwriter_collator import (
     ProofWriterProofGenerationAllCollator,
 )
-from pl_models.proofwriter import PLProofWriter
-import pytorch_lightning as pl
-from torch.utils.data.dataloader import DataLoader
-from pytorch_lightning.callbacks import ModelCheckpoint
+from torchtextlogic.data_collators.prover_collator import PRoverProofWriterCollator
+from torchtextlogic.data_collators.ruletaker_collator import (
+    RuleTakerProofWriterCollator,
+)
+from torchtextlogic.datasets.proof_qa.proofwriter_dataset import ProofWriterDataset
+from torchtextlogic.pl_models.proofwriter import PLProofWriter
+from torchtextlogic.pl_models.prover import PLPRover
+from torchtextlogic.pl_models.ruletaker import PLRuleTaker
 
 MODEL = "ruletaker"
 DEVICE = "cpu"
@@ -33,7 +36,9 @@ if MODEL == "proofwriter":
 
     pl_proofwriter = PLProofWriter("t5-large")
 
-    trainer = pl.Trainer(accelerator=DEVICE)
+    trainer = pl.Trainer(
+        callbacks=[checkpoint_callback], accelerator=DEVICE, max_epochs=10
+    )
 
     trainer.fit(pl_proofwriter, train_dataloader, val_dataloader)
 
@@ -56,7 +61,9 @@ elif MODEL == "prover":
 
     pl_prover = PLPRover("roberta-large")
 
-    trainer = pl.Trainer(accelerator=DEVICE)
+    trainer = pl.Trainer(
+        callbacks=[checkpoint_callback], accelerator=DEVICE, max_epochs=10
+    )
 
     trainer.fit(pl_prover, train_dataloader, val_dataloader)
 
@@ -79,6 +86,8 @@ elif MODEL == "ruletaker":
 
     pl_ruletaker = PLRuleTaker("roberta-large")
 
-    trainer = pl.Trainer(accelerator=DEVICE)
+    trainer = pl.Trainer(
+        callbacks=[checkpoint_callback], accelerator=DEVICE, max_epochs=10
+    )
 
     trainer.fit(pl_ruletaker, train_dataloader, val_dataloader)

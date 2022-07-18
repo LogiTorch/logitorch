@@ -3,8 +3,8 @@ import torch.nn as nn
 from torch.nn.init import xavier_normal_
 from transformers import BertForMaskedLM, BertTokenizer
 
-from losses.unlikelihood_loss import UnlikelihoodLoss
-from models.exceptions import LossError, TaskError
+from torchtextlogic.losses.unlikelihood_loss import UnlikelihoodLoss
+from torchtextlogic.models.exceptions import LossError, TaskError
 
 
 class BERTNOT(nn.Module):

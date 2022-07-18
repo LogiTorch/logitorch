@@ -1,7 +1,7 @@
 from typing import Dict, List, Tuple
 
 import torch
-from transformers import AutoTokenizer, RobertaTokenizer
+from transformers import RobertaTokenizer
 
 
 class DAGNCollator:
