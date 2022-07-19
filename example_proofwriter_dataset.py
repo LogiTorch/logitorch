@@ -26,7 +26,7 @@ if MODEL == "proofwriter":
         monitor="val_loss",
         mode="min",
         dirpath="models/",
-        filename="best_proofwriter",
+        filename="best_proofwriter-{epoch:02d}-{val_loss:.2f}",
     )
 
     proofwriter_collator = ProofWriterProofGenerationAllCollator("t5-large")
@@ -51,7 +51,7 @@ elif MODEL == "prover":
         monitor="val_loss",
         mode="min",
         dirpath="models/",
-        filename="best_prover",
+        filename="best_prover-{epoch:02d}-{val_loss:.2f}",
     )
 
     prover_collator = PRoverProofWriterCollator("roberta-large")
@@ -76,7 +76,7 @@ elif MODEL == "ruletaker":
         monitor="val_loss",
         mode="min",
         dirpath="models/",
-        filename="best_ruletaker",
+        filename="best_ruletaker-{epoch:02d}-{val_loss:.2f}",
     )
 
     ruletaker_collator = RuleTakerProofWriterCollator("roberta-large")
