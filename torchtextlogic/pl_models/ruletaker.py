@@ -10,10 +10,16 @@ from torchtextlogic.models.ruletaker import RuleTaker
 
 
 class PLRuleTaker(pl.LightningModule):
-    def __init__(self, pretrained_model: str, learning_rate: float = 1e-3) -> None:
+    def __init__(
+        self,
+        pretrained_model: str,
+        learning_rate: float = 1e-5,
+        weight_decay: float = 0.1,
+    ) -> None:
         super().__init__()
         self.model = RuleTaker(pretrained_model)
         self.learning_rate = learning_rate
+        self.weight_decay = weight_decay
 
     def forward(self, x, y):  # type: ignore
         return self.model(x, y)
@@ -22,7 +28,11 @@ class PLRuleTaker(pl.LightningModule):
         return self.model.predict(context, question, device)
 
     def configure_optimizers(self):
-        return Adam(self.model.parameters(), lr=self.learning_rate)
+        return Adam(
+            self.model.parameters(),
+            lr=self.learning_rate,
+            weight_decay=self.weight_decay,
+        )
 
     def training_step(self, train_batch: Tuple[Dict[str, torch.Tensor], torch.Tensor], batch_idx: int) -> torch.Tensor:  # type: ignore
         x, y = train_batch

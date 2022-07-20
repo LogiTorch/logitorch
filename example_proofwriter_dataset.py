@@ -14,7 +14,7 @@ from torchtextlogic.pl_models.proofwriter import PLProofWriter
 from torchtextlogic.pl_models.prover import PLPRover
 from torchtextlogic.pl_models.ruletaker import PLRuleTaker
 
-MODEL = "ruletaker"
+MODEL = "prover"
 DEVICE = "cpu"
 
 if MODEL == "proofwriter":
@@ -37,7 +37,7 @@ if MODEL == "proofwriter":
     pl_proofwriter = PLProofWriter("t5-large")
 
     trainer = pl.Trainer(
-        callbacks=[checkpoint_callback], accelerator=DEVICE, max_epochs=10
+        callbacks=[checkpoint_callback], accelerator=DEVICE, max_epochs=5
     )
 
     trainer.fit(pl_proofwriter, train_dataloader, val_dataloader)
@@ -56,13 +56,13 @@ elif MODEL == "prover":
 
     prover_collator = PRoverProofWriterCollator("roberta-large")
 
-    train_dataloader = DataLoader(train_dataset, 32, collate_fn=prover_collator)
-    val_dataloader = DataLoader(val_dataset, 32, collate_fn=prover_collator)
+    train_dataloader = DataLoader(train_dataset, 8, collate_fn=prover_collator)
+    val_dataloader = DataLoader(val_dataset, 8, collate_fn=prover_collator)
 
     pl_prover = PLPRover("roberta-large")
 
     trainer = pl.Trainer(
-        callbacks=[checkpoint_callback], accelerator=DEVICE, max_epochs=10
+        callbacks=[checkpoint_callback], accelerator=DEVICE, max_epochs=5
     )
 
     trainer.fit(pl_prover, train_dataloader, val_dataloader)
@@ -87,7 +87,7 @@ elif MODEL == "ruletaker":
     pl_ruletaker = PLRuleTaker("roberta-large")
 
     trainer = pl.Trainer(
-        callbacks=[checkpoint_callback], accelerator=DEVICE, max_epochs=10
+        callbacks=[checkpoint_callback], accelerator=DEVICE, max_epochs=5
     )
 
     trainer.fit(pl_ruletaker, train_dataloader, val_dataloader)
