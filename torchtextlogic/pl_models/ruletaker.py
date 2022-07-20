@@ -14,28 +14,23 @@ class PLRuleTaker(pl.LightningModule):
         super().__init__()
         self.model = RuleTaker(pretrained_model)
         self.learning_rate = learning_rate
-        self.cross_entropy_loss = nn.CrossEntropyLoss()
 
-    def forward(self, x: Dict[str, torch.Tensor]) -> SequenceClassifierOutput:  # type: ignore
-        return self.model(x)
+    def forward(self, x, y):  # type: ignore
+        return self.model(x, y)
 
-    def predict(self, x: str, device: str = "cpu"):
-        return self.model.predict(x, device)
+    def predict(self, context: str, question: str, device: str = "cpu"):
+        return self.model.predict(context, question, device)
 
     def configure_optimizers(self):
         return Adam(self.model.parameters(), lr=self.learning_rate)
 
     def training_step(self, train_batch: Tuple[Dict[str, torch.Tensor], torch.Tensor], batch_idx: int) -> torch.Tensor:  # type: ignore
         x, y = train_batch
-        outputs = self(x)
-        y_pred = outputs.logits
-        loss = self.cross_entropy_loss(y_pred, y)
+        loss = self(x, y).loss
         self.log("train_loss", loss, on_epoch=True)
         return loss
 
     def validation_step(self, val_batch: Tuple[Dict[str, torch.Tensor], torch.Tensor], batch_idx: int) -> None:  # type: ignore
         x, y = val_batch
-        outputs = self(x)
-        y_pred = outputs.logits
-        loss = self.cross_entropy_loss(y_pred, y)
+        loss = self(x, y).loss
         self.log("val_loss", loss, on_epoch=True)

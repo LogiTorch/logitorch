@@ -17,9 +17,9 @@ class ProofWriterQACollator:
             for s in i[1].values():
                 sentences.append(s)
 
-        contexts.append("".join(sentences))
-        questions.append(i[2])
-        labels.append(str(i[3]))
+            contexts.append("".join(sentences))
+            questions.append(i[2])
+            labels.append(str(i[3]))
 
         batch_x = self.tokenizer(contexts, questions, padding=True, return_tensors="pt")
         batch_y = self.tokenizer(labels, padding=True, return_tensors="pt")
@@ -44,10 +44,10 @@ class ProofWriterProofGenerationAllCollator:
             for s in i[1].values():
                 sentences.append(s)
 
-        contexts.append("".join(sentences))
-        questions.append(i[2])
-        labels.append(str(i[3]))
-        proofs.append(i[4])
+            contexts.append("".join(sentences))
+            questions.append(i[2])
+            labels.append(str(i[3]))
+            proofs.append(i[4])
 
         batch_x = self.tokenizer(contexts, questions, padding=True, return_tensors="pt")
         batch_y = self.tokenizer(labels, proofs, padding=True, return_tensors="pt")

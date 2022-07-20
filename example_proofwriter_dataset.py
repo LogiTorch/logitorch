@@ -14,7 +14,7 @@ from torchtextlogic.pl_models.proofwriter import PLProofWriter
 from torchtextlogic.pl_models.prover import PLPRover
 from torchtextlogic.pl_models.ruletaker import PLRuleTaker
 
-MODEL = "prover"
+MODEL = "ruletaker"
 DEVICE = "cpu"
 
 if MODEL == "proofwriter":
@@ -79,12 +79,12 @@ elif MODEL == "ruletaker":
         filename="best_ruletaker-{epoch:02d}-{val_loss:.2f}",
     )
 
-    ruletaker_collator = RuleTakerProofWriterCollator("roberta-large")
+    ruletaker_collator = RuleTakerProofWriterCollator("roberta-base")
 
     train_dataloader = DataLoader(train_dataset, 32, collate_fn=ruletaker_collator)
     val_dataloader = DataLoader(val_dataset, 32, collate_fn=ruletaker_collator)
 
-    pl_ruletaker = PLRuleTaker("roberta-large")
+    pl_ruletaker = PLRuleTaker("roberta-base")
 
     trainer = pl.Trainer(
         callbacks=[checkpoint_callback], accelerator=DEVICE, max_epochs=10

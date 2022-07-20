@@ -40,9 +40,9 @@ class RuleTakerProofWriterCollator:
             for s in i[1].values():
                 sentences.append(s)
 
-        contexts.append("".join(sentences))
-        questions.append(i[2])
-        labels.append(PROOFWRITER_LABEL_TO_ID[str(i[3])])
+            contexts.append("".join(sentences))
+            questions.append(i[2])
+            labels.append(PROOFWRITER_LABEL_TO_ID[str(i[3])])
 
         batch_x = self.tokenizer(contexts, questions, padding=True, return_tensors="pt")
         return batch_x, torch.tensor(labels, dtype=torch.int64)
