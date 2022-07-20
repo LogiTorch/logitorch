@@ -31,8 +31,8 @@ if MODEL == "proofwriter":
 
     proofwriter_collator = ProofWriterProofGenerationAllCollator("t5-large")
 
-    train_dataloader = DataLoader(train_dataset, 32, collate_fn=proofwriter_collator)
-    val_dataloader = DataLoader(val_dataset, 32, collate_fn=proofwriter_collator)
+    train_dataloader = DataLoader(train_dataset, 8, collate_fn=proofwriter_collator)
+    val_dataloader = DataLoader(val_dataset, 8, collate_fn=proofwriter_collator)
 
     pl_proofwriter = PLProofWriter("t5-large")
 
@@ -56,8 +56,8 @@ elif MODEL == "prover":
 
     prover_collator = PRoverProofWriterCollator("roberta-large")
 
-    train_dataloader = DataLoader(train_dataset, 8, collate_fn=prover_collator)
-    val_dataloader = DataLoader(val_dataset, 8, collate_fn=prover_collator)
+    train_dataloader = DataLoader(train_dataset, 32, collate_fn=prover_collator)
+    val_dataloader = DataLoader(val_dataset, 32, collate_fn=prover_collator)
 
     pl_prover = PLPRover("roberta-large")
 

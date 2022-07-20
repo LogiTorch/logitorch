@@ -4,6 +4,7 @@ import pytorch_lightning as pl
 import torch
 import torch.nn as nn
 from torch.optim import Adam
+from transformers import Adafactor
 from transformers.modeling_outputs import SequenceClassifierOutput
 
 from torchtextlogic.models.ruletaker import RuleTaker
@@ -33,6 +34,12 @@ class PLRuleTaker(pl.LightningModule):
             lr=self.learning_rate,
             weight_decay=self.weight_decay,
         )
+        # return Adafactor(
+        #     self.model.parameters(),
+        #     relative_step=True,
+        #     warmup_init=True,
+        #     lr=None,
+        # )
 
     def training_step(self, train_batch: Tuple[Dict[str, torch.Tensor], torch.Tensor], batch_idx: int) -> torch.Tensor:  # type: ignore
         x, y = train_batch

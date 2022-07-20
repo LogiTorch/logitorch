@@ -21,8 +21,17 @@ class ProofWriterQACollator:
             questions.append(i[2])
             labels.append(str(i[3]))
 
-        batch_x = self.tokenizer(contexts, questions, padding=True, return_tensors="pt")
-        batch_y = self.tokenizer(labels, padding=True, return_tensors="pt")
+        batch_x = self.tokenizer(
+            contexts,
+            questions,
+            padding=True,
+            max_length=512,
+            truncation=True,
+            return_tensors="pt",
+        )
+        batch_y = self.tokenizer(
+            labels, padding=True, max_length=512, truncation=True, return_tensors="pt"
+        )
 
         return batch_x, batch_y.input_ids
 
@@ -49,7 +58,21 @@ class ProofWriterProofGenerationAllCollator:
             labels.append(str(i[3]))
             proofs.append(i[4])
 
-        batch_x = self.tokenizer(contexts, questions, padding=True, return_tensors="pt")
-        batch_y = self.tokenizer(labels, proofs, padding=True, return_tensors="pt")
+        batch_x = self.tokenizer(
+            contexts,
+            questions,
+            padding=True,
+            max_length=512,
+            truncation=True,
+            return_tensors="pt",
+        )
+        batch_y = self.tokenizer(
+            labels,
+            proofs,
+            padding=True,
+            max_length=512,
+            truncation=True,
+            return_tensors="pt",
+        )
 
         return batch_x, batch_y.input_ids
