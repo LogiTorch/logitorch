@@ -79,12 +79,12 @@ elif MODEL == "ruletaker":
         filename="best_ruletaker-{epoch:02d}-{val_loss:.2f}",
     )
 
-    ruletaker_collator = RuleTakerProofWriterCollator("roberta-base")
+    ruletaker_collator = RuleTakerProofWriterCollator("roberta-large")
 
     train_dataloader = DataLoader(train_dataset, 32, collate_fn=ruletaker_collator)
     val_dataloader = DataLoader(val_dataset, 32, collate_fn=ruletaker_collator)
 
-    pl_ruletaker = PLRuleTaker("roberta-base")
+    pl_ruletaker = PLRuleTaker("roberta-large")
 
     trainer = pl.Trainer(
         callbacks=[checkpoint_callback], accelerator=DEVICE, max_epochs=10
