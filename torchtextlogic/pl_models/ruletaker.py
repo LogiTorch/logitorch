@@ -29,17 +29,17 @@ class PLRuleTaker(pl.LightningModule):
         return self.model.predict(context, question, device)
 
     def configure_optimizers(self):
-        return Adam(
-            self.model.parameters(),
-            lr=self.learning_rate,
-            weight_decay=self.weight_decay,
-        )
-        # return Adafactor(
+        # return Adam(
         #     self.model.parameters(),
-        #     relative_step=True,
-        #     warmup_init=True,
-        #     lr=None,
+        #     lr=self.learning_rate,
+        #     weight_decay=self.weight_decay,
         # )
+        return Adafactor(
+            self.model.parameters(),
+            relative_step=True,
+            warmup_init=True,
+            lr=None,
+        )
 
     def training_step(self, train_batch: Tuple[Dict[str, torch.Tensor], torch.Tensor], batch_idx: int) -> torch.Tensor:  # type: ignore
         x, y = train_batch
