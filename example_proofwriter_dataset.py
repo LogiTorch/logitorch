@@ -14,7 +14,7 @@ from torchtextlogic.pl_models.proofwriter import PLProofWriter
 from torchtextlogic.pl_models.prover import PLPRover
 from torchtextlogic.pl_models.ruletaker import PLRuleTaker
 
-MODEL = "prover"
+MODEL = "proofwriter"
 DEVICE = "cpu"
 
 if MODEL == "proofwriter":

@@ -21,13 +21,13 @@ class PLProofWriter(pl.LightningModule):
 
     def predict(
         self,
-        x: str,
-        prompt: str = None,
+        context: str,
+        question: str,
         num_beams: int = 5,
         max_length: int = 120,
         device: str = "cpu",
     ):
-        return self.model.predict(x, prompt, num_beams, num_beams, max_length, device)
+        return self.model.predict(context, question, num_beams, max_length, device)
 
     def configure_optimizers(self):
         return Adafactor(

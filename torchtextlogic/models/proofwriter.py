@@ -42,10 +42,10 @@ class ProofWriter(nn.Module):
                 no_repeat_ngram_size=1,
                 remove_invalid_values=True,
             )
-
+            # print(beam_output)
             pred = self.tokenizer.decode(
-                beam_output,
-                skip_special_tokens=False,
+                beam_output[0],
+                skip_special_tokens=True,
                 clean_up_tokenization_spaces=True,
             )
 

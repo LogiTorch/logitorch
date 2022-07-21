@@ -23,9 +23,7 @@ class RuleTaker(nn.Module):
 
     def predict(self, context: str, question: str, device: str = "cpu") -> int:
         with torch.no_grad():
-            print(context, question)
             tokenized_x = self.tokenizer(context, question, return_tensors="pt")
             logits = self(tokenized_x.to(device)).logits
-            print(logits)
             pred = logits.argmax().item()
             return pred

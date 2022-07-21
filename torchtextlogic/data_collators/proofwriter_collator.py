@@ -57,7 +57,7 @@ class ProofWriterProofGenerationAllCollator:
             questions.append(i[2])
             labels.append(str(i[3]))
             proofs.append(i[4])
-
+        # print(proofs)
         batch_x = self.tokenizer(
             contexts,
             questions,
