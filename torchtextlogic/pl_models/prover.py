@@ -3,6 +3,7 @@ from typing import Dict, Tuple
 import pytorch_lightning as pl
 import torch
 from torch.optim import Adam
+from transformers import Adafactor
 
 from torchtextlogic.models.prover import PRover
 
@@ -31,6 +32,12 @@ class PLPRover(pl.LightningModule):
         return Adam(
             self.parameters(), lr=self.learning_rate, weight_decay=self.weight_decay
         )
+        # return Adafactor(
+        #     self.model.parameters(),
+        #     relative_step=True,
+        #     warmup_init=True,
+        #     lr=None,
+        # )
 
     def training_step(self, train_batch: Tuple[Dict[str, torch.Tensor], torch.Tensor], batch_idx: int) -> torch.Tensor:  # type: ignore
         x, p_of, n_y, e_y, qa_y = train_batch
