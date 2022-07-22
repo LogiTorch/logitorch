@@ -1,14 +1,16 @@
 from typing import Dict, Tuple
 
 import torch
-from transformers import AutoTokenizer
+from transformers import AutoTokenizer, RobertaTokenizer
 
 from torchtextlogic.datasets.proof_qa.proofwriter_dataset import PROOFWRITER_LABEL_TO_ID
 
 
 class RuleTakerCollator:
     def __init__(self, pretrained_tokenizer: str) -> None:
-        self.tokenizer = AutoTokenizer.from_pretrained(pretrained_tokenizer)
+        self.tokenizer = RobertaTokenizer.from_pretrained(
+            "LIAMF-USP/roberta-large-finetuned-race"
+        )
 
     def __call__(self, batch) -> Tuple[Dict[str, torch.Tensor], torch.Tensor]:
         contexts = []

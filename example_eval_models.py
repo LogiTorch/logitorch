@@ -16,7 +16,7 @@ from torchtextlogic.pl_models.proofwriter import PLProofWriter
 from torchtextlogic.pl_models.prover import PLPRover
 from torchtextlogic.pl_models.ruletaker import PLRuleTaker
 
-MODEL = "ruletaker"
+MODEL = "proofwriter"
 DEVICE = "cpu"
 
 
@@ -31,7 +31,6 @@ def parse_facts_rules(facts, rules):
 
 
 if MODEL == "proofwriter":
-    test_dataset = ProofWriterDataset("depth-0", "test", "proof_generation_all")
     model = PLProofWriter.load_from_checkpoint(
         "models/best_proofwriter-epoch=04-val_loss=0.20.ckpt",
         pretrained_model="t5-large",
@@ -41,7 +40,7 @@ if MODEL == "proofwriter":
     for d in range(0, 6):
         if d == 4:
             d = "3ext"
-        test_dataset = ProofWriterDataset(f"depth-{d}", "test", "proof_generation_all")
+        test_dataset = ProofWriterDataset(f"depth-{d}", "val", "proof_generation_all")
         with open(f"proofwriter_{d}.txt", "w") as out:
             y_preds = []
             y_trues = []
@@ -55,7 +54,6 @@ if MODEL == "proofwriter":
                 y_true = PROOFWRITER_LABEL_TO_ID[str(i[3])]
                 y_preds.append(y_pred)
                 y_trues.append(y_true)
-                break
             out.write(str(accuracy_score(y_trues, y_preds)))
 
 elif MODEL == "prover":
@@ -77,7 +75,6 @@ elif MODEL == "prover":
                 y_true = PROOFWRITER_LABEL_TO_ID[str(i[3])]
                 y_preds.append(y_pred)
                 y_trues.append(y_true)
-                break
             out.write(str(accuracy_score(y_trues, y_preds)))
 
 elif MODEL == "ruletaker":

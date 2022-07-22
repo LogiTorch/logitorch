@@ -1,4 +1,5 @@
-from torchtextlogic.datasets.qa.ruletaker_dataset import RuleTakerDataset
+from operator import truediv
+
 import pytorch_lightning as pl
 from pytorch_lightning.callbacks import ModelCheckpoint
 from torch.utils.data.dataloader import DataLoader
@@ -13,6 +14,7 @@ from torchtextlogic.data_collators.ruletaker_collator import (
     RuleTakerProofWriterCollator,
 )
 from torchtextlogic.datasets.proof_qa.proofwriter_dataset import ProofWriterDataset
+from torchtextlogic.datasets.qa.ruletaker_dataset import RuleTakerDataset
 from torchtextlogic.pl_models.proofwriter import PLProofWriter
 from torchtextlogic.pl_models.prover import PLPRover
 from torchtextlogic.pl_models.ruletaker import PLRuleTaker
@@ -40,7 +42,10 @@ if MODEL == "proofwriter":
     pl_proofwriter = PLProofWriter("t5-large")
 
     trainer = pl.Trainer(
-        callbacks=[checkpoint_callback], accelerator=DEVICE, max_epochs=5
+        callbacks=[checkpoint_callback],
+        auto_find_lr=True,
+        accelerator=DEVICE,
+        max_epochs=5,
     )
 
     trainer.fit(pl_proofwriter, train_dataloader, val_dataloader)
@@ -65,7 +70,10 @@ elif MODEL == "prover":
     pl_prover = PLPRover("roberta-large")
 
     trainer = pl.Trainer(
-        callbacks=[checkpoint_callback], accelerator=DEVICE, max_epochs=5
+        callbacks=[checkpoint_callback],
+        auto_find_lr=True,
+        accelerator=DEVICE,
+        max_epochs=5,
     )
 
     trainer.fit(pl_prover, train_dataloader, val_dataloader)
@@ -90,7 +98,11 @@ elif MODEL == "ruletaker":
     pl_ruletaker = PLRuleTaker("roberta-large")
 
     trainer = pl.Trainer(
-        callbacks=[checkpoint_callback], accelerator=DEVICE, max_epochs=5
+        callbacks=[checkpoint_callback],
+        auto_find_lr=True,
+        accelerator=DEVICE,
+        max_epochs=5,
     )
-
-    trainer.fit(pl_ruletaker, train_dataloader, val_dataloader)
+    # trainer = pl.Trainer(auto_lr_find=True)
+    # trainer.fit(pl_ruletaker, train_dataloader, val_dataloader)
+    trainer.tune(pl_ruletaker, train_dataloader)

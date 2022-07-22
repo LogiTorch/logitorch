@@ -43,11 +43,13 @@ class PLRuleTaker(pl.LightningModule):
 
     def training_step(self, train_batch: Tuple[Dict[str, torch.Tensor], torch.Tensor], batch_idx: int) -> torch.Tensor:  # type: ignore
         x, y = train_batch
-        loss = self(x, y).loss
-        self.log("train_loss", loss, on_epoch=True)
-        return loss
+        # loss = self(x, y).loss
+        loss = self(x, y)
+        # print(loss)
+        self.log("train_loss", loss[0], on_epoch=True)
+        return loss[0]
 
     def validation_step(self, val_batch: Tuple[Dict[str, torch.Tensor], torch.Tensor], batch_idx: int) -> None:  # type: ignore
         x, y = val_batch
-        loss = self(x, y).loss
-        self.log("val_loss", loss, on_epoch=True)
+        loss = self(x, y)
+        self.log("val_loss", loss[0], on_epoch=True)
