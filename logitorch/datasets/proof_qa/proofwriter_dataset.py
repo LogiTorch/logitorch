@@ -2,14 +2,14 @@ import os
 import re
 from typing import Dict, List, Optional, Tuple, Union
 
-from torchtextlogic.datasets.base import AbstractProofQADataset
-from torchtextlogic.datasets.exceptions import (
+from logitorch.datasets.base import AbstractProofQADataset
+from logitorch.datasets.exceptions import (
     AbductionClosedWorldAssumptionError,
     DatasetNameError,
     SplitSetError,
     TaskError,
 )
-from torchtextlogic.datasets.utils import (
+from logitorch.datasets.utils import (
     DATASETS_FOLDER,
     SPLIT_SETS,
     download_dataset,

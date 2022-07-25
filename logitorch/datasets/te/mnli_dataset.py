@@ -3,9 +3,9 @@ from typing import List, Tuple
 
 import pandas as pd
 
-from torchtextlogic.datasets.base import AbstractTEDataset
-from torchtextlogic.datasets.exceptions import SplitSetError
-from torchtextlogic.datasets.utils import (
+from logitorch.datasets.base import AbstractTEDataset
+from logitorch.datasets.exceptions import SplitSetError
+from logitorch.datasets.utils import (
     DATASETS_FOLDER,
     SPLIT_SETS_TRAIN_VAL,
     download_dataset,

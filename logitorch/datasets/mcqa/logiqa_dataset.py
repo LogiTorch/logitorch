@@ -1,9 +1,9 @@
 import os
 from typing import List, Tuple
 
-from torchtextlogic.datasets.base import AbstractMCQADataset
-from torchtextlogic.datasets.exceptions import SplitSetError
-from torchtextlogic.datasets.utils import DATASETS_FOLDER, SPLIT_SETS, download_dataset
+from logitorch.datasets.base import AbstractMCQADataset
+from logitorch.datasets.exceptions import SplitSetError
+from logitorch.datasets.utils import DATASETS_FOLDER, SPLIT_SETS, download_dataset
 
 LOGIQA_DATASET_ZIP_URL = (
     "https://www.dropbox.com/s/7q0eaosyd5zu5st/logiqa_dataset.zip?dl=1"

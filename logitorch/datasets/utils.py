@@ -7,7 +7,7 @@ from zipfile import ZipFile
 import requests
 from tqdm import tqdm
 
-from torchtextlogic.datasets.exceptions import FileSizeError
+from logitorch.datasets.exceptions import FileSizeError
 
 CURRENT_PATH = str(Path(os.getenv("CACHED_PATH_CACHE_ROOT", Path.home() / ".cache")))
 DATASETS_FOLDER = f"{CURRENT_PATH}/torchtextlogic_datasets"

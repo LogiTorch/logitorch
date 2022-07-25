@@ -4,7 +4,7 @@ import pytorch_lightning as pl
 import torch
 from transformers import AdamW, get_linear_schedule_with_warmup
 
-from torchtextlogic.models.prover import PRover
+from logitorch.models.prover import PRover
 
 
 class PLPRover(pl.LightningModule):

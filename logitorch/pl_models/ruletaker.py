@@ -4,7 +4,7 @@ import pytorch_lightning as pl
 import torch
 from transformers import AdamW, get_linear_schedule_with_warmup
 
-from torchtextlogic.models.ruletaker import RuleTaker
+from logitorch.models.ruletaker import RuleTaker
 
 
 class PLRuleTaker(pl.LightningModule):

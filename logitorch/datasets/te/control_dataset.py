@@ -1,9 +1,9 @@
 import os
 from typing import List, Tuple
 
-from torchtextlogic.datasets.base import AbstractTEDataset
-from torchtextlogic.datasets.exceptions import SplitSetError
-from torchtextlogic.datasets.utils import (
+from logitorch.datasets.base import AbstractTEDataset
+from logitorch.datasets.exceptions import SplitSetError
+from logitorch.datasets.utils import (
     DATASETS_FOLDER,
     SPLIT_SETS,
     download_dataset,

@@ -3,8 +3,8 @@ from typing import List, Tuple
 
 import pandas as pd
 
-from torchtextlogic.datasets.base import AbstractTEDataset
-from torchtextlogic.datasets.utils import DATASETS_FOLDER, download_dataset
+from logitorch.datasets.base import AbstractTEDataset
+from logitorch.datasets.utils import DATASETS_FOLDER, download_dataset
 
 NEGATED_SNLI_DATASET_ZIP_URL = (
     "https://www.dropbox.com/s/dkdiagvxtzrmlxm/negated_snli_dataset.zip?dl=1"

@@ -2,24 +2,24 @@ import pytorch_lightning as pl
 from pytorch_lightning.callbacks import ModelCheckpoint
 from torch.utils.data.dataloader import DataLoader
 
-from torchtextlogic.data_collators.bertnot_collator import (
+from logitorch.data_collators.bertnot_collator import (
     BERTNOTTextualEntailmentCollator,
 )
-from torchtextlogic.data_collators.proofwriter_collator import (
+from logitorch.data_collators.proofwriter_collator import (
     ProofWriterProofGenerationAllCollator,
 )
-from torchtextlogic.data_collators.prover_collator import PRoverProofWriterCollator
-from torchtextlogic.data_collators.ruletaker_collator import (
+from logitorch.data_collators.prover_collator import PRoverProofWriterCollator
+from logitorch.data_collators.ruletaker_collator import (
     RuleTakerProofWriterCollator,
 )
-from torchtextlogic.datasets.proof_qa.proofwriter_dataset import ProofWriterDataset
-from torchtextlogic.datasets.te.mnli_dataset import MNLIDataset
-from torchtextlogic.datasets.te.rte_dataset import RTEDataset
-from torchtextlogic.datasets.te.snli_dataset import SNLIDataset
-from torchtextlogic.pl_models.bertnot import PLBERTNOT
-from torchtextlogic.pl_models.proofwriter import PLProofWriter
-from torchtextlogic.pl_models.prover import PLPRover
-from torchtextlogic.pl_models.ruletaker import PLRuleTaker
+from logitorch.datasets.proof_qa.proofwriter_dataset import ProofWriterDataset
+from logitorch.datasets.te.mnli_dataset import MNLIDataset
+from logitorch.datasets.te.rte_dataset import RTEDataset
+from logitorch.datasets.te.snli_dataset import SNLIDataset
+from logitorch.pl_models.bertnot import PLBERTNOT
+from logitorch.pl_models.proofwriter import PLProofWriter
+from logitorch.pl_models.prover import PLPRover
+from logitorch.pl_models.ruletaker import PLRuleTaker
 
 MODEL = "bertnot"
 DEVICE = "cpu"

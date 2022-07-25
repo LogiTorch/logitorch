@@ -1,8 +1,8 @@
 import os
 from typing import List, Tuple
 
-from torchtextlogic.datasets.exceptions import DatasetNameError, SplitSetError
-from torchtextlogic.datasets.utils import DATASETS_FOLDER, download_dataset, read_jsonl
+from logitorch.datasets.exceptions import DatasetNameError, SplitSetError
+from logitorch.datasets.utils import DATASETS_FOLDER, download_dataset, read_jsonl
 
 WIKI20K_DATASET_ZIP_URL = (
     "https://www.dropbox.com/s/yeh70n6etbg0a95/wiki20k_dataset.zip?dl=1"

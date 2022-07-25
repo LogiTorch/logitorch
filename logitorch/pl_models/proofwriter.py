@@ -5,7 +5,7 @@ import torch
 from transformers import Adafactor, get_linear_schedule_with_warmup
 from transformers.modeling_outputs import SequenceClassifierOutput
 
-from torchtextlogic.models.proofwriter import ProofWriter
+from logitorch.models.proofwriter import ProofWriter
 
 
 class PLProofWriter(pl.LightningModule):

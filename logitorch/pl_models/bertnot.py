@@ -6,9 +6,9 @@ from torch.optim import Adam
 from torch.utils.data.dataloader import DataLoader
 from transformers import AdamW, get_linear_schedule_with_warmup
 
-from torchtextlogic.data_collators.bertnot_collator import BERTNOTWiki20KCollator
-from torchtextlogic.datasets.mlm.wiki20k_dataset import Wiki20KDataset
-from torchtextlogic.models.bertnot import BERTNOT
+from logitorch.data_collators.bertnot_collator import BERTNOTWiki20KCollator
+from logitorch.datasets.mlm.wiki20k_dataset import Wiki20KDataset
+from logitorch.models.bertnot import BERTNOT
 
 
 class PLBERTNOT(pl.LightningModule):

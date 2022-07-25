@@ -6,7 +6,7 @@ from torch.nn.init import xavier_normal_
 from transformers import RobertaModel
 from transformers.models.roberta.modeling_roberta import RobertaClassificationHead
 
-from torchtextlogic.data_collators.prover_collator import PRoverProofWriterCollator
+from logitorch.data_collators.prover_collator import PRoverProofWriterCollator
 
 
 class _NodeClassificationHead(nn.Module):

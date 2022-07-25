@@ -3,7 +3,7 @@ import torch
 from torch.nn.utils.rnn import pad_sequence
 from transformers import RobertaTokenizer
 
-from torchtextlogic.datasets.proof_qa.proofwriter_dataset import PROOFWRITER_LABEL_TO_ID
+from logitorch.datasets.proof_qa.proofwriter_dataset import PROOFWRITER_LABEL_TO_ID
 
 
 class Node:
