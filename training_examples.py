@@ -114,7 +114,7 @@ elif MODEL == "bertnot":
         monitor=None,
         save_top_k=1,
         dirpath="models/",
-        filename="pretrained_bertnot.ckpt",
+        filename="pretrained_bertnot",
     )
 
     pl_bertnot = PLBERTNOT(
@@ -142,14 +142,14 @@ elif MODEL == "bertnot":
         monitor="val_loss",
         mode="min",
         dirpath="models/",
-        filename="snli_bertnot.ckpt",
+        filename="snli_bertnot",
     )
 
     train_dataloader = DataLoader(train_dataset, 32, collate_fn=bertnot_collator)
     val_dataloader = DataLoader(val_dataset, 32, collate_fn=bertnot_collator)
 
     pl_bertnot = PLBERTNOT.load_from_checkpoint(
-        "models/pretrained_bertnot.ckpt",
+        "models/pretrained_bertnot",
         task="te",
         learning_rate=1e-5,
         weight_decay=0.1,
@@ -175,14 +175,14 @@ elif MODEL == "bertnot":
         monitor="val_loss",
         mode="min",
         dirpath="models/",
-        filename="mnli_bertnot.ckpt",
+        filename="mnli_bertnot",
     )
 
     train_dataloader = DataLoader(train_dataset, 32, collate_fn=bertnot_collator)
     val_dataloader = DataLoader(val_dataset, 32, collate_fn=bertnot_collator)
 
     pl_bertnot = PLBERTNOT.load_from_checkpoint(
-        "models/pretrained_bertnot.ckpt",
+        "models/pretrained_bertnot",
         task="te",
         learning_rate=2e-5,
         weight_decay=0.0,
@@ -208,14 +208,14 @@ elif MODEL == "bertnot":
         monitor="val_loss",
         mode="min",
         dirpath="models/",
-        filename="rte_bertnot.ckpt",
+        filename="rte_bertnot",
     )
 
     train_dataloader = DataLoader(train_dataset, 32, collate_fn=bertnot_collator)
     val_dataloader = DataLoader(val_dataset, 32, collate_fn=bertnot_collator)
 
     pl_bertnot = PLBERTNOT.load_from_checkpoint(
-        "models/pretrained_bertnot.ckpt",
+        "models/pretrained_bertnot",
         task="te",
         learning_rate=2e-5,
         weight_decay=0.0,
