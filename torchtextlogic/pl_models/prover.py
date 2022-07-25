@@ -2,8 +2,7 @@ from typing import Dict, Tuple
 
 import pytorch_lightning as pl
 import torch
-from torch.optim import Adam
-from transformers import Adafactor
+from transformers import AdamW, get_linear_schedule_with_warmup
 
 from torchtextlogic.models.prover import PRover
 
@@ -29,15 +28,20 @@ class PLPRover(pl.LightningModule):
         return self.model.predict(triples, rules, question, device)
 
     def configure_optimizers(self):
-        return Adam(
-            self.parameters(), lr=self.learning_rate, weight_decay=self.weight_decay
+        optimizer = AdamW(
+            self.model.parameters(),
+            lr=self.learning_rate,
+            weight_decay=self.weight_decay,
         )
-        # return Adafactor(
-        #     self.model.parameters(),
-        #     relative_step=True,
-        #     warmup_init=True,
-        #     lr=None,
-        # )
+
+        scheduler = get_linear_schedule_with_warmup(
+            optimizer,
+            num_warmup_steps=int(0.1 * self.trainer.estimated_stepping_batches),
+            num_training_steps=self.trainer.estimated_stepping_batches,
+        )
+        scheduler = {"scheduler": scheduler, "interval": "step", "frequency": 1}
+
+        return [optimizer], [scheduler]
 
     def training_step(self, train_batch: Tuple[Dict[str, torch.Tensor], torch.Tensor], batch_idx: int) -> torch.Tensor:  # type: ignore
         x, p_of, n_y, e_y, qa_y = train_batch

@@ -7,7 +7,7 @@ from torchtextlogic.datasets.proof_qa.proofwriter_dataset import PROOFWRITER_LAB
 
 
 class RuleTakerCollator:
-    def __init__(self, pretrained_tokenizer: str) -> None:
+    def __init__(self) -> None:
         self.tokenizer = RobertaTokenizer.from_pretrained(
             "LIAMF-USP/roberta-large-finetuned-race"
         )
@@ -27,8 +27,10 @@ class RuleTakerCollator:
 
 
 class RuleTakerProofWriterCollator:
-    def __init__(self, pretrained_tokenizer: str) -> None:
-        self.tokenizer = AutoTokenizer.from_pretrained(pretrained_tokenizer)
+    def __init__(self) -> None:
+        self.tokenizer = RobertaTokenizer.from_pretrained(
+            "LIAMF-USP/roberta-large-finetuned-race"
+        )
 
     def __call__(self, batch) -> Tuple[Dict[str, torch.Tensor], torch.Tensor]:
         contexts = []
@@ -37,10 +39,10 @@ class RuleTakerProofWriterCollator:
 
         for i in batch:
             sentences = []
-            for s in i[0].values():
-                sentences.append(s)
-            for s in i[1].values():
-                sentences.append(s)
+            for k, v in i[0].items():
+                sentences.append(f"{k}: {v}")
+            for k, v in i[1].items():
+                sentences.append(f"{k}: {v}")
 
             contexts.append("".join(sentences))
             questions.append(i[2])

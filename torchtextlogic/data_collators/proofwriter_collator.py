@@ -12,10 +12,10 @@ class ProofWriterQACollator:
 
         for i in batch:
             sentences = []
-            for s in i[0].values():
-                sentences.append(s)
-            for s in i[1].values():
-                sentences.append(s)
+            for k, v in i[0].items():
+                sentences.append(f"{k}: {v}")
+            for k, v in i[1].items():
+                sentences.append(f"{k}: {v}")
 
             contexts.append("".join(sentences))
             questions.append(i[2])
@@ -25,13 +25,9 @@ class ProofWriterQACollator:
             contexts,
             questions,
             padding=True,
-            max_length=512,
-            truncation=True,
             return_tensors="pt",
         )
-        batch_y = self.tokenizer(
-            labels, padding=True, max_length=512, truncation=True, return_tensors="pt"
-        )
+        batch_y = self.tokenizer(labels, padding=True, return_tensors="pt")
 
         return batch_x, batch_y.input_ids
 
@@ -48,30 +44,30 @@ class ProofWriterProofGenerationAllCollator:
 
         for i in batch:
             sentences = []
-            for s in i[0].values():
-                sentences.append(s)
-            for s in i[1].values():
-                sentences.append(s)
+            for k, v in i[0].items():
+                sentences.append(f"{k}: {v}")
+            for k, v in i[1].items():
+                sentences.append(f"{k}: {v}")
 
             contexts.append("".join(sentences))
             questions.append(i[2])
             labels.append(str(i[3]))
-            proofs.append(i[4])
-        # print(proofs)
+
+            proof = i[4].split("OR")[0]
+            proof = proof.replace("[", "")
+            proof = proof.replace("]", "")
+            proofs.append(proof)
+
         batch_x = self.tokenizer(
             contexts,
             questions,
             padding=True,
-            max_length=512,
-            truncation=True,
             return_tensors="pt",
         )
         batch_y = self.tokenizer(
             labels,
             proofs,
             padding=True,
-            max_length=512,
-            truncation=True,
             return_tensors="pt",
         )
 

@@ -37,7 +37,7 @@ class BERTNOTWiki20KCollator:
         return batch_x, batch_y
 
 
-class BERTNOTTextualEntailment:
+class BERTNOTTextualEntailmentCollator:
     def __init__(self, pretrained_tokenizer: str) -> None:
         self.tokenizer = AutoTokenizer.from_pretrained(pretrained_tokenizer)
 
