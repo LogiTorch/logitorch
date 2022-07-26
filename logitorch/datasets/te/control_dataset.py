@@ -79,9 +79,9 @@ class ControlDataset(AbstractTEDataset):
         labels_list = []
 
         for i in data:
-            premises_list.append(i[premises_key])
-            hypotheses_list.append(i[hypotheses_key])
-            labels_list.append(CONTROL_LABEL_TO_ID[i[labels_key]])
+            premises_list.append(str(i[premises_key]))
+            hypotheses_list.append(str(i[hypotheses_key]))
+            labels_list.append(CONTROL_LABEL_TO_ID[str(i[labels_key])])
 
         return premises_list, hypotheses_list, labels_list
 

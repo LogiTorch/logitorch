@@ -50,8 +50,8 @@ class SNLIDataset(AbstractTEDataset):
             data[labels_key].tolist(),
         ):
             if label in SNLI_LABEL_TO_ID.values():
-                premises_list.append(premise)
-                hypotheses_list.append(hypothesis)
+                premises_list.append(str(premise))
+                hypotheses_list.append(str(hypothesis))
                 labels_list.append(label)
 
         return premises_list, hypotheses_list, labels_list

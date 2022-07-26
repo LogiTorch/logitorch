@@ -49,8 +49,8 @@ class MNLIDataset(AbstractTEDataset):
             data[hypotheses_key].tolist(),
             data[labels_key].tolist(),
         ):
-            premises_list.append(premise)
-            hypotheses_list.append(hypothesis)
+            premises_list.append(str(premise))
+            hypotheses_list.append(str(hypothesis))
             labels_list.append(label)
 
         return premises_list, hypotheses_list, labels_list

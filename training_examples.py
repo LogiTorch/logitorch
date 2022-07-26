@@ -17,7 +17,7 @@ from logitorch.pl_models.proofwriter import PLProofWriter
 from logitorch.pl_models.prover import PLPRover
 from logitorch.pl_models.ruletaker import PLRuleTaker
 
-MODEL = "proofwriter"
+MODEL = "ruletaker"
 DEVICE = "cpu"
 
 if MODEL == "proofwriter":
@@ -108,30 +108,30 @@ elif MODEL == "ruletaker":
 
 elif MODEL == "bertnot":
 
-    checkpoint_callback = ModelCheckpoint(
-        monitor=None,
-        save_top_k=1,
-        dirpath="models/",
-        filename="pretrained_bertnot",
-    )
+    # checkpoint_callback = ModelCheckpoint(
+    #     monitor=None,
+    #     save_top_k=1,
+    #     dirpath="models/",
+    #     filename="pretrained_bertnot",
+    # )
 
-    pl_bertnot = PLBERTNOT(
-        "bert-base-cased",
-        task="mlm",
-        learning_rate=1e-5,
-        batch_size=32,
-        weight_decay=0,
-        num_labels=3,
-    )
+    # pl_bertnot = PLBERTNOT(
+    #     "bert-base-cased",
+    #     task="mlm",
+    #     learning_rate=1e-5,
+    #     batch_size=32,
+    #     weight_decay=0,
+    #     num_labels=3,
+    # )
 
-    trainer = pl.Trainer(
-        callbacks=[checkpoint_callback],
-        auto_lr_find=True,
-        accelerator=DEVICE,
-        max_epochs=5,
-    )
+    # trainer = pl.Trainer(
+    #     callbacks=[checkpoint_callback],
+    #     auto_lr_find=True,
+    #     accelerator=DEVICE,
+    #     max_epochs=5,
+    # )
 
-    trainer.fit(pl_bertnot)
+    # trainer.fit(pl_bertnot)
 
     ##############################################
 
