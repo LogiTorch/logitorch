@@ -1,7 +1,4 @@
 import pytorch_lightning as pl
-from pytorch_lightning.callbacks import ModelCheckpoint
-from torch.utils.data.dataloader import DataLoader
-
 from logitorch.data_collators.bertnot_collator import BERTNOTTextualEntailmentCollator
 from logitorch.data_collators.proofwriter_collator import (
     ProofWriterProofGenerationAllCollator,
@@ -16,6 +13,8 @@ from logitorch.pl_models.bertnot import PLBERTNOT
 from logitorch.pl_models.proofwriter import PLProofWriter
 from logitorch.pl_models.prover import PLPRover
 from logitorch.pl_models.ruletaker import PLRuleTaker
+from pytorch_lightning.callbacks import ModelCheckpoint
+from torch.utils.data.dataloader import DataLoader
 
 MODEL = "ruletaker"
 DEVICE = "cpu"

@@ -2,13 +2,12 @@ from typing import Dict, Tuple
 
 import pytorch_lightning as pl
 import torch
-from torch.optim import Adam
-from torch.utils.data.dataloader import DataLoader
-from transformers import AdamW, get_linear_schedule_with_warmup
-
 from logitorch.data_collators.bertnot_collator import BERTNOTWiki20KCollator
 from logitorch.datasets.mlm.wiki20k_dataset import Wiki20KDataset
 from logitorch.models.bertnot import BERTNOT
+from torch.optim import Adam
+from torch.utils.data.dataloader import DataLoader
+from transformers import AdamW, get_linear_schedule_with_warmup
 
 
 class PLBERTNOT(pl.LightningModule):

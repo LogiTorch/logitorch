@@ -1,9 +1,8 @@
 import numpy as np
 import torch
+from logitorch.datasets.proof_qa.proofwriter_dataset import PROOFWRITER_LABEL_TO_ID
 from torch.nn.utils.rnn import pad_sequence
 from transformers import RobertaTokenizer
-
-from logitorch.datasets.proof_qa.proofwriter_dataset import PROOFWRITER_LABEL_TO_ID
 
 
 class Node:

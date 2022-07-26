@@ -2,9 +2,8 @@ from typing import Dict, Tuple
 
 import pytorch_lightning as pl
 import torch
-from transformers import AdamW, get_linear_schedule_with_warmup
-
 from logitorch.models.prover import PRover
+from transformers import AdamW, get_linear_schedule_with_warmup
 
 
 class PLPRover(pl.LightningModule):
