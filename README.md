@@ -1,6 +1,6 @@
-# TorchTextLogic
+# LogiTorch
 
-TorchTextLogic is a PyTorch-based library for logical reasoning in natural language, it consists of:
+LogiTorch is a PyTorch-based library for logical reasoning in natural language, it consists of:
 
 - Textual logical reasoning datasets
 - Implementations of different logical reasoning neural architectures
@@ -14,7 +14,7 @@ TorchTextLogic is a PyTorch-based library for logical reasoning in natural langu
 
 ### 📋 Datasets
 
-Datasets implemented in TorchTextLogic:
+Datasets implemented in LogiTorch:
 
 - [x] [AR-LSAT](https://arxiv.org/abs/2104.06598)
 - [x] [ConTRoL](https://arxiv.org/abs/2011.04864)
@@ -33,7 +33,7 @@ Datasets implemented in TorchTextLogic:
 
 ### 🤖 Models
 
-Models implemented in TorchTextLogic:
+Models implemented in LogiTorch:
 
 - [x]  [RuleTaker](https://arxiv.org/abs/2002.05867)
 - [x]  [ProofWriter](https://arxiv.org/abs/2012.13048)
@@ -49,17 +49,52 @@ Models implemented in TorchTextLogic:
 
 ## 🧪 Example Usage
 
+### Training Example
 ```python
-from torchtextlogic.datasets.qa.ruletaker_dataset import RuleTakerDataset
-from torchtextlogic.pl_models.pl_ruletaker import PLRuleTaker
-from torchtextlogic.data_collators.ruletaker_collator import RuleTakerCollator
+import pytorch_lightning as pl
+from logitorch.data_collators.ruletaker_collator import RuleTakerCollator
+from logitorch.datasets.qa.ruletaker_dataset import RuleTakerDataset
+from logitorch.pl_models.ruletaker import PLRuleTaker
+from pytorch_lightning.callbacks import ModelCheckpoint
 from torch.utils.data.dataloader import DataLoader
+
+train_dataset = RuleTakerDataset("depth-5", "train")
+val_dataset = RuleTakerDataset("depth-5", "val")
+
+ruletaker_collate_fn = RuleTakerCollator()
+train_dataloader = DataLoader(
+    train_dataset, batch_size=32, collate_fn=ruletaker_collate_fn
+)
+
+val_dataloader = DataLoader(
+    train_dataset, batch_size=32, collate_fn=ruletaker_collate_fn
+)
+
+model = PLRuleTaker(learning_rate=1e-5, weight_decay=0.1)
+
+checkpoint_callback = ModelCheckpoint(
+    save_top_k=1,
+    monitor="val_loss",
+    mode="min",
+    dirpath="models/",
+    filename="best_ruletaker.ckpt",
+)
+
+trainer = pl.Trainer(accelerator="gpu", gpus=1)
+trainer.fit(model, train_dataloader, val_dataloader)
+```
+
+### Testing Example
+```python
+from logitorch.pl_models.ruletaker import PLRuleTaker
+from logitorch.datasets.qa.ruletaker_dataset import RULETAKER_ID_TO_LABEL
 import pytorch_lightning as pl
 
-dataset = RuleTakerDataset("depth-0", "train")
-ruletaker_collate_fn = RuleTakerCollator("roberta-base")
-model = PLRuleTaker("roberta-base")
-train_dataloader = DataLoader(dataset, 3, collate_fn=ruletaker_collate_fn)
-trainer = pl.Trainer(accelerator="gpu", gpus=1)
-trainer.fit(model, train_dataloader)
+model = PLRuleTaker.load_from_checkpoint("best_ruletaker.ckpt")
+
+context = "Bob is smart. If someone is smart then he is kind"
+question = "Bob is kind"
+
+pred = model.predict(context, question)
+print(RULETAKER_ID_TO_LABEL[pred])
 ```
