@@ -11,7 +11,7 @@ from logitorch.models.proofwriter import ProofWriter
 class PLProofWriter(pl.LightningModule):
     def __init__(
         self,
-        pretrained_model: str = "t5-large",
+        pretrained_model: str = "google/t5-v1_1-large",
         learning_rate: float = None,
         weight_decay=0.1,
     ) -> None:

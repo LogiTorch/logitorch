@@ -2,16 +2,12 @@ import pytorch_lightning as pl
 from pytorch_lightning.callbacks import ModelCheckpoint
 from torch.utils.data.dataloader import DataLoader
 
-from logitorch.data_collators.bertnot_collator import (
-    BERTNOTTextualEntailmentCollator,
-)
+from logitorch.data_collators.bertnot_collator import BERTNOTTextualEntailmentCollator
 from logitorch.data_collators.proofwriter_collator import (
     ProofWriterProofGenerationAllCollator,
 )
 from logitorch.data_collators.prover_collator import PRoverProofWriterCollator
-from logitorch.data_collators.ruletaker_collator import (
-    RuleTakerProofWriterCollator,
-)
+from logitorch.data_collators.ruletaker_collator import RuleTakerProofWriterCollator
 from logitorch.datasets.proof_qa.proofwriter_dataset import ProofWriterDataset
 from logitorch.datasets.te.mnli_dataset import MNLIDataset
 from logitorch.datasets.te.rte_dataset import RTEDataset
@@ -21,7 +17,7 @@ from logitorch.pl_models.proofwriter import PLProofWriter
 from logitorch.pl_models.prover import PLPRover
 from logitorch.pl_models.ruletaker import PLRuleTaker
 
-MODEL = "bertnot"
+MODEL = "proofwriter"
 DEVICE = "cpu"
 
 if MODEL == "proofwriter":
@@ -36,12 +32,14 @@ if MODEL == "proofwriter":
         filename="best_proofwriter-{epoch:02d}-{val_loss:.2f}",
     )
 
-    proofwriter_collator = ProofWriterProofGenerationAllCollator("t5-large")
+    proofwriter_collator = ProofWriterProofGenerationAllCollator("google/t5-v1_1-large")
 
     train_dataloader = DataLoader(train_dataset, 8, collate_fn=proofwriter_collator)
     val_dataloader = DataLoader(val_dataset, 8, collate_fn=proofwriter_collator)
 
-    pl_proofwriter = PLProofWriter("t5-large", learning_rate=1e-5, weight_decay=0.1)
+    pl_proofwriter = PLProofWriter(
+        "google/t5-v1_1-large", learning_rate=1e-5, weight_decay=0.1
+    )
 
     trainer = pl.Trainer(
         callbacks=[checkpoint_callback],
@@ -118,7 +116,12 @@ elif MODEL == "bertnot":
     )
 
     pl_bertnot = PLBERTNOT(
-        "bert-base-cased", task="mlm", learning_rate=1e-5, batch_size=32, weight_decay=0
+        "bert-base-cased",
+        task="mlm",
+        learning_rate=1e-5,
+        batch_size=32,
+        weight_decay=0,
+        num_labels=3,
     )
 
     trainer = pl.Trainer(
@@ -150,6 +153,7 @@ elif MODEL == "bertnot":
 
     pl_bertnot = PLBERTNOT.load_from_checkpoint(
         "models/pretrained_bertnot",
+        pretrained_model="bert-base-cased",
         task="te",
         learning_rate=1e-5,
         weight_decay=0.1,
@@ -183,6 +187,7 @@ elif MODEL == "bertnot":
 
     pl_bertnot = PLBERTNOT.load_from_checkpoint(
         "models/pretrained_bertnot",
+        pretrained_model="bert-base-cased",
         task="te",
         learning_rate=2e-5,
         weight_decay=0.0,
@@ -197,6 +202,33 @@ elif MODEL == "bertnot":
     )
 
     trainer.fit(pl_bertnot, train_dataloader, val_dataloader)
+
+    ##############################################
+
+    checkpoint_callback = ModelCheckpoint(
+        monitor=None,
+        save_top_k=1,
+        dirpath="models/",
+        filename="pretrained_bertnot",
+    )
+
+    pl_bertnot = PLBERTNOT(
+        "bert-base-cased",
+        task="mlm",
+        learning_rate=1e-5,
+        batch_size=32,
+        weight_decay=0,
+        num_labels=2,
+    )
+
+    trainer = pl.Trainer(
+        callbacks=[checkpoint_callback],
+        auto_lr_find=True,
+        accelerator=DEVICE,
+        max_epochs=5,
+    )
+
+    trainer.fit(pl_bertnot)
 
     ##############################################
 
@@ -216,6 +248,7 @@ elif MODEL == "bertnot":
 
     pl_bertnot = PLBERTNOT.load_from_checkpoint(
         "models/pretrained_bertnot",
+        pretrained_model="bert-base-cased",
         task="te",
         learning_rate=2e-5,
         weight_decay=0.0,

@@ -1,13 +1,13 @@
 from sklearn.metrics import accuracy_score
 from tqdm import tqdm
 
-from torchtextlogic.datasets.proof_qa.proofwriter_dataset import (
+from logitorch.datasets.proof_qa.proofwriter_dataset import (
     PROOFWRITER_LABEL_TO_ID,
     ProofWriterDataset,
 )
-from torchtextlogic.pl_models.proofwriter import PLProofWriter
-from torchtextlogic.pl_models.prover import PLPRover
-from torchtextlogic.pl_models.ruletaker import PLRuleTaker
+from logitorch.pl_models.proofwriter import PLProofWriter
+from logitorch.pl_models.prover import PLPRover
+from logitorch.pl_models.ruletaker import PLRuleTaker
 
 MODEL = "proofwriter"
 DEVICE = "cuda:0"

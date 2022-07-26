@@ -1,6 +1,6 @@
 import os
 
-from torchtextlogic.datasets.utils import DATASETS_FOLDER, download_dataset
+from logitorch.datasets.utils import DATASETS_FOLDER, download_dataset
 
 
 def test_download_dataset() -> None:
