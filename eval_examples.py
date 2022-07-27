@@ -21,10 +21,10 @@ DEVICE = "cpu"
 
 def parse_facts_rules(facts, rules):
     sentences = []
-    for s in facts.values():
-        sentences.append(s)
-    for s in rules.values():
-        sentences.append(s)
+    for k, v in facts.items():
+        sentences.append(f"{k}: {v}")
+    for k, v in rules.items():
+        sentences.append(f"{k}: {v}")
     context = "".join(sentences)
     return context
 
@@ -106,7 +106,7 @@ elif MODEL == "bertnot":
         y_trues = []
         for p, h, l in val_dataset:
 
-            y_pred = model.predict(p, h, task="te")
+            y_pred = model.predict(p, h, task="te", device=DEVICE)
             y_preds.append(y_pred)
             y_trues.append(l)
         out.write(str(accuracy_score(y_trues, y_preds)))
@@ -115,7 +115,7 @@ elif MODEL == "bertnot":
         y_preds = []
         y_trues = []
         for p, h, l in neg_dataset:
-            y_pred = model.predict(p, h, task="te")
+            y_pred = model.predict(p, h, task="te", device=DEVICE)
             y_preds.append(y_pred)
             y_trues.append(l)
         out.write(str(accuracy_score(y_trues, y_preds)))
@@ -132,7 +132,7 @@ elif MODEL == "bertnot":
         y_trues = []
         for p, h, l in val_dataset:
 
-            y_pred = model.predict(p, h, task="te")
+            y_pred = model.predict(p, h, task="te", device=DEVICE)
             y_preds.append(y_pred)
             y_trues.append(l)
         out.write(str(accuracy_score(y_trues, y_preds)))
@@ -141,7 +141,7 @@ elif MODEL == "bertnot":
         y_preds = []
         y_trues = []
         for p, h, l in neg_dataset:
-            y_pred = model.predict(p, h, task="te")
+            y_pred = model.predict(p, h, task="te", device=DEVICE)
             y_preds.append(y_pred)
             y_trues.append(l)
         out.write(str(accuracy_score(y_trues, y_preds)))
@@ -158,7 +158,7 @@ elif MODEL == "bertnot":
         y_trues = []
         for p, h, l in val_dataset:
 
-            y_pred = model.predict(p, h, task="te")
+            y_pred = model.predict(p, h, task="te", device=DEVICE)
             y_preds.append(y_pred)
             y_trues.append(l)
         out.write(str(accuracy_score(y_trues, y_preds)))
@@ -167,7 +167,7 @@ elif MODEL == "bertnot":
         y_preds = []
         y_trues = []
         for p, h, l in neg_dataset:
-            y_pred = model.predict(p, h, task="te")
+            y_pred = model.predict(p, h, task="te", device=DEVICE)
             y_preds.append(y_pred)
             y_trues.append(l)
         out.write(str(accuracy_score(y_trues, y_preds)))

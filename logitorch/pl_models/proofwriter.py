@@ -42,6 +42,7 @@ class PLProofWriter(pl.LightningModule):
                 lr=self.learning_rate,
                 weight_decay=self.weight_decay,
             )
+            return optimizer
         else:
             optimizer = Adafactor(
                 self.model.parameters(),
@@ -52,14 +53,14 @@ class PLProofWriter(pl.LightningModule):
                 weight_decay=self.weight_decay,
             )
 
-        scheduler = get_linear_schedule_with_warmup(
-            optimizer,
-            num_warmup_steps=int(0.1 * self.trainer.estimated_stepping_batches),
-            num_training_steps=self.trainer.estimated_stepping_batches,
-        )
-        scheduler = {"scheduler": scheduler, "interval": "step", "frequency": 1}
+            scheduler = get_linear_schedule_with_warmup(
+                optimizer,
+                num_warmup_steps=int(0.1 * self.trainer.estimated_stepping_batches),
+                num_training_steps=self.trainer.estimated_stepping_batches,
+            )
+            scheduler = {"scheduler": scheduler, "interval": "step", "frequency": 1}
 
-        return [optimizer], [scheduler]
+            return [optimizer], [scheduler]
 
     def training_step(self, train_batch: Tuple[Dict[str, torch.Tensor], torch.Tensor], batch_idx: int) -> torch.Tensor:  # type: ignore
         x, y = train_batch

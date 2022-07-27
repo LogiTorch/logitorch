@@ -16,7 +16,7 @@ from logitorch.pl_models.ruletaker import PLRuleTaker
 from pytorch_lightning.callbacks import ModelCheckpoint
 from torch.utils.data.dataloader import DataLoader
 
-MODEL = "ruletaker"
+MODEL = "proofwriter"
 DEVICE = "cpu"
 
 if MODEL == "proofwriter":
@@ -31,14 +31,12 @@ if MODEL == "proofwriter":
         filename="best_proofwriter-{epoch:02d}-{val_loss:.2f}",
     )
 
-    proofwriter_collator = ProofWriterProofGenerationAllCollator("google/t5-v1_1-large")
+    proofwriter_collator = ProofWriterProofGenerationAllCollator("t5-base")
 
     train_dataloader = DataLoader(train_dataset, 8, collate_fn=proofwriter_collator)
     val_dataloader = DataLoader(val_dataset, 8, collate_fn=proofwriter_collator)
 
-    pl_proofwriter = PLProofWriter(
-        "google/t5-v1_1-large", learning_rate=1e-5, weight_decay=0.1
-    )
+    pl_proofwriter = PLProofWriter("t5-base", learning_rate=1e-5, weight_decay=0.1)
 
     trainer = pl.Trainer(
         callbacks=[checkpoint_callback],
@@ -107,30 +105,30 @@ elif MODEL == "ruletaker":
 
 elif MODEL == "bertnot":
 
-    # checkpoint_callback = ModelCheckpoint(
-    #     monitor=None,
-    #     save_top_k=1,
-    #     dirpath="models/",
-    #     filename="pretrained_bertnot",
-    # )
+    checkpoint_callback = ModelCheckpoint(
+        monitor=None,
+        save_top_k=1,
+        dirpath="models/",
+        filename="pretrained_bertnot",
+    )
 
-    # pl_bertnot = PLBERTNOT(
-    #     "bert-base-cased",
-    #     task="mlm",
-    #     learning_rate=1e-5,
-    #     batch_size=32,
-    #     weight_decay=0,
-    #     num_labels=3,
-    # )
+    pl_bertnot = PLBERTNOT(
+        "bert-base-cased",
+        task="mlm",
+        learning_rate=1e-5,
+        batch_size=32,
+        weight_decay=0,
+        num_labels=3,
+    )
 
-    # trainer = pl.Trainer(
-    #     callbacks=[checkpoint_callback],
-    #     auto_lr_find=True,
-    #     accelerator=DEVICE,
-    #     max_epochs=5,
-    # )
+    trainer = pl.Trainer(
+        callbacks=[checkpoint_callback],
+        auto_lr_find=True,
+        accelerator=DEVICE,
+        max_epochs=5,
+    )
 
-    # trainer.fit(pl_bertnot)
+    trainer.fit(pl_bertnot)
 
     ##############################################
 
