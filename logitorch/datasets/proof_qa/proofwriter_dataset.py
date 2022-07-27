@@ -87,6 +87,7 @@ class ProofWriterDataset(AbstractProofQADataset):
                     self.labels,
                     self.proofs,
                     self.proofs_intermerdiates,
+                    self.depths,
                 ) = self.__read_dataset_proof_generation_all(
                     "triples", "rules", "questions"
                 )
@@ -142,6 +143,7 @@ class ProofWriterDataset(AbstractProofQADataset):
         List[List[str]],
         List[List[str]],
         List[List[str]],
+        List[List[int]],
     ]:
         data = read_jsonl(self.dataset_path)
         triples_list = []
@@ -150,6 +152,7 @@ class ProofWriterDataset(AbstractProofQADataset):
         labels_list = []
         proofs_list = []
         proofs_intermediates_list = []
+        depths_list = []
 
         proofs_intermediates_key = "proofsWithIntermediates"
         for i in data:
@@ -159,6 +162,7 @@ class ProofWriterDataset(AbstractProofQADataset):
             proofs = []
             proofs_intermediates = []
             labels = []
+            depths = []
 
             for t, val in i[triples_key].items():
                 triples[t] = val["text"]
@@ -182,14 +186,18 @@ class ProofWriterDataset(AbstractProofQADataset):
                 labels.append(q["answer"])
                 proofs.append(q["proofs"])
                 proofs_intermediates.append(tmp_proof)
+                depths.append(q["QDep"])
 
-            for q, l, p, p_i in zip(questions, labels, proofs, proofs_intermediates):
+            for q, l, p, p_i, d in zip(
+                questions, labels, proofs, proofs_intermediates, depths
+            ):
                 triples_list.append(triples)
                 rules_list.append(rules)
                 questions_list.append(q)
                 labels_list.append(l)
                 proofs_list.append(p)
                 proofs_intermediates_list.append(p_i)
+                depths_list.append(d)
 
         # print(
         #     triples_list[0],
@@ -205,6 +213,7 @@ class ProofWriterDataset(AbstractProofQADataset):
             labels_list,
             proofs_list,
             proofs_intermediates_list,
+            depths_list,
         )
 
     def __read_dataset_proof_generation_iter(
@@ -340,7 +349,13 @@ class ProofWriterDataset(AbstractProofQADataset):
         self, index: int
     ) -> Union[
         Tuple[
-            Dict[str, str], Dict[str, str], List[str], List[str], List[str], List[str]
+            Dict[str, str],
+            Dict[str, str],
+            List[str],
+            List[str],
+            List[str],
+            List[str],
+            List[int],
         ],
         Tuple[Dict[str, str], Dict[str, str], List[str], List[str], List[str]],
         Tuple[Dict[str, str], Dict[str, str], List[str], List[str]],
@@ -354,6 +369,7 @@ class ProofWriterDataset(AbstractProofQADataset):
                 self.labels[index],
                 self.proofs[index],
                 self.proofs_intermerdiates[index],
+                self.depths[index],
             )
         elif self.task == "abduction":
             return (

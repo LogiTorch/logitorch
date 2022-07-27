@@ -32,12 +32,14 @@ if MODEL == "proofwriter":
         filename="best_proofwriter-{epoch:02d}-{val_loss:.2f}",
     )
 
-    proofwriter_collator = ProofWriterProofGenerationAllCollator("t5-base")
+    proofwriter_collator = ProofWriterProofGenerationAllCollator("google/t5-v1_1-large")
 
     train_dataloader = DataLoader(train_dataset, 8, collate_fn=proofwriter_collator)
     val_dataloader = DataLoader(val_dataset, 8, collate_fn=proofwriter_collator)
 
-    pl_proofwriter = PLProofWriter("t5-base", learning_rate=1e-5, weight_decay=0.1)
+    pl_proofwriter = PLProofWriter(
+        "google/t5-v1_1-large", learning_rate=1e-5, weight_decay=0.1
+    )
 
     trainer = pl.Trainer(
         callbacks=[checkpoint_callback],

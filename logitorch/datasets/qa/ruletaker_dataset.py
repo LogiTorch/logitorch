@@ -1,6 +1,8 @@
 import os
 from typing import List, Tuple
 
+from sympy import O
+
 from logitorch.datasets.base import AbstractQADataset
 from logitorch.datasets.exceptions import DatasetNameError, SplitSetError
 from logitorch.datasets.utils import (
@@ -51,9 +53,12 @@ class RuleTakerDataset(AbstractQADataset):
             self.dataset_path = (
                 f"{RULETAKER_DATASET_FOLDER}/{self.dataset_name}/{self.split_set}.jsonl"
             )
-            self.contexts, self.questions, self.labels = self.__read_dataset(
-                "context", "questions", "text", "label"
-            )
+            (
+                self.contexts,
+                self.questions,
+                self.labels,
+                self.depths,
+            ) = self.__read_dataset("context", "questions", "text", "label")
         except DatasetNameError as err:
             print(err.message)
             print(f"The RuleTaker datasets are: {RULETAKER_SUB_DATASETS}")
@@ -66,22 +71,29 @@ class RuleTakerDataset(AbstractQADataset):
         questions_key: str,
         questions_text_key: str,
         labels_key: str,
-    ) -> Tuple[List[str], List[str], List[int]]:
+    ) -> Tuple[List[str], List[str], List[int], List[int]]:
         data = read_jsonl(self.dataset_path)
         contexts_list = []
         questions_list = []
         labels_list = []
+        depths_list = []
 
         for i in data:
             for q in i[questions_key]:
                 contexts_list.append(i[contexts_key])
                 questions_list.append(q[questions_text_key])
                 labels_list.append(RULETAKER_LABEL_TO_ID[str(q[str(labels_key)])])
+                depths_list.append(q["meta"]["QDep"])
 
-        return contexts_list, questions_list, labels_list
+        return contexts_list, questions_list, labels_list, depths_list
 
-    def __getitem__(self, index: int) -> Tuple[str, str, int]:
-        return self.contexts[index], self.questions[index], self.labels[index]
+    def __getitem__(self, index: int) -> Tuple[str, str, int, int]:
+        return (
+            self.contexts[index],
+            self.questions[index],
+            self.labels[index],
+            self.depths[index],
+        )
 
     def __str__(self) -> str:
         return f"The {self.split_set} set of {self.dataset_name}'s RuleTaker has {self.__len__()} instances"

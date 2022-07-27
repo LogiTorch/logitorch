@@ -16,7 +16,7 @@ from logitorch.pl_models.proofwriter import PLProofWriter
 from logitorch.pl_models.prover import PLPRover
 from logitorch.pl_models.ruletaker import PLRuleTaker
 
-MODEL = "bertnot"
+MODEL = "prover"
 DEVICE = "cpu"
 
 
@@ -34,46 +34,68 @@ proofwriter_test_datasets = ["depth-5", "birds-electricity"]
 
 if MODEL == "proofwriter":
     model = PLProofWriter.load_from_checkpoint(
-        "models/best_proofwriter-epoch=04-val_loss=0.02.ckpt",
-        pretrained_model="t5-large",
+        "models/best_proofwriter-epoch=05-val_loss=0.01.ckpt",
+        pretrained_model="google/t5-v1_1-large",
     )
     model.to(DEVICE)
     model.eval()
+
     for d in proofwriter_test_datasets:
         test_dataset = ProofWriterDataset(d, "test", "proof_generation_all")
+        depths_pred = {0: [], 1: [], 2: [], 3: [], 4: [], 5: [], 6: []}
+        depths_true = {0: [], 1: [], 2: [], 3: [], 4: [], 5: [], 6: []}
+        y_preds = []
+        y_trues = []
+
+        for i in tqdm(test_dataset):
+            context = parse_facts_rules(i[0], i[1])
+            y_pred = model.predict(context, i[2], device=DEVICE)
+            if "True" in y_pred:
+                y_pred = 1
+            else:
+                y_pred = 0
+            y_true = PROOFWRITER_LABEL_TO_ID[str(i[3])]
+            depths_pred[i[6]].append(y_pred)
+            depths_true[i[6]].append(y_true)
+            y_preds.append(y_pred)
+            y_trues.append(y_true)
+
+        for k in depths_pred:
+            with open(f"proofwriter_{d}_{k}.txt", "w") as out:
+                out.write(str(accuracy_score(depths_pred[k], depths_true[k])))
+
         with open(f"proofwriter_{d}.txt", "w") as out:
-            y_preds = []
-            y_trues = []
-            for i in tqdm(test_dataset):
-                context = parse_facts_rules(i[0], i[1])
-                y_pred = model.predict(context, i[2], device=DEVICE)
-                if "True" in y_pred:
-                    y_pred = 1
-                else:
-                    y_pred = 0
-                y_true = PROOFWRITER_LABEL_TO_ID[str(i[3])]
-                y_preds.append(y_pred)
-                y_trues.append(y_true)
-            out.write(str(accuracy_score(y_trues, y_preds)))
+            out.write(str(accuracy_score(y_preds, y_trues)))
 
 elif MODEL == "prover":
     model = PLPRover.load_from_checkpoint(
-        "models/best_prover-epoch=04-val_loss=0.10.ckpt",
+        "models/best_prover-epoch=09-val_loss=0.07.ckpt",
         pretrained_model="roberta-large",
     )
     model.to(DEVICE)
     model.eval()
+
     for d in proofwriter_test_datasets:
         test_dataset = ProofWriterDataset(d, "test", "proof_generation_all")
+        depths_pred = {0: [], 1: [], 2: [], 3: [], 4: [], 5: [], 6: []}
+        depths_true = {0: [], 1: [], 2: [], 3: [], 4: [], 5: [], 6: []}
+        y_preds = []
+        y_trues = []
+
+        for i in tqdm(test_dataset):
+            y_pred = model.predict(i[0], i[1], i[2], device=DEVICE)
+            y_true = PROOFWRITER_LABEL_TO_ID[str(i[3])]
+            depths_pred[i[6]].append(y_pred)
+            depths_true[i[6]].append(y_true)
+            y_preds.append(y_pred)
+            y_trues.append(y_true)
+
+        for k in depths_pred:
+            with open(f"prover_{d}_{k}.txt", "w") as out:
+                out.write(str(accuracy_score(depths_pred[k], depths_true[k])))
+
         with open(f"prover_{d}.txt", "w") as out:
-            y_preds = []
-            y_trues = []
-            for i in tqdm(test_dataset):
-                y_pred = model.predict(i[0], i[1], i[2], device=DEVICE)
-                y_true = PROOFWRITER_LABEL_TO_ID[str(i[3])]
-                y_preds.append(y_pred)
-                y_trues.append(y_true)
-            out.write(str(accuracy_score(y_trues, y_preds)))
+            out.write(str(accuracy_score(y_preds, y_trues)))
 
 elif MODEL == "ruletaker":
     model = PLRuleTaker.load_from_checkpoint(
@@ -81,18 +103,29 @@ elif MODEL == "ruletaker":
     )
     model.to(DEVICE)
     model.eval()
+
     for d in proofwriter_test_datasets:
         test_dataset = ProofWriterDataset(d, "test", "proof_generation_all")
+        depths_pred = {0: [], 1: [], 2: [], 3: [], 4: [], 5: [], 6: []}
+        depths_true = {0: [], 1: [], 2: [], 3: [], 4: [], 5: [], 6: []}
+        y_preds = []
+        y_trues = []
+
+        for i in tqdm(test_dataset):
+            context = parse_facts_rules(i[0], i[1])
+            y_pred = model.predict(context, i[2], device=DEVICE)
+            y_true = PROOFWRITER_LABEL_TO_ID[str(i[3])]
+            depths_pred[i[6]].append(y_pred)
+            depths_true[i[6]].append(y_true)
+            y_preds.append(y_pred)
+            y_trues.append(y_true)
+
+        for k in depths_pred:
+            with open(f"ruletaker_{d}_{k}.txt", "w") as out:
+                out.write(str(accuracy_score(depths_pred[k], depths_true[k])))
+
         with open(f"ruletaker_{d}.txt", "w") as out:
-            y_preds = []
-            y_trues = []
-            for i in tqdm(test_dataset):
-                context = parse_facts_rules(i[0], i[1])
-                y_pred = model.predict(context, i[2], device=DEVICE)
-                y_true = PROOFWRITER_LABEL_TO_ID[str(i[3])]
-                y_preds.append(y_pred)
-                y_trues.append(y_true)
-            out.write(str(accuracy_score(y_trues, y_preds)))
+            out.write(str(accuracy_score(y_preds, y_trues)))
 
 elif MODEL == "bertnot":
     model = PLBERTNOT.load_from_checkpoint(
