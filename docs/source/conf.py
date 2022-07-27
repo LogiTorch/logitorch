@@ -17,12 +17,12 @@
 
 # -- Project information -----------------------------------------------------
 
-project = "TorchTextLogic"
+project = "LogiTorch"
 copyright = "2021, Chadi Helwe"
 author = "Chadi Helwe"
 
 # The full version, including alpha/beta/rc tags
-release = "0.0.1"
+release = "0.0.0"
 
 
 # -- General configuration ---------------------------------------------------
@@ -39,7 +39,7 @@ extensions = [
 ]
 
 autoapi_type = "python"
-autoapi_dirs = ["../../torchtextlogic"]
+autoapi_dirs = ["../../logitorch"]
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ["_templates"]
