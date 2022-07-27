@@ -31,7 +31,7 @@ class BERTNOT(nn.Module):
 
         self.cross_entopy_loss = nn.CrossEntropyLoss()
         self.unlikelihood_loss = UnlikelihoodLoss()
-        self.kl_loss = nn.KLDivLoss(reduction="mean")
+        self.kl_loss = nn.KLDivLoss(reduction="batchmean")
 
         self.tokenizer = BertTokenizer.from_pretrained(pretrained_bert_model)
 

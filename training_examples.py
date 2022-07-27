@@ -20,246 +20,242 @@ from logitorch.pl_models.ruletaker import PLRuleTaker
 MODEL = "proofwriter"
 DEVICE = "cpu"
 
-if MODEL == "proofwriter":
-    train_dataset = ProofWriterDataset("depth-5", "train", "proof_generation_all")
-    val_dataset = ProofWriterDataset("depth-5", "val", "proof_generation_all")
 
-    checkpoint_callback = ModelCheckpoint(
-        save_top_k=1,
-        monitor="val_loss",
-        mode="min",
-        dirpath="models/",
-        filename="best_proofwriter-{epoch:02d}-{val_loss:.2f}",
-    )
+def main():
+    if MODEL == "proofwriter":
+        train_dataset = ProofWriterDataset("depth-5", "train", "proof_generation_all")
+        val_dataset = ProofWriterDataset("depth-5", "val", "proof_generation_all")
 
-    proofwriter_collator = ProofWriterProofGenerationAllCollator("google/t5-v1_1-large")
+        checkpoint_callback = ModelCheckpoint(
+            save_top_k=1,
+            monitor="val_loss",
+            mode="min",
+            dirpath="models/",
+            filename="best_proofwriter-{epoch:02d}-{val_loss:.2f}",
+        )
 
-    train_dataloader = DataLoader(train_dataset, 8, collate_fn=proofwriter_collator)
-    val_dataloader = DataLoader(val_dataset, 8, collate_fn=proofwriter_collator)
+        proofwriter_collator = ProofWriterProofGenerationAllCollator(
+            "google/t5-v1_1-large"
+        )
 
-    pl_proofwriter = PLProofWriter(
-        "google/t5-v1_1-large", learning_rate=1e-5, weight_decay=0.1
-    )
+        train_dataloader = DataLoader(train_dataset, 8, collate_fn=proofwriter_collator)
+        val_dataloader = DataLoader(val_dataset, 8, collate_fn=proofwriter_collator)
 
-    trainer = pl.Trainer(
-        callbacks=[checkpoint_callback],
-        auto_lr_find=True,
-        accelerator=DEVICE,
-        max_epochs=5,
-    )
+        pl_proofwriter = PLProofWriter(
+            "google/t5-v1_1-large", learning_rate=1e-5, weight_decay=0.1
+        )
 
-    trainer.fit(pl_proofwriter, train_dataloader, val_dataloader)
+        trainer = pl.Trainer(
+            callbacks=[checkpoint_callback],
+            auto_lr_find=True,
+            accelerator=DEVICE,
+            max_epochs=5,
+        )
 
-elif MODEL == "prover":
-    train_dataset = ProofWriterDataset("depth-5", "train", "proof_generation_all")
-    val_dataset = ProofWriterDataset("depth-5", "val", "proof_generation_all")
+        trainer.fit(pl_proofwriter, train_dataloader, val_dataloader)
 
-    checkpoint_callback = ModelCheckpoint(
-        save_top_k=1,
-        monitor="val_loss",
-        mode="min",
-        dirpath="models/",
-        filename="best_prover-{epoch:02d}-{val_loss:.2f}",
-    )
+    elif MODEL == "prover":
+        train_dataset = ProofWriterDataset("depth-5", "train", "proof_generation_all")
+        val_dataset = ProofWriterDataset("depth-5", "val", "proof_generation_all")
 
-    prover_collator = PRoverProofWriterCollator("roberta-large")
+        checkpoint_callback = ModelCheckpoint(
+            save_top_k=1,
+            monitor="val_loss",
+            mode="min",
+            dirpath="models/",
+            filename="best_prover-{epoch:02d}-{val_loss:.2f}",
+        )
 
-    train_dataloader = DataLoader(train_dataset, 16, collate_fn=prover_collator)
-    val_dataloader = DataLoader(val_dataset, 16, collate_fn=prover_collator)
+        prover_collator = PRoverProofWriterCollator("roberta-large")
 
-    pl_prover = PLPRover("roberta-large", learning_rate=1e-5, weight_decay=0.1)
+        train_dataloader = DataLoader(train_dataset, 16, collate_fn=prover_collator)
+        val_dataloader = DataLoader(val_dataset, 16, collate_fn=prover_collator)
 
-    trainer = pl.Trainer(
-        callbacks=[checkpoint_callback],
-        auto_lr_find=True,
-        accelerator=DEVICE,
-        max_epochs=10,
-    )
+        pl_prover = PLPRover("roberta-large", learning_rate=1e-5, weight_decay=0.1)
 
-    trainer.fit(pl_prover, train_dataloader, val_dataloader)
+        trainer = pl.Trainer(
+            callbacks=[checkpoint_callback],
+            auto_lr_find=True,
+            accelerator=DEVICE,
+            max_epochs=10,
+        )
 
-elif MODEL == "ruletaker":
-    train_dataset = ProofWriterDataset("depth-5", "train", "proof_generation_all")
-    val_dataset = ProofWriterDataset("depth-5", "val", "proof_generation_all")
+        trainer.fit(pl_prover, train_dataloader, val_dataloader)
 
-    checkpoint_callback = ModelCheckpoint(
-        save_top_k=1,
-        monitor="val_loss",
-        mode="min",
-        dirpath="models/",
-        filename="best_ruletaker-{epoch:02d}-{val_loss:.2f}",
-    )
+    elif MODEL == "ruletaker":
+        train_dataset = ProofWriterDataset("depth-5", "train", "proof_generation_all")
+        val_dataset = ProofWriterDataset("depth-5", "val", "proof_generation_all")
 
-    ruletaker_collator = RuleTakerProofWriterCollator()
+        checkpoint_callback = ModelCheckpoint(
+            save_top_k=1,
+            monitor="val_loss",
+            mode="min",
+            dirpath="models/",
+            filename="best_ruletaker-{epoch:02d}-{val_loss:.2f}",
+        )
 
-    train_dataloader = DataLoader(train_dataset, 16, collate_fn=ruletaker_collator)
-    val_dataloader = DataLoader(val_dataset, 16, collate_fn=ruletaker_collator)
+        ruletaker_collator = RuleTakerProofWriterCollator()
 
-    pl_ruletaker = PLRuleTaker(weight_decay=0.1, learning_rate=1e-5)
+        train_dataloader = DataLoader(train_dataset, 16, collate_fn=ruletaker_collator)
+        val_dataloader = DataLoader(val_dataset, 16, collate_fn=ruletaker_collator)
 
-    trainer = pl.Trainer(
-        callbacks=[checkpoint_callback],
-        auto_lr_find=True,
-        accelerator=DEVICE,
-        max_epochs=10,
-    )
+        pl_ruletaker = PLRuleTaker(weight_decay=0.1, learning_rate=1e-5)
 
-    trainer.fit(pl_ruletaker, train_dataloader, val_dataloader)
+        trainer = pl.Trainer(
+            callbacks=[checkpoint_callback],
+            auto_lr_find=True,
+            accelerator=DEVICE,
+            max_epochs=10,
+        )
 
-elif MODEL == "bertnot":
+        trainer.fit(pl_ruletaker, train_dataloader, val_dataloader)
 
-    checkpoint_callback = ModelCheckpoint(
-        monitor=None,
-        save_top_k=1,
-        dirpath="models/",
-        filename="pretrained_bertnot",
-    )
+    elif MODEL == "bertnot":
 
-    pl_bertnot = PLBERTNOT(
-        "bert-base-cased",
-        task="mlm",
-        learning_rate=1e-5,
-        batch_size=32,
-        weight_decay=0,
-        num_labels=3,
-    )
+        checkpoint_callback = ModelCheckpoint(
+            monitor=None,
+            save_top_k=1,
+            dirpath="models/",
+            filename="pretrained_bertnot",
+        )
 
-    trainer = pl.Trainer(
-        callbacks=[checkpoint_callback],
-        auto_lr_find=True,
-        accelerator=DEVICE,
-        max_epochs=5,
-    )
+        pl_bertnot = PLBERTNOT(
+            "bert-base-cased",
+            task="mlm",
+            learning_rate=1e-5,
+            batch_size=32,
+            weight_decay=0,
+            num_labels=3,
+        )
 
-    trainer.fit(pl_bertnot)
+        trainer = pl.Trainer(
+            callbacks=[checkpoint_callback],
+            auto_lr_find=True,
+            accelerator=DEVICE,
+            max_epochs=5,
+        )
 
-    ##############################################
+        trainer.fit(pl_bertnot)
 
-    bertnot_collator = BERTNOTTextualEntailmentCollator("bert-base-cased")
+        ##############################################
 
-    train_dataset = SNLIDataset("train")
-    val_dataset = SNLIDataset("val")
+        bertnot_collator = BERTNOTTextualEntailmentCollator("bert-base-cased")
 
-    checkpoint_callback = ModelCheckpoint(
-        save_top_k=1,
-        monitor="val_loss",
-        mode="min",
-        dirpath="models/",
-        filename="snli_bertnot",
-    )
+        train_dataset = SNLIDataset("train")
 
-    train_dataloader = DataLoader(train_dataset, 32, collate_fn=bertnot_collator)
-    val_dataloader = DataLoader(val_dataset, 32, collate_fn=bertnot_collator)
+        checkpoint_callback = ModelCheckpoint(
+            save_top_k=1,
+            dirpath="models/",
+            filename="snli_bertnot",
+        )
 
-    pl_bertnot = PLBERTNOT.load_from_checkpoint(
-        "models/pretrained_bertnot",
-        pretrained_model="bert-base-cased",
-        task="te",
-        learning_rate=1e-5,
-        weight_decay=0.1,
-        num_labels=3,
-    )
+        train_dataloader = DataLoader(train_dataset, 32, collate_fn=bertnot_collator)
 
-    trainer = pl.Trainer(
-        callbacks=[checkpoint_callback],
-        auto_lr_find=True,
-        accelerator=DEVICE,
-        max_epochs=3,
-    )
+        pl_bertnot = PLBERTNOT.load_from_checkpoint(
+            "models/pretrained_bertnot",
+            pretrained_model="bert-base-cased",
+            task="te",
+            learning_rate=1e-5,
+            weight_decay=0.1,
+            num_labels=3,
+        )
 
-    trainer.fit(pl_bertnot, train_dataloader, val_dataloader)
+        trainer = pl.Trainer(
+            callbacks=[checkpoint_callback],
+            auto_lr_find=True,
+            accelerator=DEVICE,
+            max_epochs=3,
+        )
 
-    ##############################################
+        trainer.fit(pl_bertnot, train_dataloader)
 
-    train_dataset = MNLIDataset("train")
-    val_dataset = MNLIDataset("val")
+        ##############################################
 
-    checkpoint_callback = ModelCheckpoint(
-        save_top_k=1,
-        monitor="val_loss",
-        mode="min",
-        dirpath="models/",
-        filename="mnli_bertnot",
-    )
+        train_dataset = MNLIDataset("train")
 
-    train_dataloader = DataLoader(train_dataset, 32, collate_fn=bertnot_collator)
-    val_dataloader = DataLoader(val_dataset, 32, collate_fn=bertnot_collator)
+        checkpoint_callback = ModelCheckpoint(
+            save_top_k=1,
+            dirpath="models/",
+            filename="mnli_bertnot",
+        )
 
-    pl_bertnot = PLBERTNOT.load_from_checkpoint(
-        "models/pretrained_bertnot",
-        pretrained_model="bert-base-cased",
-        task="te",
-        learning_rate=2e-5,
-        weight_decay=0.0,
-        num_labels=3,
-    )
+        train_dataloader = DataLoader(train_dataset, 32, collate_fn=bertnot_collator)
 
-    trainer = pl.Trainer(
-        callbacks=[checkpoint_callback],
-        auto_lr_find=True,
-        accelerator=DEVICE,
-        max_epochs=3,
-    )
+        pl_bertnot = PLBERTNOT.load_from_checkpoint(
+            "models/pretrained_bertnot",
+            pretrained_model="bert-base-cased",
+            task="te",
+            learning_rate=2e-5,
+            weight_decay=0.0,
+            num_labels=3,
+        )
 
-    trainer.fit(pl_bertnot, train_dataloader, val_dataloader)
+        trainer = pl.Trainer(
+            callbacks=[checkpoint_callback],
+            auto_lr_find=True,
+            accelerator=DEVICE,
+            max_epochs=3,
+        )
 
-    ##############################################
+        trainer.fit(pl_bertnot, train_dataloader)
 
-    checkpoint_callback = ModelCheckpoint(
-        monitor=None,
-        save_top_k=1,
-        dirpath="models/",
-        filename="pretrained_bertnot",
-    )
+        ##############################################
 
-    pl_bertnot = PLBERTNOT(
-        "bert-base-cased",
-        task="mlm",
-        learning_rate=1e-5,
-        batch_size=32,
-        weight_decay=0,
-        num_labels=2,
-    )
+        checkpoint_callback = ModelCheckpoint(
+            monitor=None,
+            save_top_k=1,
+            dirpath="models/",
+            filename="pretrained_bertnot",
+        )
 
-    trainer = pl.Trainer(
-        callbacks=[checkpoint_callback],
-        auto_lr_find=True,
-        accelerator=DEVICE,
-        max_epochs=5,
-    )
+        pl_bertnot = PLBERTNOT(
+            "bert-base-cased",
+            task="mlm",
+            learning_rate=1e-5,
+            batch_size=32,
+            weight_decay=0,
+            num_labels=2,
+        )
 
-    trainer.fit(pl_bertnot)
+        trainer = pl.Trainer(
+            callbacks=[checkpoint_callback],
+            auto_lr_find=True,
+            accelerator=DEVICE,
+            max_epochs=5,
+        )
 
-    ##############################################
+        trainer.fit(pl_bertnot)
 
-    train_dataset = RTEDataset("train")
-    val_dataset = RTEDataset("val")
+        ##############################################
 
-    checkpoint_callback = ModelCheckpoint(
-        save_top_k=1,
-        monitor="val_loss",
-        mode="min",
-        dirpath="models/",
-        filename="rte_bertnot",
-    )
+        train_dataset = RTEDataset("train")
 
-    train_dataloader = DataLoader(train_dataset, 32, collate_fn=bertnot_collator)
-    val_dataloader = DataLoader(val_dataset, 32, collate_fn=bertnot_collator)
+        checkpoint_callback = ModelCheckpoint(
+            save_top_k=1,
+            dirpath="models/",
+            filename="rte_bertnot",
+        )
 
-    pl_bertnot = PLBERTNOT.load_from_checkpoint(
-        "models/pretrained_bertnot",
-        pretrained_model="bert-base-cased",
-        task="te",
-        learning_rate=2e-5,
-        weight_decay=0.0,
-        num_labels=2,
-    )
+        train_dataloader = DataLoader(train_dataset, 32, collate_fn=bertnot_collator)
 
-    trainer = pl.Trainer(
-        callbacks=[checkpoint_callback],
-        auto_lr_find=True,
-        accelerator=DEVICE,
-        max_epochs=50,
-    )
+        pl_bertnot = PLBERTNOT.load_from_checkpoint(
+            "models/pretrained_bertnot",
+            pretrained_model="bert-base-cased",
+            task="te",
+            learning_rate=2e-5,
+            weight_decay=0.0,
+            num_labels=2,
+        )
 
-    trainer.fit(pl_bertnot, train_dataloader, val_dataloader)
+        trainer = pl.Trainer(
+            callbacks=[checkpoint_callback],
+            auto_lr_find=True,
+            accelerator=DEVICE,
+            max_epochs=50,
+        )
+
+        trainer.fit(pl_bertnot, train_dataloader)
+
+
+if __name__ == "__main__":
+    main()
