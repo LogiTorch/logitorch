@@ -2,9 +2,10 @@ from typing import Dict, Tuple
 
 import pytorch_lightning as pl
 import torch
-from logitorch.models.proofwriter import ProofWriter
 from transformers import Adafactor, get_linear_schedule_with_warmup
 from transformers.modeling_outputs import SequenceClassifierOutput
+
+from logitorch.models.proofwriter import ProofWriter
 
 
 class PLProofWriter(pl.LightningModule):

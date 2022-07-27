@@ -1,9 +1,10 @@
 import torch
 import torch.nn as nn
-from logitorch.losses.unlikelihood_loss import UnlikelihoodLoss
-from logitorch.models.exceptions import LossError, TaskError
 from torch.nn.init import xavier_normal_
 from transformers import BertForMaskedLM, BertTokenizer
+
+from logitorch.losses.unlikelihood_loss import UnlikelihoodLoss
+from logitorch.models.exceptions import LossError, TaskError
 
 
 class BERTNOT(nn.Module):

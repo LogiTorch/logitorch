@@ -1,6 +1,7 @@
 from typing import Optional
 
 from textblob import TextBlob
+
 from utilities.exceptions import OutOfRangeError
 
 

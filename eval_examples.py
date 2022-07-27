@@ -1,3 +1,6 @@
+from sklearn.metrics import accuracy_score
+from tqdm import tqdm
+
 from logitorch.datasets.proof_qa.proofwriter_dataset import (
     PROOFWRITER_LABEL_TO_ID,
     ProofWriterDataset,
@@ -12,8 +15,6 @@ from logitorch.pl_models.bertnot import PLBERTNOT
 from logitorch.pl_models.proofwriter import PLProofWriter
 from logitorch.pl_models.prover import PLPRover
 from logitorch.pl_models.ruletaker import PLRuleTaker
-from sklearn.metrics import accuracy_score
-from tqdm import tqdm
 
 MODEL = "bertnot"
 DEVICE = "cpu"

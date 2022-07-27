@@ -1,8 +1,9 @@
 from typing import Dict, Tuple
 
 import torch
-from logitorch.datasets.proof_qa.proofwriter_dataset import PROOFWRITER_LABEL_TO_ID
 from transformers import AutoTokenizer, RobertaTokenizer
+
+from logitorch.datasets.proof_qa.proofwriter_dataset import PROOFWRITER_LABEL_TO_ID
 
 
 class RuleTakerCollator:

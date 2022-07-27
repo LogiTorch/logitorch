@@ -1,11 +1,12 @@
 import numpy as np
 import torch
 import torch.nn as nn
-from logitorch.data_collators.prover_collator import PRoverProofWriterCollator
 from torch.nn import CrossEntropyLoss
 from torch.nn.init import xavier_normal_
 from transformers import RobertaModel
 from transformers.models.roberta.modeling_roberta import RobertaClassificationHead
+
+from logitorch.data_collators.prover_collator import PRoverProofWriterCollator
 
 
 class _NodeClassificationHead(nn.Module):

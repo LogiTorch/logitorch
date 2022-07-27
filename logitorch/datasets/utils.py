@@ -5,8 +5,9 @@ from typing import Any, Dict, List
 from zipfile import ZipFile
 
 import requests
-from logitorch.datasets.exceptions import FileSizeError
 from tqdm import tqdm
+
+from logitorch.datasets.exceptions import FileSizeError
 
 CURRENT_PATH = str(Path(os.getenv("CACHED_PATH_CACHE_ROOT", Path.home() / ".cache")))
 DATASETS_FOLDER = f"{CURRENT_PATH}/logitorch_datasets"
