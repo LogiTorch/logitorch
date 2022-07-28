@@ -254,6 +254,36 @@ def main():
         )
 
         trainer.fit(pl_bertnot, train_dataloader)
+    elif MODEL == "rte":
+        train_dataset = RTEDataset("train")
+
+        bertnot_collator = BERTNOTTextualEntailmentCollator("bert-base-cased")
+
+        checkpoint_callback = ModelCheckpoint(
+            save_top_k=1,
+            dirpath="models/",
+            filename="rte_bertnot",
+        )
+
+        train_dataloader = DataLoader(train_dataset, 32, collate_fn=bertnot_collator)
+
+        pl_bertnot = PLBERTNOT.load_from_checkpoint(
+            "models/pretrained_bertnot_2.ckpt",
+            pretrained_model="bert-base-cased",
+            task="te",
+            learning_rate=2e-5,
+            weight_decay=0.0,
+            num_labels=2,
+        )
+
+        trainer = pl.Trainer(
+            callbacks=[checkpoint_callback],
+            auto_lr_find=True,
+            accelerator=DEVICE,
+            max_epochs=50,
+        )
+
+        trainer.fit(pl_bertnot, train_dataloader)
 
 
 if __name__ == "__main__":

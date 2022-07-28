@@ -205,3 +205,29 @@ elif MODEL == "bertnot":
             y_preds.append(y_pred)
             y_trues.append(l)
         out.write(str(accuracy_score(y_trues, y_preds)))
+elif MODEL == "rte":
+    model = PLBERTNOT.load_from_checkpoint(
+        "models/rte_bertnot.ckpt", pretrained_model="bert-base-cased", num_labels=2
+    )
+    model.to(DEVICE)
+    val_dataset = RTEDataset("val")
+    neg_dataset = NegatedRTEDataset()
+
+    with open("bertnot_val_rte.txt", "w") as out:
+        y_preds = []
+        y_trues = []
+        for p, h, l in val_dataset:
+
+            y_pred = model.predict(p, h, task="te", device=DEVICE)
+            y_preds.append(y_pred)
+            y_trues.append(l)
+        out.write(str(accuracy_score(y_trues, y_preds)))
+
+    with open("bertnot_neg_rte.txt", "w") as out:
+        y_preds = []
+        y_trues = []
+        for p, h, l in neg_dataset:
+            y_pred = model.predict(p, h, task="te", device=DEVICE)
+            y_preds.append(y_pred)
+            y_trues.append(l)
+        out.write(str(accuracy_score(y_trues, y_preds)))
