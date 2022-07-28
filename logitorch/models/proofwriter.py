@@ -35,13 +35,20 @@ class ProofWriter(nn.Module):
             beam_output = self.model.generate(
                 **tokenized_x.to(device),
                 max_length=max_length,
-                early_stopping=True,
                 num_beams=num_beams,
-                num_return_sequences=1,
-                use_cache=True,
-                no_repeat_ngram_size=1,
-                remove_invalid_values=True,
+                do_sample=True,
+                top_p=0.90
             )
+            # beam_output = self.model.generate(
+            #     **tokenized_x.to(device),
+            #     max_length=max_length,
+            #     early_stopping=True,
+            #     num_beams=num_beams,
+            #     num_return_sequences=1,
+            #     use_cache=True,
+            #     no_repeat_ngram_size=1,
+            #     remove_invalid_values=True,
+            # )
             # print(beam_output)
             pred = self.tokenizer.decode(
                 beam_output[0],
