@@ -7,6 +7,9 @@ LogiTorch is a PyTorch-based library for logical reasoning in natural language, 
 - A simple and clean API that can be used with PyTorch Lightning
 
 ## 📦 Installation
+```console
+foo@bar:~$ pip install logitorch
+```
 
 ## 📖 Documentation
 
