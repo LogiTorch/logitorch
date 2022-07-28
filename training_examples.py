@@ -152,7 +152,7 @@ def main():
         train_dataloader = DataLoader(train_dataset, 32, collate_fn=bertnot_collator)
 
         pl_bertnot = PLBERTNOT.load_from_checkpoint(
-            "models/pretrained_bertnot",
+            "models/pretrained_bertnot.ckpt",
             pretrained_model="bert-base-cased",
             task="te",
             learning_rate=1e-5,
@@ -182,7 +182,7 @@ def main():
         train_dataloader = DataLoader(train_dataset, 32, collate_fn=bertnot_collator)
 
         pl_bertnot = PLBERTNOT.load_from_checkpoint(
-            "models/pretrained_bertnot",
+            "models/pretrained_bertnot.ckpt",
             pretrained_model="bert-base-cased",
             task="te",
             learning_rate=2e-5,
@@ -202,10 +202,9 @@ def main():
         ##############################################
 
         checkpoint_callback = ModelCheckpoint(
-            monitor=None,
             save_top_k=1,
             dirpath="models/",
-            filename="pretrained_bertnot",
+            filename="pretrained_bertnot_2",
         )
 
         pl_bertnot = PLBERTNOT(
@@ -239,7 +238,7 @@ def main():
         train_dataloader = DataLoader(train_dataset, 32, collate_fn=bertnot_collator)
 
         pl_bertnot = PLBERTNOT.load_from_checkpoint(
-            "models/pretrained_bertnot",
+            "models/pretrained_bertnot_2.ckpt",
             pretrained_model="bert-base-cased",
             task="te",
             learning_rate=2e-5,
