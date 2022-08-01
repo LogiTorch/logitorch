@@ -7,8 +7,12 @@ from logitorch.data_collators.proofwriter_collator import (
     ProofWriterProofGenerationAllCollator,
 )
 from logitorch.data_collators.prover_collator import PRoverProofWriterCollator
-from logitorch.data_collators.ruletaker_collator import RuleTakerProofWriterCollator
+from logitorch.data_collators.ruletaker_collator import (
+    RuleTakerCollator,
+    RuleTakerProofWriterCollator,
+)
 from logitorch.datasets.proof_qa.proofwriter_dataset import ProofWriterDataset
+from logitorch.datasets.qa.ruletaker_dataset import RuleTakerDataset
 from logitorch.datasets.te.mnli_dataset import MNLIDataset
 from logitorch.datasets.te.rte_dataset import RTEDataset
 from logitorch.datasets.te.snli_dataset import SNLIDataset
@@ -83,18 +87,18 @@ def main():
         trainer.fit(pl_prover, train_dataloader, val_dataloader)
 
     elif MODEL == "ruletaker":
-        train_dataset = ProofWriterDataset("depth-5", "train", "proof_generation_all")
-        val_dataset = ProofWriterDataset("depth-5", "val", "proof_generation_all")
+        train_dataset = RuleTakerDataset("depth-5", "train")
+        val_dataset = RuleTakerDataset("depth-5", "val")
 
         checkpoint_callback = ModelCheckpoint(
             save_top_k=1,
             monitor="val_loss",
             mode="min",
             dirpath="models/",
-            filename="best_ruletaker-{epoch:02d}-{val_loss:.2f}",
+            filename="best_ruletaker_ruletaker-{epoch:02d}-{val_loss:.2f}",
         )
 
-        ruletaker_collator = RuleTakerProofWriterCollator()
+        ruletaker_collator = RuleTakerCollator()
 
         train_dataloader = DataLoader(train_dataset, 16, collate_fn=ruletaker_collator)
         val_dataloader = DataLoader(val_dataset, 16, collate_fn=ruletaker_collator)

@@ -1,7 +1,6 @@
 import os
 from typing import List, Tuple
 
-from sympy import O
 
 from logitorch.datasets.base import AbstractQADataset
 from logitorch.datasets.exceptions import DatasetNameError, SplitSetError

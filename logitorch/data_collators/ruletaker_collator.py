@@ -17,7 +17,7 @@ class RuleTakerCollator:
         questions = []
         batch_y = []
 
-        for context, question, label in batch:
+        for context, question, label, _ in batch:
             contexts.append(context)
             questions.append(question)
             batch_y.append(label)
