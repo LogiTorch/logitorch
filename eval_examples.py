@@ -5,6 +5,7 @@ from logitorch.datasets.proof_qa.proofwriter_dataset import (
     PROOFWRITER_LABEL_TO_ID,
     ProofWriterDataset,
 )
+from logitorch.datasets.qa.ruletaker_dataset import RuleTakerDataset
 from logitorch.datasets.te.mnli_dataset import MNLIDataset
 from logitorch.datasets.te.negated_mnli_dataset import NegatedMNLIDataset
 from logitorch.datasets.te.negated_rte_dataset import NegatedRTEDataset
@@ -16,7 +17,7 @@ from logitorch.pl_models.proofwriter import PLProofWriter
 from logitorch.pl_models.prover import PLPRover
 from logitorch.pl_models.ruletaker import PLRuleTaker
 
-MODEL = "prover"
+MODEL = "ruletaker"
 DEVICE = "cpu"
 
 
@@ -99,32 +100,31 @@ elif MODEL == "prover":
 
 elif MODEL == "ruletaker":
     model = PLRuleTaker.load_from_checkpoint(
-        "models/best_ruletaker-epoch=04-val_loss=0.03.ckpt"
+        "models/best_ruletaker_ruletaker-epoch=05-val_loss=0.03.ckpt"
     )
     model.to(DEVICE)
     model.eval()
 
     for d in proofwriter_test_datasets:
-        test_dataset = ProofWriterDataset(d, "test", "proof_generation_all")
+        test_dataset = RuleTakerDataset(d, "test")
         depths_pred = {0: [], 1: [], 2: [], 3: [], 4: [], 5: [], 6: []}
         depths_true = {0: [], 1: [], 2: [], 3: [], 4: [], 5: [], 6: []}
         y_preds = []
         y_trues = []
 
         for i in tqdm(test_dataset):
-            context = parse_facts_rules(i[0], i[1])
-            y_pred = model.predict(context, i[2], device=DEVICE)
-            y_true = PROOFWRITER_LABEL_TO_ID[str(i[3])]
-            depths_pred[i[6]].append(y_pred)
-            depths_true[i[6]].append(y_true)
+            y_pred = model.predict(i[0], i[1], device=DEVICE)
+            y_true = i[2]
+            depths_pred[i[3]].append(y_pred)
+            depths_true[i[3]].append(y_true)
             y_preds.append(y_pred)
             y_trues.append(y_true)
 
         for k in depths_pred:
-            with open(f"ruletaker_{d}_{k}.txt", "w") as out:
+            with open(f"ruletaker_1_{d}_{k}.txt", "w") as out:
                 out.write(str(accuracy_score(depths_pred[k], depths_true[k])))
 
-        with open(f"ruletaker_{d}.txt", "w") as out:
+        with open(f"ruletaker_1_{d}.txt", "w") as out:
             out.write(str(accuracy_score(y_preds, y_trues)))
 
 elif MODEL == "bertnot":
