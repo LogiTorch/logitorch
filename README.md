@@ -13,6 +13,7 @@ foo@bar:~$ pip install logitorch
 
 ## 📖 Documentation
 
+You can find the documentation for LogiTorch on [ReadTheDocs](https://logitorch.readthedocs.io).
 ## 🖥️ Features
 
 ### 📋 Datasets
