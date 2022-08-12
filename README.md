@@ -81,7 +81,7 @@ checkpoint_callback = ModelCheckpoint(
     monitor="val_loss",
     mode="min",
     dirpath="models/",
-    filename="best_ruletaker.ckpt",
+    filename="best_ruletaker",
 )
 
 trainer = pl.Trainer(accelerator="gpu", gpus=1)
