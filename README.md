@@ -7,6 +7,7 @@ LogiTorch is a PyTorch-based library for logical reasoning in natural language, 
 - A simple and clean API that can be used with PyTorch Lightning
 
 ## 📦 Installation
+
 ```console
 foo@bar:~$ pip install logitorch
 ```
@@ -14,6 +15,7 @@ foo@bar:~$ pip install logitorch
 ## 📖 Documentation
 
 You can find the documentation for LogiTorch on [ReadTheDocs](https://logitorch.readthedocs.io).
+
 ## 🖥️ Features
 
 ### 📋 Datasets
@@ -54,6 +56,7 @@ Models implemented in LogiTorch:
 ## 🧪 Example Usage
 
 ### Training Example
+
 ```python
 import pytorch_lightning as pl
 from logitorch.data_collators.ruletaker_collator import RuleTakerCollator
@@ -89,6 +92,7 @@ trainer.fit(model, train_dataloader, val_dataloader)
 ```
 
 ### Testing Example
+
 ```python
 from logitorch.pl_models.ruletaker import PLRuleTaker
 from logitorch.datasets.qa.ruletaker_dataset import RULETAKER_ID_TO_LABEL
@@ -103,6 +107,6 @@ pred = model.predict(context, question)
 print(RULETAKER_ID_TO_LABEL[pred])
 ```
 
-
 ## Ethical Consideration
+
 Users of LogiTorch should distinguish the datasets and models of our library from the originals. They should always credit and cite both our library and the original data source, as in ``We used LogiTorch's (citation) re-implementation of BERTNOT \cite{hosseini2021understanding}''.
