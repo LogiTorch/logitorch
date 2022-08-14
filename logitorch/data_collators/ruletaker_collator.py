@@ -1,7 +1,7 @@
 from typing import Dict, Tuple
 
 import torch
-from transformers import AutoTokenizer, RobertaTokenizer
+from transformers import RobertaTokenizer
 
 from logitorch.datasets.proof_qa.proofwriter_dataset import PROOFWRITER_LABEL_TO_ID
 
