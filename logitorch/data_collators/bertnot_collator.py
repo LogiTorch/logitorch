@@ -8,7 +8,7 @@ from transformers import AutoTokenizer
 class BERTNOTWiki20KCollator:
     def __init__(self, pretrained_tokenizer: str) -> None:
         """
-        This function takes in a pretrained tokenizer
+        It takes in a pretrained tokenizer
 
         :param pretrained_tokenizer: The name of the pretrained tokenizer to use
         :type pretrained_tokenizer: str
@@ -54,7 +54,7 @@ class BERTNOTWiki20KCollator:
 class BERTNOTTextualEntailmentCollator:
     def __init__(self, pretrained_tokenizer: str) -> None:
         """
-        This function takes in a pretrained tokenizer
+        It takes in a pretrained tokenizer
 
         :param pretrained_tokenizer: The name of the pre-trained tokenizer to use
         :type pretrained_tokenizer: str

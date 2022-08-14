@@ -1,11 +1,28 @@
+from typing import Dict, Tuple
+
+import torch
 from transformers import T5Tokenizer
 
 
 class ProofWriterQACollator:
     def __init__(self, pretrained_t5_tokenizer: str) -> None:
+        """
+        It takes in a pretrained T5 tokenizer
+
+        :param pretrained_t5_tokenizer: The name of the T5 tokenizer to use
+        :type pretrained_t5_tokenizer: str
+        """
         self.tokenizer = T5Tokenizer.from_pretrained(pretrained_t5_tokenizer)
 
-    def __call__(self, batch):
+    def __call__(self, batch) -> Tuple[Dict[str, torch.Tensor], torch.Tensor]:
+        """
+        The function takes in a batch of data, and returns a tuple of two elements: a dictionary of
+        tensors, and a tensor
+
+        :param batch: A list of tuples of the form (context, question, label)
+        :return: A tuple of two tensors. The first tensor is the input tensor, and the second tensor is
+        the output tensor.
+        """
         contexts = []
         questions = []
         labels = []
@@ -34,9 +51,23 @@ class ProofWriterQACollator:
 
 class ProofWriterProofGenerationAllCollator:
     def __init__(self, pretrained_t5_tokenizer: str) -> None:
+        """
+        It takes in a pretrained T5 tokenizer
+
+        :param pretrained_t5_tokenizer: The name of the T5 tokenizer to use
+        :type pretrained_t5_tokenizer: str
+        """
         self.tokenizer = T5Tokenizer.from_pretrained(pretrained_t5_tokenizer)
 
-    def __call__(self, batch):
+    def __call__(self, batch) -> Tuple[Dict[str, torch.Tensor], torch.Tensor]:
+        """
+        The function takes in a batch of data, and returns a tuple of two elements: a dictionary of
+        tensors, and a tensor
+
+        :param batch: A list of tuples of the form (context, question, label, proof)
+        :return: A tuple of two tensors. The first tensor is the input tensor, and the second tensor is
+        the output tensor.
+        """
         contexts = []
         questions = []
         labels = []
