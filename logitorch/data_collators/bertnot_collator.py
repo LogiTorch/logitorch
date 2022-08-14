@@ -7,9 +7,23 @@ from transformers import AutoTokenizer
 
 class BERTNOTWiki20KCollator:
     def __init__(self, pretrained_tokenizer: str) -> None:
+        """
+        This function takes in a pretrained tokenizer
+
+        :param pretrained_tokenizer: The name of the pretrained tokenizer to use
+        :type pretrained_tokenizer: str
+        """
         self.tokenizer = AutoTokenizer.from_pretrained(pretrained_tokenizer)
 
     def __call__(self, batch) -> Tuple[Dict[str, torch.Tensor], torch.Tensor]:
+        """
+        The function takes in a batch of data, and returns a tuple of two elements: a dictionary of
+        tensors, and a tensor
+
+        :param batch: A list of tuples of the form (sentence, label)
+        :return: A tuple of two tensors. The first tensor is the input tensor, and the second tensor is
+        the output tensor.
+        """
         sentences = []
         labels = []
 
@@ -39,13 +53,22 @@ class BERTNOTWiki20KCollator:
 
 class BERTNOTTextualEntailmentCollator:
     def __init__(self, pretrained_tokenizer: str) -> None:
+        """
+        This function takes in a pretrained tokenizer
+
+        :param pretrained_tokenizer: The name of the pre-trained tokenizer to use
+        :type pretrained_tokenizer: str
+        """
         self.tokenizer = AutoTokenizer.from_pretrained(pretrained_tokenizer)
 
-    def __call__(self, batch):
+    def __call__(self, batch) -> Tuple[Dict[str, torch.Tensor], torch.Tensor]:
         """
-        It takes a batch of data, and returns a batch of data that is tokenized and padded
-        :param batch: a batch of data from the dataset
-        :return: The input_ids of the labels
+        The function takes in a batch of data, and returns a tuple of two elements: a dictionary of
+        tensors, and a tensor
+
+        :param batch: A list of tuples of the form (premise, hypothesis, label)
+        :return: A tuple of two tensors. The first tensor is the input tensor, and the second tensor is
+        the output tensor.
         """
         premises = []
         hypotheses = []
