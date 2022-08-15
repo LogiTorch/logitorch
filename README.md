@@ -9,7 +9,7 @@ LogiTorch is a PyTorch-based library for logical reasoning in natural language, 
 ## 📦 Installation
 
 ```console
-foo@bar:~$ pip install logitorch
+foo@bar:~$ pip install logitorch==0.0.1a1
 ```
 
 ## 📖 Documentation
