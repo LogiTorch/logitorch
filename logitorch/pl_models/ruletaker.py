@@ -21,7 +21,7 @@ class PLRuleTaker(pl.LightningModule):
     def forward(self, x, y):  # type: ignore
         return self.model(x, y)
 
-    def predict(self, context: str, question: str, device: str = "cpu"):
+    def predict(self, context: str, question: str, device: str = "cpu") -> int:
         return self.model.predict(context, question, device)
 
     def configure_optimizers(self):

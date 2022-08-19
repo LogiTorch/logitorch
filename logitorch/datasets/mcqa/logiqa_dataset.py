@@ -17,7 +17,7 @@ LOGIQA_ID_TO_LABEL = {0: "a", 1: "b", 2: "c", 3: "d"}
 class LogiQADataset(AbstractMCQADataset):
     def __init__(self, split_set: str) -> None:
         """
-        The function takes in a string as an argument and returns None.
+        The constructor takes in a string as an argument and checks if it is in the list of split sets
         :param split_set: The split set to use
         :type split_set: str
         """
@@ -42,7 +42,7 @@ class LogiQADataset(AbstractMCQADataset):
 
     def __read_dataset(self) -> Tuple[List[str], List[str], List[List[str]], List[int]]:
         """
-        It reads the dataset and returns a tuple of 4 lists: contexts, questions, answers, and labels
+        This function reads the dataset and returns a tuple of 4 lists: contexts, questions, answers, and labels
         :return: A tuple of lists.
         """
         with open(self.dataset_path, "r", encoding="utf-8") as out:

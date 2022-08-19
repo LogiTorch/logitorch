@@ -22,7 +22,7 @@ ARLSAT_ID_TO_LABEL = {0: "A", 1: "B", 2: "C", 3: "D", 4: "E"}
 class ARLSATDataset(AbstractMCQADataset):
     def __init__(self, split_set: str) -> None:
         """
-        The function takes in a string as an argument and checks if it is in the list of split sets. If
+        The constructor takes in a string as an argument and checks if it is in the list of split sets. If
         it is not, it raises an error. If it is, it checks if the dataset folder exists. If it does not,
         it downloads the dataset. It then sets the split set to the argument passed in, sets the dataset
         path to the dataset folder and the split set, and reads the dataset
@@ -60,7 +60,7 @@ class ARLSATDataset(AbstractMCQADataset):
         labels_key: str,
     ) -> Tuple[List[str], List[str], List[List[str]], List[int]]:
         """
-        It reads a json file and returns a tuple of lists
+        This function reads a json file and returns a tuple of lists
 
         :param contexts_key: str,
         :type contexts_key: str
@@ -94,7 +94,7 @@ class ARLSATDataset(AbstractMCQADataset):
 
     def __getitem__(self, index: int) -> Tuple[str, str, List[str], int]:
         """
-        The function takes in an index and returns a tuple of the context, question, answer, and label at
+        This function takes in an index and returns a tuple of the context, question, answer, and label at
         that index
 
         :param index: The index of the data point in the dataset
@@ -110,7 +110,7 @@ class ARLSATDataset(AbstractMCQADataset):
 
     def __str__(self) -> str:
         """
-        The function returns a string that says "The [split_set] set of ARLSAT has [number of instances]
+        This function returns a string that says "The [split_set] set of ARLSAT has [number of instances]
         instances"
 
         The function takes in the split_set as an argument
