@@ -7,7 +7,7 @@ assignees: ''
 
 ---
 
-* TorchTextLogic version:
+* LogicTorch version:
 * Python version:
 * Operating System:
 
