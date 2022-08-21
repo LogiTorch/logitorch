@@ -7,7 +7,7 @@ assignees: ''
 
 ---
 
-* LogicTorch version:
+* LogiTorch version:
 * Python version:
 * Operating System:
 
