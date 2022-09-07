@@ -21,7 +21,7 @@ class PRoverProofWriterCollator:
     def __init__(self, pretrained_roberta_tokenizer: str) -> None:
         self.tokenizer = RobertaTokenizer.from_pretrained(pretrained_roberta_tokenizer)
 
-    def get_proof_graph_with_fail(self, proof_str):
+    def get_proof_graph_with_fail(self, proof_str: str) -> Tuple[List[str], List[str]]:
         proof_str = proof_str[:-2].split("=")[1].strip()[1:-1]
         nodes = proof_str.split(" <- ")
 
