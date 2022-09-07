@@ -1,3 +1,6 @@
+from ast import Dict
+from typing import List, Tuple
+
 import numpy as np
 import torch
 from torch.nn.utils.rnn import pad_sequence
@@ -7,10 +10,10 @@ from logitorch.datasets.proof_qa.proofwriter_dataset import PROOFWRITER_LABEL_TO
 
 
 class Node:
-    def __init__(self, head):
+    def __init__(self, head: str) -> None:
         self.head = head
 
-    def __str__(self):
+    def __str__(self) -> str:
         return str(self.head)
 
 
@@ -31,7 +34,9 @@ class PRoverProofWriterCollator:
 
         return all_nodes, all_edges
 
-    def get_proof_graph(self, proof_str):
+    def get_proof_graph(
+        self, proof_str: str
+    ) -> Tuple[List[str], List[Tuple[str, str]]]:
         stack = []
         last_open = 0
         last_open_index = 0
@@ -92,7 +97,9 @@ class PRoverProofWriterCollator:
 
         return all_nodes, all_edges
 
-    def get_node_edge_label_constrained(self, x):
+    def get_node_edge_label_constrained(
+        self, x: str
+    ) -> Tuple[List[int], List[np.ndarray]]:
 
         proofs = x[4]
         nrule = len(x[1])
@@ -160,7 +167,9 @@ class PRoverProofWriterCollator:
 
         return node_label, list(edge_label.flatten())
 
-    def __call__(self, batch):
+    def __call__(
+        self, batch
+    ) -> Tuple[Dict[str, torch.Tensor], torch.Tensor, torch.Tensor, torch.Tensor]:
         contexts = []
         proofs_offsets = []
         node_labels = []
