@@ -36,7 +36,7 @@ Datasets implemented in LogiTorch:
 - [x] [Negated RTE](https://aclanthology.org/2020.emnlp-main.732/)
 - [x] [PARARULES Plus](https://github.com/Strong-AI-Lab/PARARULE-Plus)
 - [x] [AbductionRules](https://arxiv.org/abs/2203.12186)
-- [x] [SimpleLogic](https://arxiv.org/abs/2205.11502)
+- [] [SimpleLogic](https://arxiv.org/abs/2205.11502)
 
 ### 🤖 Models
 
