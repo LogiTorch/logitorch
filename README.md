@@ -37,6 +37,7 @@ Datasets implemented in LogiTorch:
 - [x] [PARARULES Plus](https://github.com/Strong-AI-Lab/PARARULE-Plus)
 - [x] [AbductionRules](https://arxiv.org/abs/2203.12186)
 - [ ] [SimpleLogic](https://arxiv.org/abs/2205.11502)
+- [ ] [RobustLR](https://arxiv.org/abs/2205.12598)
 
 ### 🤖 Models
 
