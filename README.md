@@ -38,6 +38,8 @@ Datasets implemented in LogiTorch:
 - [x] [AbductionRules](https://arxiv.org/abs/2203.12186)
 - [ ] [SimpleLogic](https://arxiv.org/abs/2205.11502)
 - [ ] [RobustLR](https://arxiv.org/abs/2205.12598)
+- [ ] [LogicNLI](https://aclanthology.org/2021.emnlp-main.303/)
+- [ ] [FOLIO](https://arxiv.org/abs/2209.00840)
 
 ### 🤖 Models
 
