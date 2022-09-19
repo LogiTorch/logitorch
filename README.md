@@ -111,6 +111,6 @@ pred = model.predict(context, question)
 print(RULETAKER_ID_TO_LABEL[pred])
 ```
 
-## Ethical Consideration
+## Citation
 
 Users of LogiTorch should distinguish the datasets and models of our library from the originals. They should always credit and cite both our library and the original data source, as in ``We used LogiTorch's (citation) re-implementation of BERTNOT \cite{hosseini2021understanding}''.
