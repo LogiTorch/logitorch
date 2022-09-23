@@ -1,0 +1,13 @@
+{
+    "MD033": {
+        "allowed_elements": [
+            "nobr",
+            "sup",
+            "font",
+            "sub"
+        ]
+    },
+    "MD013": { 
+        "line_length": 300 
+    } 
+}

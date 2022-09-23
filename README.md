@@ -22,20 +22,20 @@ You can find the documentation for LogiTorch on [ReadTheDocs](https://logitorch.
 
 Datasets implemented in LogiTorch:
 
-- [x] [AR-LSAT <sub><sub>(MIT LICENCSE)</sub></sub>](https://arxiv.org/abs/2104.06598)
-- [x] [ConTRoL](https://arxiv.org/abs/2011.04864)
-- [x] [LogiQA](https://arxiv.org/abs/2007.08124)
+- [x] [AR-LSAT](https://arxiv.org/abs/2104.06598) <font size="2">(MIT LICENSE)</font>
+- [x] [ConTRoL](https://arxiv.org/abs/2011.04864) <font size="2">(GitHub LICENSE)</font>
+- [x] [LogiQA](https://arxiv.org/abs/2007.08124) <font size="2">(GitHub LICENSE)</font>
 - [x] [ReClor](https://arxiv.org/abs/2002.04326)
-- [x] [RuleTaker](https://arxiv.org/abs/2002.05867)
-- [x] [ProofWriter](https://arxiv.org/abs/2012.13048)
-- [x] [SNLI](https://arxiv.org/abs/1508.05326)
-- [x] [MultiNLI](https://arxiv.org/abs/1704.05426)
+- [x] [RuleTaker](https://arxiv.org/abs/2002.05867) <font size="2">(APACHE-2.0 LICENSE)</font>
+- [x] [ProofWriter](https://arxiv.org/abs/2012.13048) <font size="2">(APACHE-2.0 LICENSE)</font>
+- [x] [SNLI](https://arxiv.org/abs/1508.05326) <font size="2">(CC-BY-4.0 LICENSE)</font>
+- [x] [MultiNLI](https://arxiv.org/abs/1704.05426) <font size="2">(CC-BY-4.0 LICENSE)</font>
 - [x] [RTE](https://tac.nist.gov/publications/2010/additional.papers/RTE6_overview.proceedings.pdf)
-- [x] [Negated SNLI](https://aclanthology.org/2020.emnlp-main.732/)
-- [x] [Negated MultiNLI](https://aclanthology.org/2020.emnlp-main.732/)
-- [x] [Negated RTE](https://aclanthology.org/2020.emnlp-main.732/)
-- [x] [PARARULES Plus](https://github.com/Strong-AI-Lab/PARARULE-Plus)
-- [x] [AbductionRules](https://arxiv.org/abs/2203.12186)
+- [x] [Negated SNLI](https://aclanthology.org/2020.emnlp-main.732/) <font size="2">(MIT LICENSE)</font>
+- [x] [Negated MultiNLI](https://aclanthology.org/2020.emnlp-main.732/) <font size="2">(MIT LICENSE)</font>
+- [x] [Negated RTE](https://aclanthology.org/2020.emnlp-main.732/) <font size="2">(MIT LICENSE)</font>
+- [x] [PARARULES Plus](https://github.com/Strong-AI-Lab/PARARULE-Plus) <font size="2">(MIT LICENSE)</font>
+- [x] [AbductionRules](https://arxiv.org/abs/2203.12186) <font size="2">(MIT LICENSE)</font>
 - [ ] [SimpleLogic](https://arxiv.org/abs/2205.11502)
 - [ ] [RobustLR](https://arxiv.org/abs/2205.12598)
 - [ ] [LogicNLI](https://aclanthology.org/2021.emnlp-main.303/)
