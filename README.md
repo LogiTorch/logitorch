@@ -22,7 +22,7 @@ You can find the documentation for LogiTorch on [ReadTheDocs](https://logitorch.
 
 Datasets implemented in LogiTorch:
 
-- [x] [AR-LSAT](https://arxiv.org/abs/2104.06598) <font size="2">(MIT LICENSE)</font>
+- [x] [AR-LSAT](https://arxiv.org/abs/2104.06598) <font size="1">(MIT LICENSE)</font>
 - [x] [ConTRoL](https://arxiv.org/abs/2011.04864) <font size="2">(GitHub LICENSE)</font>
 - [x] [LogiQA](https://arxiv.org/abs/2007.08124) <font size="2">(GitHub LICENSE)</font>
 - [x] [ReClor](https://arxiv.org/abs/2002.04326)
