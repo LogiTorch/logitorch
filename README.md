@@ -25,7 +25,7 @@ Datasets implemented in LogiTorch:
 - [x] [AR-LSAT](https://arxiv.org/abs/2104.06598) <sub>(MIT LICENSE)</sub>
 - [x] [ConTRoL](https://arxiv.org/abs/2011.04864) <sub>(GitHub LICENSE)</sub>
 - [x] [LogiQA](https://arxiv.org/abs/2007.08124) <sub>(GitHub LICENSE)</sub>
-- [x] [ReClor](https://arxiv.org/abs/2002.04326)
+- [x] [ReClor](https://arxiv.org/abs/2002.04326) <sub>(Non-Commercial Research Use)</sub>
 - [x] [RuleTaker](https://arxiv.org/abs/2002.05867) <sub>(APACHE-2.0 LICENSE)</sub>
 - [x] [ProofWriter](https://arxiv.org/abs/2012.13048) <sub>(APACHE-2.0 LICENSE)</sub>
 - [x] [SNLI](https://arxiv.org/abs/1508.05326) <sub>(CC-BY-4.0 LICENSE)</sub>
