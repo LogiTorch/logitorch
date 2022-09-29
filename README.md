@@ -28,18 +28,18 @@ Datasets implemented in LogiTorch:
 - [x] [ReClor](https://arxiv.org/abs/2002.04326) <sub>(Non-Commercial Research Use)</sub>
 - [x] [RuleTaker](https://arxiv.org/abs/2002.05867) <sub>(APACHE-2.0 LICENSE)</sub>
 - [x] [ProofWriter](https://arxiv.org/abs/2012.13048) <sub>(APACHE-2.0 LICENSE)</sub>
-- [x] [SNLI](https://arxiv.org/abs/1508.05326) <sub>(CC-BY-4.0 LICENSE)</sub>
-- [x] [MultiNLI](https://arxiv.org/abs/1704.05426) <sub>(CC-BY-4.0 LICENSE)</sub>
+- [x] [SNLI](https://arxiv.org/abs/1508.05326) <sub>(CC-BY-SA-4.0 LICENSE)</sub>
+- [x] [MultiNLI](https://arxiv.org/abs/1704.05426) <sub>(CC-BY-SA-4.0 LICENSE)</sub>
 - [x] [RTE](https://tac.nist.gov/publications/2010/additional.papers/RTE6_overview.proceedings.pdf) <sub>([TAC User Agreements](https://tac.nist.gov//data/forms/index.html))</sub>
 - [x] [Negated SNLI](https://aclanthology.org/2020.emnlp-main.732/) <sub>(MIT LICENSE)</sub>
 - [x] [Negated MultiNLI](https://aclanthology.org/2020.emnlp-main.732/) <sub>(MIT LICENSE)</sub>
 - [x] [Negated RTE](https://aclanthology.org/2020.emnlp-main.732/) <sub>(MIT LICENSE)</sub>
 - [x] [PARARULES Plus](https://github.com/Strong-AI-Lab/PARARULE-Plus) <sub>(MIT LICENSE)</sub>
 - [x] [AbductionRules](https://arxiv.org/abs/2203.12186) <sub>(MIT LICENSE)</sub>
+- [x] [FOLIO](https://arxiv.org/abs/2209.00840) <sub>(CC-BY-SA-4.0 LICENSE)</sub>
 - [ ] [SimpleLogic](https://arxiv.org/abs/2205.11502)
 - [ ] [RobustLR](https://arxiv.org/abs/2205.12598)
 - [ ] [LogicNLI](https://aclanthology.org/2021.emnlp-main.303/)
-- [ ] [FOLIO](https://arxiv.org/abs/2209.00840)
 
 ### 🤖 Models
 
