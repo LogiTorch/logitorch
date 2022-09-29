@@ -30,7 +30,7 @@ Datasets implemented in LogiTorch:
 - [x] [ProofWriter](https://arxiv.org/abs/2012.13048) <sub>(APACHE-2.0 LICENSE)</sub>
 - [x] [SNLI](https://arxiv.org/abs/1508.05326) <sub>(CC-BY-4.0 LICENSE)</sub>
 - [x] [MultiNLI](https://arxiv.org/abs/1704.05426) <sub>(CC-BY-4.0 LICENSE)</sub>
-- [x] [RTE](https://tac.nist.gov/publications/2010/additional.papers/RTE6_overview.proceedings.pdf)
+- [x] [RTE](https://tac.nist.gov/publications/2010/additional.papers/RTE6_overview.proceedings.pdf) <sub>([TAC User Agreements](https://tac.nist.gov//data/forms/index.html]))</sub>
 - [x] [Negated SNLI](https://aclanthology.org/2020.emnlp-main.732/) <sub>(MIT LICENSE)</sub>
 - [x] [Negated MultiNLI](https://aclanthology.org/2020.emnlp-main.732/) <sub>(MIT LICENSE)</sub>
 - [x] [Negated RTE](https://aclanthology.org/2020.emnlp-main.732/) <sub>(MIT LICENSE)</sub>
