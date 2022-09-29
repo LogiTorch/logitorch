@@ -33,7 +33,14 @@ class AbstractTEDataset(BaseLogicDataset):
 
 class AbstractQADataset(BaseLogicDataset):
     @abstractmethod
-    def __getitem__(self, index: int) -> Tuple[str, str, int]:
+    def __getitem__(
+        self, index: int
+    ) -> Union[
+        Tuple[str, str, int],
+        Tuple[str, str, str],
+        Tuple[str, str, int, int],
+        Tuple[List[str], str, int, List[str]],
+    ]:
         raise NotImplementedError()
 
 

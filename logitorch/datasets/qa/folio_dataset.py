@@ -61,7 +61,7 @@ class FOLIODataset(AbstractQADataset):
 
         return contexts_list, questions_list, labels_list, contexts_fol_list
 
-    def __getitem__(self, index: int) -> Tuple[str, str, int, int]:
+    def __getitem__(self, index: int) -> Tuple[List[str], str, int, List[str]]:
         return (
             self.contexts[index],
             self.questions[index],
