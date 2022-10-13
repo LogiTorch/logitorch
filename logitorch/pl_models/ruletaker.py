@@ -12,9 +12,10 @@ class PLRuleTaker(pl.LightningModule):
         self,
         learning_rate: float = 1e-5,
         weight_decay: float = 0.1,
+        num_labels: int = 2,
     ) -> None:
         super().__init__()
-        self.model = RuleTaker()
+        self.model = RuleTaker(num_labels=num_labels)
         self.learning_rate = learning_rate
         self.weight_decay = weight_decay
 

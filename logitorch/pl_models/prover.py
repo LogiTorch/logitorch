@@ -12,10 +12,11 @@ class PLPRover(pl.LightningModule):
         self,
         pretrained_model: str = "roberta-base",
         learning_rate: float = 1e-5,
-        weight_decay=0.1,
+        weight_decay: float = 0.1,
+        num_labels: int = 2,
     ) -> None:
         super().__init__()
-        self.model = PRover(pretrained_model)
+        self.model = PRover(pretrained_model, num_labels=2)
         self.learning_rate = learning_rate
         self.weight_decay = weight_decay
 
