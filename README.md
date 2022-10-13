@@ -64,20 +64,21 @@ Models implemented in LogiTorch:
 
 ```python
 import pytorch_lightning as pl
+from pytorch_lightning.callbacks import ModelCheckpoint
+from torch.utils.data.dataloader import DataLoader
+
 from logitorch.data_collators.ruletaker_collator import RuleTakerCollator
 from logitorch.datasets.qa.ruletaker_dataset import RuleTakerDataset
 from logitorch.pl_models.ruletaker import PLRuleTaker
-from pytorch_lightning.callbacks import ModelCheckpoint
-from torch.utils.data.dataloader import DataLoader
 
 train_dataset = RuleTakerDataset("depth-5", "train")
 val_dataset = RuleTakerDataset("depth-5", "val")
 
 ruletaker_collate_fn = RuleTakerCollator()
+
 train_dataloader = DataLoader(
     train_dataset, batch_size=32, collate_fn=ruletaker_collate_fn
 )
-
 val_dataloader = DataLoader(
     train_dataset, batch_size=32, collate_fn=ruletaker_collate_fn
 )
@@ -101,12 +102,11 @@ trainer.fit(model, train_dataloader, val_dataloader)
 ```python
 from logitorch.pl_models.ruletaker import PLRuleTaker
 from logitorch.datasets.qa.ruletaker_dataset import RULETAKER_ID_TO_LABEL
-import pytorch_lightning as pl
 
 model = PLRuleTaker.load_from_checkpoint("best_ruletaker.ckpt")
 
-context = "Bob is smart. If someone is smart then he is kind"
-question = "Bob is kind"
+context = "Bob is smart. If someone is smart then he is kind."
+question = "Bob is kind."
 
 pred = model.predict(context, question)
 print(RULETAKER_ID_TO_LABEL[pred])
