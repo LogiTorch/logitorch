@@ -21,7 +21,6 @@ class RuleTaker(nn.Module):
         )
 
     def forward(self, x, y=None):
-
         outputs = self.encoder(**x)
         sequence_outputs = outputs[0]
         logits = self.classifier(sequence_outputs)

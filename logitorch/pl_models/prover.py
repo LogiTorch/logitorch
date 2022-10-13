@@ -16,7 +16,7 @@ class PLPRover(pl.LightningModule):
         num_labels: int = 2,
     ) -> None:
         super().__init__()
-        self.model = PRover(pretrained_model, num_labels=2)
+        self.model = PRover(pretrained_model, num_labels=num_labels)
         self.learning_rate = learning_rate
         self.weight_decay = weight_decay
 
