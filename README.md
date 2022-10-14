@@ -113,9 +113,20 @@ pred = model.predict(context, question)
 print(RULETAKER_ID_TO_LABEL[pred])
 ```
 
-## Citation
+## Citing
 
 Users of LogiTorch should distinguish the datasets and models of our library from the originals. They should always credit and cite both our library and the original data source, as in ``We used LogiTorch's (citation) re-implementation of BERTNOT \cite{hosseini2021understanding}''.
+
+If you want to cite logitorch, please refer to the publication in the [Empirical Methods in Natural Language Processing](https://2022.emnlp.org/):
+
+```code
+@inproceedings{helwe2022logitorch,
+  title={LogiTorch: A Pytorch-based library for logical reasoning on natural language},
+  author={Helwe, Chadi and Clavel, Chlo\'e and Suchanek, Fabian},
+  booktitle={Proceedings of the 2022 Conference on Empirical Methods in Natural Language Processing: System Demonstrations},
+  year={2022}
+}
+```
 
 ## Acknowledgments
 
