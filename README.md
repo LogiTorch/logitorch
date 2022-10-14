@@ -121,7 +121,7 @@ If you want to cite LogiTorch, please refer to the publication in the [Empirical
 
 ```code
 @inproceedings{helwe2022logitorch,
-  title={LogiTorch: A Pytorch-based library for logical reasoning on natural language},
+  title={LogiTorch: A PyTorch-based library for logical reasoning on natural language},
   author={Helwe, Chadi and Clavel, Chlo\'e and Suchanek, Fabian},
   booktitle={Proceedings of the 2022 Conference on Empirical Methods in Natural Language Processing: System Demonstrations},
   year={2022}
