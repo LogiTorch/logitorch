@@ -81,7 +81,7 @@ train_dataloader = DataLoader(
     train_dataset, batch_size=32, collate_fn=ruletaker_collate_fn
 )
 val_dataloader = DataLoader(
-    train_dataset, batch_size=32, collate_fn=ruletaker_collate_fn
+    val_dataset, batch_size=32, collate_fn=ruletaker_collate_fn
 )
 
 model = PLRuleTaker(learning_rate=1e-5, weight_decay=0.1)
@@ -104,7 +104,7 @@ trainer.fit(model, train_dataloader, val_dataloader)
 from logitorch.pl_models.ruletaker import PLRuleTaker
 from logitorch.datasets.qa.ruletaker_dataset import RULETAKER_ID_TO_LABEL
 
-model = PLRuleTaker.load_from_checkpoint("best_ruletaker.ckpt")
+model = PLRuleTaker.load_from_checkpoint("models/best_ruletaker.ckpt")
 
 context = "Bob is smart. If someone is smart then he is kind."
 question = "Bob is kind."
