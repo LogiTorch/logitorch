@@ -8,7 +8,7 @@ from logitorch.datasets.qa.ruletaker_dataset import RuleTakerDataset
 from logitorch.pipelines.exceptions import ModelNotCompatibleError
 from logitorch.pl_models.ruletaker import PLRuleTaker
 
-RULETAKER_COMPATIBLE_MODELS = PLRuleTaker
+RULETAKER_COMPATIBLE_MODELS = (PLRuleTaker)
 
 
 def ruletaker_pipeline(
