@@ -54,7 +54,7 @@ def ruletaker_pipeline(
                 )
                 trainer.fit(model, train_dataloader, val_dataloader)
         else:
-            raise ModelNotCompatibleError()
+            raise ModelNotCompatibleError(RULETAKER_COMPATIBLE_MODELS)
 
     except ModelNotCompatibleError as err:
         print(err.message)
