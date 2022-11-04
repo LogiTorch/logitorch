@@ -94,7 +94,7 @@ checkpoint_callback = ModelCheckpoint(
     filename="best_ruletaker",
 )
 
-trainer = pl.Trainer(accelerator="gpu", gpus=1)
+trainer = pl.Trainer(callbacks=[checkpoint_callback], accelerator="gpu", gpus=1)
 trainer.fit(model, train_dataloader, val_dataloader)
 ```
 
