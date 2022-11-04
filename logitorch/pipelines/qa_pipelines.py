@@ -8,7 +8,7 @@ from logitorch.datasets.qa.ruletaker_dataset import RuleTakerDataset
 from logitorch.pipelines.exceptions import ModelNotCompatibleError
 from logitorch.pl_models.ruletaker import PLRuleTaker
 
-RULETAKER_COMPATIBLE_MODELS = (PLRuleTaker)
+RULETAKER_COMPATIBLE_MODELS = PLRuleTaker
 
 
 def ruletaker_pipeline(
@@ -48,9 +48,9 @@ def ruletaker_pipeline(
 
                 trainer = pl.Trainer(
                     callbacks=[checkpoint_callback],
+                    max_epochs=epochs,
                     accelerator=accelerator,
                     gpus=n_gpus,
-                    max_epochs=epochs,
                 )
                 trainer.fit(model, train_dataloader, val_dataloader)
         else:

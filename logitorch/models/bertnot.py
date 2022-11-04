@@ -10,6 +10,7 @@ from logitorch.models.exceptions import LossError, TaskError
 class BERTNOT(nn.Module):
     def __init__(self, pretrained_bert_model: str, num_labels: int = 2) -> None:
         super().__init__()
+        self.pretrained_model = pretrained_bert_model
         self.model = BertForMaskedLM.from_pretrained(pretrained_bert_model)
 
         classifier_dropout = (

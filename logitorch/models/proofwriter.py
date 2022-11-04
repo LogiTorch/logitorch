@@ -9,6 +9,7 @@ from transformers.modeling_outputs import SequenceClassifierOutput
 class ProofWriter(nn.Module):
     def __init__(self, pretrained_t5_model: str) -> None:
         super().__init__()
+        self.pretrained_model = pretrained_t5_model
         self.model = T5ForConditionalGeneration.from_pretrained(pretrained_t5_model)
         self.tokenizer = T5Tokenizer.from_pretrained(pretrained_t5_model)
 

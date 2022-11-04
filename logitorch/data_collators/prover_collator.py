@@ -169,7 +169,9 @@ class PRoverProofWriterCollator:
 
     def __call__(
         self, batch
-    ) -> Tuple[Dict[str, torch.Tensor], torch.Tensor, torch.Tensor, torch.Tensor]:
+    ) -> Tuple[
+        Dict[str, torch.Tensor], torch.Tensor, torch.Tensor, torch.Tensor, torch.Tensor
+    ]:
         contexts = []
         proofs_offsets = []
         node_labels = []
