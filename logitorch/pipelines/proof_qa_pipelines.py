@@ -25,7 +25,7 @@ def proofwriter_pipeline(
     batch_size: int = 1,
     epochs: int = 1,
     accelerator: str = "cpu",
-    n_gpus: int = 0,
+    gpus: int = 0,
 ):
     try:
         if isinstance(model, PROOFWRITER_COMPATIBLE_MODELS):
@@ -64,7 +64,7 @@ def proofwriter_pipeline(
                 callbacks=[checkpoint_callback],
                 max_epochs=epochs,
                 accelerator=accelerator,
-                gpus=n_gpus,
+                gpus=gpus,
             )
 
             trainer.fit(model, train_dataloader, val_dataloader)

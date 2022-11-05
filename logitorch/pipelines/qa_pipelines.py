@@ -18,8 +18,8 @@ def ruletaker_pipeline(
     saved_model_name: str,
     batch_size: int,
     epochs: int,
-    accelerator: str,
-    n_gpus: int,
+    accelerator: str = "cpu",
+    gpus: int = 0,
 ):
     try:
         if isinstance(model, RULETAKER_COMPATIBLE_MODELS):
@@ -50,7 +50,7 @@ def ruletaker_pipeline(
                     callbacks=[checkpoint_callback],
                     max_epochs=epochs,
                     accelerator=accelerator,
-                    gpus=n_gpus,
+                    gpus=gpus,
                 )
                 trainer.fit(model, train_dataloader, val_dataloader)
         else:
