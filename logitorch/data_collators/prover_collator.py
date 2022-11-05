@@ -1,5 +1,4 @@
-from ast import Dict
-from typing import List, Tuple
+from typing import Dict, List, Tuple
 
 import numpy as np
 import torch

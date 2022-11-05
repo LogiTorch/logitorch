@@ -50,7 +50,6 @@ class _EdgeClassificationHead(nn.Module):
 class PRover(nn.Module):
     def __init__(self, pretrained_roberta_model: str, num_labels: int = 2) -> None:
         super().__init__()
-        self.pretrained_model = pretrained_roberta_model
         self.num_labels = num_labels
         self.num_labels_edge = num_labels
         self.proofwriter_collator = PRoverProofWriterCollator(pretrained_roberta_model)
@@ -209,7 +208,7 @@ class PRover(nn.Module):
             nfact = len(triples)
             nrule = len(rules)
             node_length = nfact + nrule + 1
-            edge_length = node_length ** 2
+            edge_length = node_length**2
 
             for s in triples.values():
                 sentences.append(s)

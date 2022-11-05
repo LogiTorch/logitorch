@@ -17,6 +17,7 @@ class PLProofWriter(pl.LightningModule):
     ) -> None:
         super().__init__()
         self.model = ProofWriter(pretrained_model)
+        self.pretrained_model = pretrained_model
         self.learning_rate = learning_rate
         self.weight_decay = weight_decay
 

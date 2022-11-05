@@ -24,12 +24,12 @@ class PLBERTNOT(pl.LightningModule):
     ) -> None:
         super().__init__()
         self.model = BERTNOT(pretrained_model, num_labels=num_labels)
+        self.pretrained_model = pretrained_model
         self.learning_rate = learning_rate
         self.weight_decay = weight_decay
         self.batch_size = batch_size
         self.gamma = gamma
         self.task = task
-        self.pretrained_model = pretrained_model
 
         if self.task == "mlm":
             self.automatic_optimization = False
