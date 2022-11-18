@@ -58,6 +58,7 @@ Models implemented in LogiTorch:
 - [ ]  [AdaLoGN](https://arxiv.org/abs/2203.08992)
 - [ ]  [Logiformer](https://arxiv.org/abs/2205.00731)
 - [ ]  [LogiGAN](https://arxiv.org/abs/2205.08794)
+- [ ]  [MERit](https://arxiv.org/abs/2203.00357)
 
 ## 🧪 Example Usage
 
