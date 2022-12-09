@@ -208,7 +208,7 @@ class PRover(nn.Module):
             nfact = len(triples)
             nrule = len(rules)
             node_length = nfact + nrule + 1
-            edge_length = node_length**2
+            edge_length = node_length ** 2
 
             for s in triples.values():
                 sentences.append(s)
