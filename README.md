@@ -51,6 +51,7 @@ Models implemented in LogiTorch:
 - [x]  [ProofWriter](https://arxiv.org/abs/2012.13048)
 - [x]  [BERTNOT](https://arxiv.org/abs/2105.03519)
 - [x]  [PRover](https://arxiv.org/abs/2010.02830)
+- [ ]  [TINA](https://suchanek.name/work/publications/emnlp-2022.pdf)
 - [ ]  [FaiRR](https://arxiv.org/abs/2203.10261)
 - [ ]  [LReasoner](https://arxiv.org/abs/2105.03659)
 - [ ]  [DAGN](https://arxiv.org/abs/2103.14349)
@@ -58,6 +59,7 @@ Models implemented in LogiTorch:
 - [ ]  [AdaLoGN](https://arxiv.org/abs/2203.08992)
 - [ ]  [Logiformer](https://arxiv.org/abs/2205.00731)
 - [ ]  [LogiGAN](https://arxiv.org/abs/2205.08794)
+- [ ]  [MERit](https://arxiv.org/abs/2203.00357)
 
 ## 🧪 Example Usage
 
