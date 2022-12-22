@@ -60,6 +60,7 @@ Models implemented in LogiTorch:
 - [ ]  [Logiformer](https://arxiv.org/abs/2205.00731)
 - [ ]  [LogiGAN](https://arxiv.org/abs/2205.08794)
 - [ ]  [MERit](https://arxiv.org/abs/2203.00357)
+- [ ]  [APOLLO](https://arxiv.org/abs/2212.09282)
 
 ## 🧪 Example Usage
 
