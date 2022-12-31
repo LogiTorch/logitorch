@@ -61,6 +61,7 @@ Models implemented in LogiTorch:
 - [ ]  [LogiGAN](https://arxiv.org/abs/2205.08794)
 - [ ]  [MERit](https://arxiv.org/abs/2203.00357)
 - [ ]  [APOLLO](https://arxiv.org/abs/2212.09282)
+- [ ]  [LAMBADA](https://arxiv.org/abs/2212.13894)
 
 ## 🧪 Example Usage
 
