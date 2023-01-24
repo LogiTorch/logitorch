@@ -1,6 +1,7 @@
 # LogiTorch
 
 ![image](docs/assets/logo.jpg)
+
 [![Downloads](https://static.pepy.tech/badge/logitorch)](https://pepy.tech/project/logitorch)
 
 LogiTorch is a PyTorch-based library for logical reasoning on natural language, it consists of:
