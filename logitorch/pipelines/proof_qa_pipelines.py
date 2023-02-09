@@ -18,7 +18,7 @@ PROOFWRITER_COMPATIBLE_MODELS = (PLProofWriter, PLPRover)
 def proofwriter_pipeline(
     model: nn.Module,
     dataset_name: str,
-    task: str,
+    task: str = "proof_generation_all",
     open_world_assumption: bool = False,
     saved_model_path: str = "/",
     saved_model_name: str = "best_model",
