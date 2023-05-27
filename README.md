@@ -111,7 +111,7 @@ trainer.fit(model, train_dataloader, val_dataloader)
 We provided pre-configured pipelines for some datasets to train models.
 
 ```python
-from logitorch.pipelines.proof_qa_pipelines import ruletaker_pipeline
+from logitorch.pipelines.qa_pipelines import ruletaker_pipeline
 from logitorch.pl_models.ruletaker import PLRuleTaker
 
 model = PLRuleTaker(learning_rate=1e-5, weight_decay=0.1)
