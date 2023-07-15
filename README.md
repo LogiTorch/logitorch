@@ -66,7 +66,7 @@ Models implemented in LogiTorch:
 - [ ]  [MERit](https://arxiv.org/abs/2203.00357)
 - [ ]  [APOLLO](https://arxiv.org/abs/2212.09282)
 - [ ]  [LAMBADA](https://arxiv.org/abs/2212.13894)
-
+- [ ]  [Chainformer](https://aclanthology.org/2023.findings-acl.588/)
 ## 🧪 Example Usage
 
 ### Training Example
