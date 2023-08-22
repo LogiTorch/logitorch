@@ -74,6 +74,7 @@ Models implemented in LogiTorch:
 - [ ]  [APOLLO](https://arxiv.org/abs/2212.09282)
 - [ ]  [LAMBADA](https://arxiv.org/abs/2212.13894)
 - [ ]  [Chainformer](https://aclanthology.org/2023.findings-acl.588/)
+- [ ]  [IDOL](https://aclanthology.org/2023.findings-acl.513/)
 ## 🧪 Example Usage
 
 ### Training Example
