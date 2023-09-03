@@ -6,27 +6,88 @@ from logitorch.data_collators.bertnot_collator import BERTNOTTextualEntailmentCo
 from logitorch.data_collators.proofwriter_collator import (
     ProofWriterProofGenerationAllCollator,
 )
+from logitorch.data_collators.fld_collator import FLDProofGenerationAllCollator
 from logitorch.data_collators.prover_collator import PRoverProofWriterCollator
 from logitorch.data_collators.ruletaker_collator import (
     RuleTakerCollator,
     RuleTakerProofWriterCollator,
 )
 from logitorch.datasets.proof_qa.proofwriter_dataset import ProofWriterDataset
+from logitorch.datasets.proof_qa.fld_dataset import FLDDataset
 from logitorch.datasets.qa.ruletaker_dataset import RuleTakerDataset
 from logitorch.datasets.te.mnli_dataset import MNLIDataset
 from logitorch.datasets.te.rte_dataset import RTEDataset
 from logitorch.datasets.te.snli_dataset import SNLIDataset
 from logitorch.pl_models.bertnot import PLBERTNOT
 from logitorch.pl_models.proofwriter import PLProofWriter
+from logitorch.pl_models.fld import PLFLDSimpleProver
 from logitorch.pl_models.prover import PLPRover
 from logitorch.pl_models.ruletaker import PLRuleTaker
 
-MODEL = "proofwriter"
-DEVICE = "cpu"
+# MODEL = "proofwriter"
+MODEL = "FLD"
+# DEVICE = "cpu"
+DEVICE = "gpu"
 
 
 def main():
-    if MODEL == "proofwriter":
+
+    if MODEL == "FLD":
+        dataset_name = "hitachi-nlp/FLD.v2"
+        task = "proof_generation_all"
+        # model_name = "google/t5-v1_1-large"
+        model_name = "t5-base"
+
+        max_train_samples = 1
+        train_dataset = FLDDataset(dataset_name, "train", task, max_samples=max_train_samples)
+
+        max_val_samples = 1
+        val_dataset = FLDDataset(dataset_name, "val", task, max_samples=max_val_samples)
+
+        checkpoint_callback = ModelCheckpoint(
+            save_top_k=1,
+
+            # monitor="val_loss",  # temporarily use "train_loss" because "val loss" does not activate "every_n_train_steps"
+            monitor="train_loss",
+
+            mode="min",
+            dirpath="models/",
+            filename="best_fld-{epoch:02d}-{val_loss:.2f}",
+
+            every_n_train_steps=100,
+            # save_on_train_epoch_end=True,
+        )
+
+        fld_collator = FLDProofGenerationAllCollator(
+            model_name
+        )
+
+        train_effective_batch_size = 64
+        train_batch_size = 8
+        eval_batch_size = 8
+        train_dataloader = DataLoader(train_dataset, train_batch_size, collate_fn=fld_collator)
+        val_dataloader = DataLoader(val_dataset, eval_batch_size, collate_fn=fld_collator)
+
+        pl_proofwriter = PLFLDSimpleProver(
+            model_name, learning_rate=1e-4, weight_decay=0.1,
+            warmup_steps=1,
+        )
+
+        accum_steps = max(int(train_effective_batch_size / train_batch_size), 1)
+        trainer = pl.Trainer(
+            callbacks=[checkpoint_callback],
+            # auto_lr_find=True,
+            accelerator=DEVICE,
+
+            accumulate_grad_batches=accum_steps,
+
+            # max_epochs=100,
+            max_steps=5000,
+        )
+
+        trainer.fit(pl_proofwriter, train_dataloader, val_dataloader)
+
+    elif MODEL == "proofwriter":
         train_dataset = ProofWriterDataset("depth-5", "train", "proof_generation_all")
         val_dataset = ProofWriterDataset("depth-5", "val", "proof_generation_all")
 
@@ -113,6 +174,7 @@ def main():
         )
 
         trainer.fit(pl_ruletaker, train_dataloader, val_dataloader)
+
 
     elif MODEL == "bertnot":
 

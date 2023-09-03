@@ -5,6 +5,9 @@ from logitorch.datasets.proof_qa.proofwriter_dataset import (
     PROOFWRITER_LABEL_TO_ID,
     ProofWriterDataset,
 )
+from logitorch.datasets.proof_qa.fld_dataset import (
+    FLDDataset,
+)
 from logitorch.datasets.qa.ruletaker_dataset import RuleTakerDataset
 from logitorch.datasets.te.mnli_dataset import MNLIDataset
 from logitorch.datasets.te.negated_mnli_dataset import NegatedMNLIDataset
@@ -14,11 +17,15 @@ from logitorch.datasets.te.rte_dataset import RTEDataset
 from logitorch.datasets.te.snli_dataset import SNLIDataset
 from logitorch.pl_models.bertnot import PLBERTNOT
 from logitorch.pl_models.proofwriter import PLProofWriter
+from logitorch.pl_models.fld import PLFLDSimpleProver
 from logitorch.pl_models.prover import PLPRover
 from logitorch.pl_models.ruletaker import PLRuleTaker
 
-MODEL = "ruletaker"
-DEVICE = "cpu"
+# MODEL = "ruletaker"
+MODEL = "FLD"
+
+# DEVICE = "cpu"
+DEVICE = "cuda"
 
 
 def parse_facts_rules(facts, rules):
@@ -32,8 +39,55 @@ def parse_facts_rules(facts, rules):
 
 
 proofwriter_test_datasets = ["depth-5", "birds-electricity"]
+FLD_test_datasets = ["hitachi-nlp/FLD.v2"]
 
-if MODEL == "proofwriter":
+if MODEL == "FLD":
+    from typing import Dict, List, Any
+    import logging
+    import json
+    from collections import defaultdict
+    from FLD_task import load_deduction, build_metrics, prettify_context_text, prettify_proof_text
+    from pprint import pprint
+    logger = logging.getLogger(__name__)
+
+    metric_funcs = {
+        'strct': build_metrics('strict'),
+        'extr_stps': build_metrics('allow_extra_steps'),
+    }
+
+    model_name = "t5-base"
+    model = PLFLDSimpleProver.load_from_checkpoint(
+        "./models/best_fld-epoch=4499-val_loss=3.19.ckpt",
+        pretrained_model=model_name,
+    )
+    model.to(DEVICE)
+    model.eval()
+
+    for d in FLD_test_datasets:
+        test_dataset = FLDDataset(d, "train", "proof_generation_all")
+
+        metrics: Dict[str, List[Any]] = defaultdict(list)
+        for i in tqdm(test_dataset):
+            pred = model.predict(i['context'], device=DEVICE)
+
+            for metric_type, calc_metrics in metric_funcs.items():
+                _metrics = calc_metrics(
+                    [i['gold_proof']],
+                    pred,
+                    context=i['context'],
+                )
+                depths = ['all', str(i['original_tree_depth'])] if i.get('original_tree_depth', None) is not None else ['all']
+                for depth in depths:
+                    for metric_name, metric_val in _metrics.items():
+                        metrics[f"{metric_type}.D-{depth}.{metric_name}"].append(metric_val)
+
+                pprint(_metrics)
+
+    pprint(metrics)
+    json.dump(metrics, open("fld_metrics.json", "w"))
+
+
+elif MODEL == "proofwriter":
     model = PLProofWriter.load_from_checkpoint(
         "models/best_proofwriter-epoch=05-val_loss=0.01.ckpt",
         pretrained_model="google/t5-v1_1-large",
