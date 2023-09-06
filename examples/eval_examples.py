@@ -41,12 +41,16 @@ def parse_facts_rules(facts, rules):
 proofwriter_test_datasets = ["depth-5", "birds-electricity"]
 FLD_test_datasets = ["hitachi-nlp/FLD.v2"]
 
+
+
 if MODEL == "FLD":
     from typing import Dict, List, Any
     import logging
     import json
     from collections import defaultdict
-    from FLD_task import load_deduction, build_metrics, prettify_context_text, prettify_proof_text
+
+    import numpy as np
+    from FLD_task import load_deduction, build_metrics, prettify_context_text, prettify_proof_text, log_example
     from pprint import pprint
     logger = logging.getLogger(__name__)
 
@@ -57,7 +61,7 @@ if MODEL == "FLD":
 
     model_name = "t5-base"
     model = PLFLDSimpleProver.load_from_checkpoint(
-        "./models/best_fld-epoch=4499-val_loss=3.19.ckpt",
+        "./models/best_fld-epoch=3999-val_loss=3.47.ckpt",
         pretrained_model=model_name,
     )
     model.to(DEVICE)
@@ -68,23 +72,34 @@ if MODEL == "FLD":
 
         metrics: Dict[str, List[Any]] = defaultdict(list)
         for i in tqdm(test_dataset):
-            pred = model.predict(i['context'], device=DEVICE)
+            pred = model.predict(i['prompt_serial'], device=DEVICE)
 
             for metric_type, calc_metrics in metric_funcs.items():
                 _metrics = calc_metrics(
-                    [i['gold_proof']],
+                    [i['proof_serial']],
                     pred,
                     context=i['context'],
                 )
-                depths = ['all', str(i['original_tree_depth'])] if i.get('original_tree_depth', None) is not None else ['all']
+                depths = (['all', str(i['depth'])] if i.get('depth', None) is not None
+                          else ['all', 'None'])
                 for depth in depths:
                     for metric_name, metric_val in _metrics.items():
                         metrics[f"{metric_type}.D-{depth}.{metric_name}"].append(metric_val)
 
-                pprint(_metrics)
+                log_example(
+                    context=i['context'],
+                    hypothesis=i['hypothesis'],
+                    gold_proofs=[i['proof_serial']],
+                    pred_proof=pred,
+                    metrics=_metrics,
+                )
 
-    pprint(metrics)
-    json.dump(metrics, open("fld_metrics.json", "w"))
+    results = {}
+    for metric_name, metric_vals in metrics.items():
+        results[f"{metric_name}"] = np.mean(metric_vals)
+
+    pprint(results)
+    json.dump(metrics, open("fld_results.json", "w"))
 
 
 elif MODEL == "proofwriter":

@@ -8,8 +8,8 @@ from logitorch.datasets.exceptions import (
 )
 from logitorch.datasets.utils import SPLIT_SETS
 from datasets import load_dataset
-from FLD_task import load_deduction
-from FLD_task.hf_dataset import serialize_transform
+from FLD_task import load_deduction, serialize
+# from FLD_task.hf_dataset import serialize_transform
 
 FLD_SUB_DATASETS = [
     "hitachi-nlp/FLD.v2",
@@ -52,6 +52,7 @@ class FLDDataset(AbstractProofQADataset):
                 dataset_name,
                 split=hf_split,
             )
+
             # load and dump once to normalize dataset format to the latest version.
             hf_dataset = hf_dataset.map(
                 lambda example: load_deduction(example).dict(),
@@ -91,31 +92,33 @@ class FLDDataset(AbstractProofQADataset):
 
         Dict[str, Any],  # FLD dataset
     ]:
-        batch_example = {
-            'context': [self._hf_dataset[index]['context']],
-            'hypothesis': [self._hf_dataset[index]['hypothesis']],
-            'world_assump_label': [self._hf_dataset[index]['world_assump_label']],
-            'proofs': [self._hf_dataset[index]['proofs']],
-            'original_tree_depth': [self._hf_dataset[index]['original_tree_depth']],
-        }
+        hf_example = self._hf_dataset[index]
+        deduction = load_deduction(hf_example)
 
         if self.task == "proof_generation_all":
-            batch_example = serialize_transform(
-                batch_example,
-                'train',
-                proof_sampling='all_at_once',
-                sample_negative_proof=True,
+            serial = serialize(
+                deduction,
+                stepwise=False,
+                sample_negative_proof=False,
             )
         elif self.task == "proof_generation_iter":
-            pass
+            sample_negative_proof = self.split_set == 'train'
+            serial = serialize(
+                deduction,
+                stepwise=True,
+                sample_negative_proof=sample_negative_proof,
+            )
         else:
             raise ValueError()
 
-        return {
-            key: vals[0]
-            for key, vals in batch_example.items()
-        }
-
+        hf_example_with_serial = hf_example.copy()
+        hf_example_with_serial.update({
+            'prompt_serial': serial.prompt,
+            'partial_proof_serial': serial.partial_proof,
+            'next_proof_step_serial': serial.next_proof_step,
+            'proof_serial': serial.proofs[0],
+        })
+        return hf_example_with_serial
 
     def __str__(self) -> str:
         return f'The {self.split_set} set of {self.dataset_name}\'s FLD for the task of "{self.task}" has {self.__len__()} instances'
@@ -123,29 +126,3 @@ class FLDDataset(AbstractProofQADataset):
     def __len__(self) -> int:
         # return len(self.triples)
         return len(self._hf_dataset)
-
-
-    def _extract_serials(self, examples: Dict[str, List[Any]]) -> Tuple[List[str], List[str], List[str]]:
-        if self.log_examples:
-            logger.info('')
-            logger.info('============================= extract_inputs_targets() =============================')
-
-        inputs: List[str] = []
-        targets: List[str] = []
-        gold_proofs: List[str] = []
-        for i_example in range(len(examples['context'])):
-            context = examples['context'][i_example]
-            next_step = examples['next_step'][i_example]
-            gold_proof = random.choice(examples['gold_proof'][i_example])
-
-            inputs.append(context)
-            targets.append(next_step)
-            gold_proofs.append(gold_proof)
-            if self.log_examples:
-                logger.info('context    [%d] : "%s"', i_example, context)
-                logger.info('next_step [%d] : "%s"', i_example, next_step)
-                logger.info('gold_proof [%d] : "%s"', i_example, gold_proof)
-
-        inputs = [self.prefix + inp for inp in inputs]
-
-        return inputs, targets, gold_proofs

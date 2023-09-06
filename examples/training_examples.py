@@ -38,10 +38,10 @@ def main():
         # model_name = "google/t5-v1_1-large"
         model_name = "t5-base"
 
-        max_train_samples = 1
+        max_train_samples = 10
         train_dataset = FLDDataset(dataset_name, "train", task, max_samples=max_train_samples)
 
-        max_val_samples = 1
+        max_val_samples = 10
         val_dataset = FLDDataset(dataset_name, "val", task, max_samples=max_val_samples)
 
         checkpoint_callback = ModelCheckpoint(
@@ -63,8 +63,8 @@ def main():
         )
 
         train_effective_batch_size = 64
-        train_batch_size = 8
-        eval_batch_size = 8
+        train_batch_size = 4
+        eval_batch_size = 4
         train_dataloader = DataLoader(train_dataset, train_batch_size, collate_fn=fld_collator)
         val_dataloader = DataLoader(val_dataset, eval_batch_size, collate_fn=fld_collator)
 

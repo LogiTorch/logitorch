@@ -36,30 +36,33 @@ class FLDProofGenerationAllCollator:
         the output tensor.
         """
 
-        prompts: List[str] = []
-        proof_steps: List[str] = []
+        xs: List[str] = []
+        ys: List[str] = []
         for i_example, example in enumerate(batch):
-            prompt = example['context']
-            next_step = example['next_step']
-            gold_proof = example['gold_proof']
+            prompt = example['prompt_serial']
+            partial_proof = example['partial_proof_serial'] or ''
+            next_step = example['next_proof_step_serial']
+            gold_proof = example['proof_serial']
 
-            prompts.append(prompt)
-            proof_steps.append(next_step)
+            x = prompt + partial_proof
+            y = next_step
+            xs.append(x)
+            ys.append(y)
             if self.log_examples:
                 logger.info('----------------- collate example = [%d]', i_example)
-                logger.info('prompt     : "%s"', prompt)
-                logger.info('next_step  : "%s"', next_step)
+                logger.info('x     : "%s"', x)
+                logger.info('y  : "%s"', y)
                 logger.info('gold_proof : "%s"', gold_proof)
 
         batch_x = self.tokenizer(
-            text=prompts,
+            text=xs,
             padding=True,
             return_tensors="pt",
             max_length=self.max_src_length,
             truncation=True,
         )
         batch_y = self.tokenizer(
-            proof_steps,
+            ys,
             padding=True,
             return_tensors="pt",
             max_length=self.max_tgt_length,
