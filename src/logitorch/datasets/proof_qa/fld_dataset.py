@@ -95,21 +95,13 @@ class FLDDataset(AbstractProofQADataset):
         hf_example = self._hf_dataset[index]
         deduction = load_deduction(hf_example)
 
-        if self.task == "proof_generation_all":
-            serial = serialize(
-                deduction,
-                stepwise=False,
-                sample_negative_proof=False,
-            )
-        elif self.task == "proof_generation_iter":
-            sample_negative_proof = self.split_set == 'train'
-            serial = serialize(
-                deduction,
-                stepwise=True,
-                sample_negative_proof=sample_negative_proof,
-            )
-        else:
-            raise ValueError()
+        stepwise = self.task == 'proof_generation_iter'
+        sample_negative_proof = self.split_set == 'train' if self.task == 'proof_generation_iter' else False
+        serial = serialize(
+            deduction,
+            stepwise=stepwise,
+            sample_negative_proof=sample_negative_proof,
+        )
 
         hf_example_with_serial = hf_example.copy()
         hf_example_with_serial.update({

@@ -1,5 +1,6 @@
 from sklearn.metrics import accuracy_score
 from tqdm import tqdm
+from pprint import pprint
 
 from logitorch.datasets.proof_qa.proofwriter_dataset import (
     PROOFWRITER_LABEL_TO_ID,
@@ -61,18 +62,26 @@ if MODEL == "FLD":
 
     model_name = "t5-base"
     model = PLFLDSimpleProver.load_from_checkpoint(
-        "./models/best_fld-epoch=3999-val_loss=3.47.ckpt",
+        "./models/best_fld-epoch=10-val_loss=0.08.ckpt",
         pretrained_model=model_name,
     )
     model.to(DEVICE)
     model.eval()
 
+    num_test_examples = 100
     for d in FLD_test_datasets:
-        test_dataset = FLDDataset(d, "train", "proof_generation_all")
+        test_dataset = FLDDataset(d, "train", "proof_generation_all", max_samples=num_test_examples)
 
         metrics: Dict[str, List[Any]] = defaultdict(list)
         for i in tqdm(test_dataset):
             pred = model.predict(i['prompt_serial'], device=DEVICE)
+
+            log_example(
+                context=i['context'],
+                hypothesis=i['hypothesis'],
+                gold_proofs=[i['proof_serial']],
+                pred_proof=pred,
+            )
 
             for metric_type, calc_metrics in metric_funcs.items():
                 _metrics = calc_metrics(
@@ -86,20 +95,18 @@ if MODEL == "FLD":
                     for metric_name, metric_val in _metrics.items():
                         metrics[f"{metric_type}.D-{depth}.{metric_name}"].append(metric_val)
 
-                log_example(
-                    context=i['context'],
-                    hypothesis=i['hypothesis'],
-                    gold_proofs=[i['proof_serial']],
-                    pred_proof=pred,
-                    metrics=_metrics,
-                )
+                if metrics is not None:
+                    print('')
+                    print(f'-------------- metrics={metric_type}        ----------------')
+                    pprint(_metrics)
 
     results = {}
     for metric_name, metric_vals in metrics.items():
         results[f"{metric_name}"] = np.mean(metric_vals)
 
+    print('\n\n-------------- metrics aggregated        ----------------')
     pprint(results)
-    json.dump(metrics, open("fld_results.json", "w"))
+    json.dump(results, open("fld_results.json", "w"))
 
 
 elif MODEL == "proofwriter":

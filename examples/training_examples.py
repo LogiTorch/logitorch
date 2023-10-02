@@ -38,10 +38,12 @@ def main():
         # model_name = "google/t5-v1_1-large"
         model_name = "t5-base"
 
-        max_train_samples = 10
+        # max_train_samples = 10
+        max_train_samples = None
         train_dataset = FLDDataset(dataset_name, "train", task, max_samples=max_train_samples)
 
-        max_val_samples = 10
+        # jsmax_val_samples = 10
+        max_val_samples = 500
         val_dataset = FLDDataset(dataset_name, "val", task, max_samples=max_val_samples)
 
         checkpoint_callback = ModelCheckpoint(
@@ -54,7 +56,8 @@ def main():
             dirpath="models/",
             filename="best_fld-{epoch:02d}-{val_loss:.2f}",
 
-            every_n_train_steps=100,
+            # every_n_train_steps=100,
+            every_n_train_steps=2500,
             # save_on_train_epoch_end=True,
         )
 
@@ -82,7 +85,8 @@ def main():
             accumulate_grad_batches=accum_steps,
 
             # max_epochs=100,
-            max_steps=5000,
+            # max_steps=5000,
+            max_steps=20000,
         )
 
         trainer.fit(pl_proofwriter, train_dataloader, val_dataloader)
