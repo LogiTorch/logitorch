@@ -16,6 +16,12 @@ LogiTorch is a PyTorch-based library for logical reasoning on natural language, 
 foo@bar:~$ pip install logitorch==0.0.1a2
 ```
 
+Or
+
+```console
+foo@bar:~$  pip install git+https://github.com/LogiTorch/logitorch.git
+```
+
 ## 📖 Documentation
 
 You can find the documentation for LogiTorch on [ReadTheDocs](https://logitorch.readthedocs.io).
@@ -41,7 +47,8 @@ Datasets implemented in LogiTorch:
 - [x] [PARARULES Plus](https://github.com/Strong-AI-Lab/PARARULE-Plus) <sub>(MIT LICENSE)</sub>
 - [x] [AbductionRules](https://arxiv.org/abs/2203.12186) <sub>(MIT LICENSE)</sub>
 - [x] [FOLIO](https://arxiv.org/abs/2209.00840) <sub>(CC-BY-SA-4.0 LICENSE)</sub>
-- [ ] [LogiQA2.0](https://arxiv.org/abs/2007.08124) 
+- [ ] [LogiQA2.0](https://arxiv.org/abs/2007.08124)
+- [ ] [LogiQA20 NLI](https://arxiv.org/abs/2007.08124) 
 - [ ] [HELP](https://aclanthology.org/S19-1027.pdf) 
 - [ ] [SimpleLogic](https://arxiv.org/abs/2205.11502)
 - [ ] [RobustLR](https://arxiv.org/abs/2205.12598)
@@ -67,6 +74,7 @@ Models implemented in LogiTorch:
 - [ ]  [APOLLO](https://arxiv.org/abs/2212.09282)
 - [ ]  [LAMBADA](https://arxiv.org/abs/2212.13894)
 - [ ]  [Chainformer](https://aclanthology.org/2023.findings-acl.588/)
+- [ ]  [IDOL](https://aclanthology.org/2023.findings-acl.513/)
 ## 🧪 Example Usage
 
 ### Training Example
