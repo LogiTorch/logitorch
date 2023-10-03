@@ -1,6 +1,5 @@
 from sklearn.metrics import accuracy_score
 from tqdm import tqdm
-from pprint import pprint
 
 from logitorch.datasets.proof_qa.proofwriter_dataset import (
     PROOFWRITER_LABEL_TO_ID,
@@ -43,70 +42,56 @@ proofwriter_test_datasets = ["depth-5", "birds-electricity"]
 FLD_test_datasets = ["hitachi-nlp/FLD.v2"]
 
 
-
 if MODEL == "FLD":
-    from typing import Dict, List, Any
-    import logging
     import json
+    import statistics
     from collections import defaultdict
+    from evaluate import load
 
-    import numpy as np
-    from FLD_task import load_deduction, build_metrics, prettify_context_text, prettify_proof_text, log_example
-    from pprint import pprint
-    logger = logging.getLogger(__name__)
+    # fld_metrics = load('/home/acb11878tj/work/projects/FLD-metrics/FLD_metrics.py')
+    fld_metrics = load('hitachi-nlp/FLD_metrics')
 
-    metric_funcs = {
-        'strct': build_metrics('strict'),
-        'extr_stps': build_metrics('allow_extra_steps'),
-    }
-
-    model_name = "t5-base"
     model = PLFLDSimpleProver.load_from_checkpoint(
-        "./models/best_fld-epoch=10-val_loss=0.08.ckpt",
-        pretrained_model=model_name,
+        "models/best_fld-epoch=21-val_loss=0.08.ckpt",
+        pretrained_model="t5-base",
     )
     model.to(DEVICE)
     model.eval()
 
-    num_test_examples = 100
+    num_test_examples = 10
     for d in FLD_test_datasets:
-        test_dataset = FLDDataset(d, "train", "proof_generation_all", max_samples=num_test_examples)
+        test_dataset = FLDDataset(d, "test", "proof_generation_all", max_samples=num_test_examples)
 
-        metrics: Dict[str, List[Any]] = defaultdict(list)
+        metrics = defaultdict(list)
         for i in tqdm(test_dataset):
             pred = model.predict(i['prompt_serial'], device=DEVICE)
 
-            log_example(
-                context=i['context'],
-                hypothesis=i['hypothesis'],
-                gold_proofs=[i['proof_serial']],
-                pred_proof=pred,
+            # from FLD_task import log_example
+            # log_example(
+            #     context=i['context'],
+            #     hypothesis=i['hypothesis'],
+            #     gold_proofs=[i['proof_serial']],
+            #     pred_proof=pred,
+            # )
+
+            _metrics = fld_metrics.compute(
+                predictions=[pred],
+                references=[[i['proof_serial']]],
+                contexts=[i['context']],
             )
 
-            for metric_type, calc_metrics in metric_funcs.items():
-                _metrics = calc_metrics(
-                    [i['proof_serial']],
-                    pred,
-                    context=i['context'],
-                )
-                depths = (['all', str(i['depth'])] if i.get('depth', None) is not None
-                          else ['all', 'None'])
-                for depth in depths:
-                    for metric_name, metric_val in _metrics.items():
-                        metrics[f"{metric_type}.D-{depth}.{metric_name}"].append(metric_val)
-
-                if metrics is not None:
-                    print('')
-                    print(f'-------------- metrics={metric_type}        ----------------')
-                    pprint(_metrics)
+            depths = (['all', str(i['depth'])] if i.get('depth', None) is not None
+                      else ['all', 'None'])
+            for depth in depths:
+                for metric_name, metric_val in _metrics.items():
+                    metrics[f"D-{depth}.{metric_name}"].append(metric_val)
 
     results = {}
     for metric_name, metric_vals in metrics.items():
-        results[f"{metric_name}"] = np.mean(metric_vals)
+        results[f"{metric_name}"] = statistics.mean(metric_vals)
 
-    print('\n\n-------------- metrics aggregated        ----------------')
-    pprint(results)
-    json.dump(results, open("fld_results.json", "w"))
+    json.dump(results, open("fld_results.json", "w"),
+              ensure_ascii=False, indent=4, sort_keys=True, separators=(',', ': '))
 
 
 elif MODEL == "proofwriter":

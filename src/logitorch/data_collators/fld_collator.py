@@ -40,12 +40,10 @@ class FLDProofGenerationAllCollator:
         ys: List[str] = []
         for i_example, example in enumerate(batch):
             prompt = example['prompt_serial']
-            partial_proof = example['partial_proof_serial'] or ''
-            next_step = example['next_proof_step_serial']
             gold_proof = example['proof_serial']
 
-            x = prompt + partial_proof
-            y = next_step
+            x = prompt
+            y = gold_proof
             xs.append(x)
             ys.append(y)
             if self.log_examples:

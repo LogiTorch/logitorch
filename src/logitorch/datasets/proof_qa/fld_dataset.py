@@ -8,8 +8,6 @@ from logitorch.datasets.exceptions import (
 )
 from logitorch.datasets.utils import SPLIT_SETS
 from datasets import load_dataset
-from FLD_task import load_deduction, serialize
-# from FLD_task.hf_dataset import serialize_transform
 
 FLD_SUB_DATASETS = [
     "hitachi-nlp/FLD.v2",
@@ -52,12 +50,6 @@ class FLDDataset(AbstractProofQADataset):
                 dataset_name,
                 split=hf_split,
             )
-
-            # load and dump once to normalize dataset format to the latest version.
-            hf_dataset = hf_dataset.map(
-                lambda example: load_deduction(example).dict(),
-                batched=False,
-            )
             if max_samples is not None:
                 hf_dataset = hf_dataset.select(range(max_samples))
             self._hf_dataset = hf_dataset
@@ -92,25 +84,7 @@ class FLDDataset(AbstractProofQADataset):
 
         Dict[str, Any],  # FLD dataset
     ]:
-        hf_example = self._hf_dataset[index]
-        deduction = load_deduction(hf_example)
-
-        stepwise = self.task == 'proof_generation_iter'
-        sample_negative_proof = self.split_set == 'train' if self.task == 'proof_generation_iter' else False
-        serial = serialize(
-            deduction,
-            stepwise=stepwise,
-            sample_negative_proof=sample_negative_proof,
-        )
-
-        hf_example_with_serial = hf_example.copy()
-        hf_example_with_serial.update({
-            'prompt_serial': serial.prompt,
-            'partial_proof_serial': serial.partial_proof,
-            'next_proof_step_serial': serial.next_proof_step,
-            'proof_serial': serial.proofs[0],
-        })
-        return hf_example_with_serial
+        return self._hf_dataset[index]
 
     def __str__(self) -> str:
         return f'The {self.split_set} set of {self.dataset_name}\'s FLD for the task of "{self.task}" has {self.__len__()} instances'
