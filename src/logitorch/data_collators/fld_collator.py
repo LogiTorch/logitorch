@@ -1,6 +1,5 @@
 from typing import Dict, Tuple, List, Any, Tuple
 import logging
-import random
 
 import torch
 from transformers import T5Tokenizer
@@ -14,28 +13,13 @@ class FLDProofGenerationAllCollator:
                  pretrained_t5_tokenizer: str,
                  max_src_length=1024,
                  max_tgt_length=512,
-                 log_examples=True) -> None:
-        """
-        It takes in a pretrained T5 tokenizer
-
-        :param pretrained_t5_tokenizer: The name of the T5 tokenizer to use
-        :type pretrained_t5_tokenizer: str
-        """
+                 log_examples=False) -> None:
         self.tokenizer = T5Tokenizer.from_pretrained(pretrained_t5_tokenizer)
         self.log_examples = log_examples
         self.max_src_length = max_src_length
         self.max_tgt_length = max_tgt_length
 
     def __call__(self, batch: List[Dict]) -> Tuple[Dict[str, torch.Tensor], torch.Tensor]:
-        """
-        The function takes in a batch of data, and returns a tuple of two elements: a dictionary of
-        tensors, and a tensor
-
-        :param batch: A list of tuples of the form (context, question, label, proof)
-        :return: A tuple of two tensors. The first tensor is the input tensor, and the second tensor is
-        the output tensor.
-        """
-
         xs: List[str] = []
         ys: List[str] = []
         for i_example, example in enumerate(batch):

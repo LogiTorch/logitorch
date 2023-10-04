@@ -6,8 +6,8 @@ from logitorch.data_collators.bertnot_collator import BERTNOTTextualEntailmentCo
 from logitorch.data_collators.proofwriter_collator import (
     ProofWriterProofGenerationAllCollator,
 )
-from logitorch.data_collators.fld_collator import FLDProofGenerationAllCollator
 from logitorch.data_collators.prover_collator import PRoverProofWriterCollator
+from logitorch.data_collators.fld_collator import FLDProofGenerationAllCollator
 from logitorch.data_collators.ruletaker_collator import (
     RuleTakerCollator,
     RuleTakerProofWriterCollator,
@@ -20,78 +20,19 @@ from logitorch.datasets.te.rte_dataset import RTEDataset
 from logitorch.datasets.te.snli_dataset import SNLIDataset
 from logitorch.pl_models.bertnot import PLBERTNOT
 from logitorch.pl_models.proofwriter import PLProofWriter
-from logitorch.pl_models.fld import PLFLDSimpleProver
+from logitorch.pl_models.fld import PLFLDAllAtOnceProver
 from logitorch.pl_models.prover import PLPRover
 from logitorch.pl_models.ruletaker import PLRuleTaker
 
 # MODEL = "proofwriter"
-MODEL = "FLD"
 # DEVICE = "cpu"
+
+MODEL = "FLD"
 DEVICE = "gpu"
 
 
 def main():
-
-    if MODEL == "FLD":
-        dataset_name = "hitachi-nlp/FLD.v2"
-        task = "proof_generation_all"
-        # model_name = "google/t5-v1_1-large"
-        model_name = "t5-base"
-
-        # max_train_samples = 10
-        max_train_samples = None
-        train_dataset = FLDDataset(dataset_name, "train", task, max_samples=max_train_samples)
-
-        # jsmax_val_samples = 10
-        max_val_samples = 500
-        val_dataset = FLDDataset(dataset_name, "val", task, max_samples=max_val_samples)
-
-        checkpoint_callback = ModelCheckpoint(
-            save_top_k=1,
-
-            # monitor="val_loss",  # temporarily use "train_loss" because "val loss" does not activate "every_n_train_steps"
-            monitor="train_loss",
-
-            mode="min",
-            dirpath="models/",
-            filename="best_fld-{epoch:02d}-{val_loss:.2f}",
-
-            # every_n_train_steps=100,
-            every_n_train_steps=2500,
-            # save_on_train_epoch_end=True,
-        )
-
-        fld_collator = FLDProofGenerationAllCollator(
-            model_name
-        )
-
-        train_effective_batch_size = 64
-        train_batch_size = 4
-        eval_batch_size = 4
-        train_dataloader = DataLoader(train_dataset, train_batch_size, collate_fn=fld_collator)
-        val_dataloader = DataLoader(val_dataset, eval_batch_size, collate_fn=fld_collator)
-
-        pl_proofwriter = PLFLDSimpleProver(
-            model_name, learning_rate=1e-4, weight_decay=0.1,
-            warmup_steps=1,
-        )
-
-        accum_steps = max(int(train_effective_batch_size / train_batch_size), 1)
-        trainer = pl.Trainer(
-            callbacks=[checkpoint_callback],
-            # auto_lr_find=True,
-            accelerator=DEVICE,
-
-            accumulate_grad_batches=accum_steps,
-
-            # max_epochs=100,
-            # max_steps=5000,
-            max_steps=20000,
-        )
-
-        trainer.fit(pl_proofwriter, train_dataloader, val_dataloader)
-
-    elif MODEL == "proofwriter":
+    if MODEL == "proofwriter":
         train_dataset = ProofWriterDataset("depth-5", "train", "proof_generation_all")
         val_dataset = ProofWriterDataset("depth-5", "val", "proof_generation_all")
 
@@ -150,6 +91,42 @@ def main():
         )
 
         trainer.fit(pl_prover, train_dataloader, val_dataloader)
+
+    elif MODEL == "FLD":
+        train_dataset = FLDDataset("hitachi-nlp/FLD.v2", "train", "proof_generation_all")
+        val_dataset = FLDDataset("hitachi-nlp/FLD.v2", "val", "proof_generation_all", max_samples=100)
+
+        checkpoint_callback = ModelCheckpoint(
+            save_top_k=1,
+            monitor="val_loss",
+            mode="min",
+            dirpath="models/",
+            filename="best_fld-{epoch:02d}-{val_loss:.2f}",
+            # every_n_train_steps=1000,  # every_n_train_steps requires monitor="train_loss"
+        )
+
+        fld_collator = FLDProofGenerationAllCollator(
+            "t5-base", log_examples=False,
+        )
+
+        train_dataloader = DataLoader(train_dataset, 4, collate_fn=fld_collator)
+        val_dataloader = DataLoader(val_dataset, 4, collate_fn=fld_collator)
+
+        pl_proofwriter = PLFLDAllAtOnceProver(
+            "t5-base", learning_rate=1e-4, weight_decay=0.1, warmup_steps=1000,
+        )
+
+        trainer = pl.Trainer(
+            callbacks=[checkpoint_callback],
+            auto_lr_find=False,
+            accelerator=DEVICE,
+            accumulate_grad_batches=16,
+            max_epochs=40,
+            # max_steps=100,
+            # max_steps=20000,
+        )
+
+        trainer.fit(pl_proofwriter, train_dataloader, val_dataloader)
 
     elif MODEL == "ruletaker":
         train_dataset = RuleTakerDataset("depth-5", "train")

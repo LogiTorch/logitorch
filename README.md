@@ -47,6 +47,7 @@ Datasets implemented in LogiTorch:
 - [x] [PARARULES Plus](https://github.com/Strong-AI-Lab/PARARULE-Plus) <sub>(MIT LICENSE)</sub>
 - [x] [AbductionRules](https://arxiv.org/abs/2203.12186) <sub>(MIT LICENSE)</sub>
 - [x] [FOLIO](https://arxiv.org/abs/2209.00840) <sub>(CC-BY-SA-4.0 LICENSE)</sub>
+- [x] [FLD](https://proceedings.mlr.press/v202/morishita23a.html)  <sub>(CC-BY-SA-4.0 LICENSE)</sub>
 - [ ] [LogiQA2.0](https://arxiv.org/abs/2007.08124)
 - [ ] [LogiQA20 NLI](https://arxiv.org/abs/2007.08124) 
 - [ ] [HELP](https://aclanthology.org/S19-1027.pdf) 

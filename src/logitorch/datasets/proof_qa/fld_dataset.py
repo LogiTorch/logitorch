@@ -1,4 +1,4 @@
-from typing import Dict, List, Optional, Tuple, Union, Any
+from typing import Dict, List, Optional, Tuple, Union
 
 from logitorch.datasets.base import AbstractProofQADataset
 from logitorch.datasets.exceptions import (
@@ -15,9 +15,6 @@ FLD_SUB_DATASETS = [
 ]
 FLD_TASKS = [
     "proof_generation_all",
-    # "proof_generation_iter",
-    # "implication_enumeration",
-    # "abduction",
 ]
 
 
@@ -45,7 +42,7 @@ class FLDDataset(AbstractProofQADataset):
             self.split_set = split_set
             self.task = task
 
-            hf_split = 'validation' if split_set == 'dev' else split_set
+            hf_split = "validation" if split_set == "dev" else split_set
             hf_dataset = load_dataset(
                 dataset_name,
                 split=hf_split,
@@ -81,8 +78,7 @@ class FLDDataset(AbstractProofQADataset):
         Tuple[Dict[str, str], Dict[str, str], List[str], List[str], List[str]],
         Tuple[Dict[str, str], Dict[str, str], List[str], List[str]],
         Tuple[Dict[str, str], Dict[str, str], List[str]],
-
-        Dict[str, Any],  # FLD dataset
+        Dict[str, Union[Optional[str], Optional[int]]],
     ]:
         return self._hf_dataset[index]
 
@@ -90,5 +86,4 @@ class FLDDataset(AbstractProofQADataset):
         return f'The {self.split_set} set of {self.dataset_name}\'s FLD for the task of "{self.task}" has {self.__len__()} instances'
 
     def __len__(self) -> int:
-        # return len(self.triples)
         return len(self._hf_dataset)

@@ -1,12 +1,17 @@
 from typing import Dict, List
 
 import torch
-import torch.nn as nn
+from torch import nn
 from transformers import T5ForConditionalGeneration, T5Tokenizer
 from transformers.modeling_outputs import SequenceClassifierOutput
 
 
-class FLDSimpleProver(nn.Module):
+class FLDAllAtOnceProver(nn.Module):
+    """A T5-based prover that generates whole a proof all at once.
+
+       Note that this prover is slightly different from the "step-wise" prover used in paper,
+       which generates a proof step-by-step. This simple prover yields slightly better performance.
+    """
     def __init__(self, pretrained_t5_model: str) -> None:
         super().__init__()
         self.model = T5ForConditionalGeneration.from_pretrained(pretrained_t5_model)

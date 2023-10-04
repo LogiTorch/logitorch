@@ -1,13 +1,14 @@
 from sklearn.metrics import accuracy_score
 from tqdm import tqdm
+import json
+import statistics
+from collections import defaultdict
 
 from logitorch.datasets.proof_qa.proofwriter_dataset import (
     PROOFWRITER_LABEL_TO_ID,
     ProofWriterDataset,
 )
-from logitorch.datasets.proof_qa.fld_dataset import (
-    FLDDataset,
-)
+from logitorch.datasets.proof_qa.fld_dataset import FLDDataset
 from logitorch.datasets.qa.ruletaker_dataset import RuleTakerDataset
 from logitorch.datasets.te.mnli_dataset import MNLIDataset
 from logitorch.datasets.te.negated_mnli_dataset import NegatedMNLIDataset
@@ -17,14 +18,15 @@ from logitorch.datasets.te.rte_dataset import RTEDataset
 from logitorch.datasets.te.snli_dataset import SNLIDataset
 from logitorch.pl_models.bertnot import PLBERTNOT
 from logitorch.pl_models.proofwriter import PLProofWriter
-from logitorch.pl_models.fld import PLFLDSimpleProver
 from logitorch.pl_models.prover import PLPRover
+from logitorch.pl_models.fld import PLFLDAllAtOnceProver
 from logitorch.pl_models.ruletaker import PLRuleTaker
+from evaluate import load
 
 # MODEL = "ruletaker"
-MODEL = "FLD"
-
 # DEVICE = "cpu"
+
+MODEL = "FLD"
 DEVICE = "cuda"
 
 
@@ -39,62 +41,8 @@ def parse_facts_rules(facts, rules):
 
 
 proofwriter_test_datasets = ["depth-5", "birds-electricity"]
-FLD_test_datasets = ["hitachi-nlp/FLD.v2"]
 
-
-if MODEL == "FLD":
-    import json
-    import statistics
-    from collections import defaultdict
-    from evaluate import load
-
-    # fld_metrics = load('/home/acb11878tj/work/projects/FLD-metrics/FLD_metrics.py')
-    fld_metrics = load('hitachi-nlp/FLD_metrics')
-
-    model = PLFLDSimpleProver.load_from_checkpoint(
-        "models/best_fld-epoch=21-val_loss=0.08.ckpt",
-        pretrained_model="t5-base",
-    )
-    model.to(DEVICE)
-    model.eval()
-
-    num_test_examples = 10
-    for d in FLD_test_datasets:
-        test_dataset = FLDDataset(d, "test", "proof_generation_all", max_samples=num_test_examples)
-
-        metrics = defaultdict(list)
-        for i in tqdm(test_dataset):
-            pred = model.predict(i['prompt_serial'], device=DEVICE)
-
-            # from FLD_task import log_example
-            # log_example(
-            #     context=i['context'],
-            #     hypothesis=i['hypothesis'],
-            #     gold_proofs=[i['proof_serial']],
-            #     pred_proof=pred,
-            # )
-
-            _metrics = fld_metrics.compute(
-                predictions=[pred],
-                references=[[i['proof_serial']]],
-                contexts=[i['context']],
-            )
-
-            depths = (['all', str(i['depth'])] if i.get('depth', None) is not None
-                      else ['all', 'None'])
-            for depth in depths:
-                for metric_name, metric_val in _metrics.items():
-                    metrics[f"D-{depth}.{metric_name}"].append(metric_val)
-
-    results = {}
-    for metric_name, metric_vals in metrics.items():
-        results[f"{metric_name}"] = statistics.mean(metric_vals)
-
-    json.dump(results, open("fld_results.json", "w"),
-              ensure_ascii=False, indent=4, sort_keys=True, separators=(',', ': '))
-
-
-elif MODEL == "proofwriter":
+if MODEL == "proofwriter":
     model = PLProofWriter.load_from_checkpoint(
         "models/best_proofwriter-epoch=05-val_loss=0.01.ckpt",
         pretrained_model="google/t5-v1_1-large",
@@ -158,6 +106,50 @@ elif MODEL == "prover":
 
         with open(f"prover_{d}.txt", "w") as out:
             out.write(str(accuracy_score(y_preds, y_trues)))
+
+elif MODEL == "FLD":
+    model = PLFLDAllAtOnceProver.load_from_checkpoint(
+        "models/best_fld-epoch=12-val_loss=0.06.ckpt",
+        pretrained_model="t5-base",
+    )
+    model.to(DEVICE)
+    model.eval()
+
+    test_dataset = FLDDataset("hitachi-nlp/FLD.v2", "test", "proof_generation_all", max_samples=10)
+
+    # fld_metrics = load('/home/acb11878tj/work/projects/FLD-metrics/FLD_metrics.py')
+    fld_metrics = load('hitachi-nlp/FLD_metrics')
+
+    metrics = defaultdict(list)
+    for i in tqdm(test_dataset):
+        pred = model.predict(i['prompt_serial'], device=DEVICE)
+
+        # from FLD_task import log_example
+        # log_example(
+        #     context=i['context'],
+        #     hypothesis=i['hypothesis'],
+        #     gold_proofs=[i['proof_serial']],
+        #     pred_proof=pred,
+        # )
+
+        _metrics = fld_metrics.compute(
+            predictions=[pred],
+            references=[[i['proof_serial']]],
+            contexts=[i['context']],
+        )
+
+        depths = (['all', str(i['depth'])] if i.get('depth', None) is not None
+                  else ['all', 'None'])
+        for depth in depths:
+            for metric_name, metric_val in _metrics.items():
+                metrics[f"D-{depth}.{metric_name}"].append(metric_val)
+
+    results = {}
+    for metric_name, metric_vals in metrics.items():
+        results[f"{metric_name}"] = statistics.mean(metric_vals)
+
+    json.dump(results, open("fld_results.json", "w"),
+              ensure_ascii=False, indent=4, sort_keys=True, separators=(',', ': '))
 
 elif MODEL == "ruletaker":
     model = PLRuleTaker.load_from_checkpoint(
