@@ -23,11 +23,8 @@ from logitorch.pl_models.fld import PLFLDAllAtOnceProver
 from logitorch.pl_models.ruletaker import PLRuleTaker
 from evaluate import load
 
-# MODEL = "ruletaker"
-# DEVICE = "cpu"
-
-MODEL = "FLD"
-DEVICE = "cuda"
+MODEL = "ruletaker"
+DEVICE = "cpu"
 
 
 def parse_facts_rules(facts, rules):
@@ -117,20 +114,11 @@ elif MODEL == "FLD":
 
     test_dataset = FLDDataset("FLD.v2", "test", "proof_generation_all", max_samples=10)
 
-    # fld_metrics = load('/home/acb11878tj/work/projects/FLD-metrics/FLD_metrics.py')
     fld_metrics = load('hitachi-nlp/FLD_metrics')
 
     metrics = defaultdict(list)
     for i in tqdm(test_dataset):
         pred = model.predict(i['prompt_serial'], device=DEVICE)
-
-        # from FLD_task import log_example
-        # log_example(
-        #     context=i['context'],
-        #     hypothesis=i['hypothesis'],
-        #     gold_proofs=[i['proof_serial']],
-        #     pred_proof=pred,
-        # )
 
         _metrics = fld_metrics.compute(
             predictions=[pred],

@@ -24,11 +24,8 @@ from logitorch.pl_models.fld import PLFLDAllAtOnceProver
 from logitorch.pl_models.prover import PLPRover
 from logitorch.pl_models.ruletaker import PLRuleTaker
 
-# MODEL = "proofwriter"
-# DEVICE = "cpu"
-
-MODEL = "FLD"
-DEVICE = "gpu"
+MODEL = "proofwriter"
+DEVICE = "cpu"
 
 
 def main():
@@ -102,7 +99,6 @@ def main():
             mode="min",
             dirpath="models/",
             filename="best_fld-{epoch:02d}-{val_loss:.2f}",
-            # every_n_train_steps=1000,  # every_n_train_steps requires monitor="train_loss"
         )
 
         fld_collator = FLDProofGenerationAllCollator(
@@ -122,8 +118,6 @@ def main():
             accelerator=DEVICE,
             accumulate_grad_batches=16,
             max_epochs=40,
-            # max_steps=100,
-            # max_steps=20000,
         )
 
         trainer.fit(pl_proofwriter, train_dataloader, val_dataloader)
