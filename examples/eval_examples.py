@@ -115,7 +115,7 @@ elif MODEL == "FLD":
     model.to(DEVICE)
     model.eval()
 
-    test_dataset = FLDDataset("hitachi-nlp/FLD.v2", "test", "proof_generation_all", max_samples=10)
+    test_dataset = FLDDataset("FLD.v2", "test", "proof_generation_all", max_samples=10)
 
     # fld_metrics = load('/home/acb11878tj/work/projects/FLD-metrics/FLD_metrics.py')
     fld_metrics = load('hitachi-nlp/FLD_metrics')

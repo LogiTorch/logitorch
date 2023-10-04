@@ -10,8 +10,8 @@ from logitorch.datasets.utils import SPLIT_SETS
 from datasets import load_dataset
 
 FLD_SUB_DATASETS = [
-    "hitachi-nlp/FLD.v2",
-    "hitachi-nlp/FLD_star.v2",
+    "FLD.v2",
+    "FLD_star.v2",
 ]
 FLD_TASKS = [
     "proof_generation_all",
@@ -42,9 +42,14 @@ class FLDDataset(AbstractProofQADataset):
             self.split_set = split_set
             self.task = task
 
+            if dataset_name == "FLD.v2":
+                hf_path, hf_name = "hitachi-nlp/FLD.v2", "default"
+            elif dataset_name == "FLD_star.v2":
+                hf_path, hf_name = "hitachi-nlp/FLD.v2", "star"
             hf_split = "validation" if split_set == "dev" else split_set
             hf_dataset = load_dataset(
-                dataset_name,
+                hf_path,
+                name=hf_name,
                 split=hf_split,
             )
             if max_samples is not None:

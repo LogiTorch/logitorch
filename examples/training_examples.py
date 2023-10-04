@@ -93,8 +93,8 @@ def main():
         trainer.fit(pl_prover, train_dataloader, val_dataloader)
 
     elif MODEL == "FLD":
-        train_dataset = FLDDataset("hitachi-nlp/FLD.v2", "train", "proof_generation_all")
-        val_dataset = FLDDataset("hitachi-nlp/FLD.v2", "val", "proof_generation_all", max_samples=100)
+        train_dataset = FLDDataset("FLD.v2", "train", "proof_generation_all")
+        val_dataset = FLDDataset("FLD.v2", "val", "proof_generation_all", max_samples=100)
 
         checkpoint_callback = ModelCheckpoint(
             save_top_k=1,
