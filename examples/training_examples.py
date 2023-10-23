@@ -7,17 +7,20 @@ from logitorch.data_collators.proofwriter_collator import (
     ProofWriterProofGenerationAllCollator,
 )
 from logitorch.data_collators.prover_collator import PRoverProofWriterCollator
+from logitorch.data_collators.fld_collator import FLDProofGenerationAllCollator
 from logitorch.data_collators.ruletaker_collator import (
     RuleTakerCollator,
     RuleTakerProofWriterCollator,
 )
 from logitorch.datasets.proof_qa.proofwriter_dataset import ProofWriterDataset
+from logitorch.datasets.proof_qa.fld_dataset import FLDDataset
 from logitorch.datasets.qa.ruletaker_dataset import RuleTakerDataset
 from logitorch.datasets.te.mnli_dataset import MNLIDataset
 from logitorch.datasets.te.rte_dataset import RTEDataset
 from logitorch.datasets.te.snli_dataset import SNLIDataset
 from logitorch.pl_models.bertnot import PLBERTNOT
 from logitorch.pl_models.proofwriter import PLProofWriter
+from logitorch.pl_models.fld import PLFLDAllAtOnceProver
 from logitorch.pl_models.prover import PLPRover
 from logitorch.pl_models.ruletaker import PLRuleTaker
 
@@ -86,6 +89,39 @@ def main():
 
         trainer.fit(pl_prover, train_dataloader, val_dataloader)
 
+    elif MODEL == "FLD":
+        train_dataset = FLDDataset("FLD.v2", "train", "proof_generation_all")
+        val_dataset = FLDDataset("FLD.v2", "val", "proof_generation_all", max_samples=100)
+
+        checkpoint_callback = ModelCheckpoint(
+            save_top_k=1,
+            monitor="val_loss",
+            mode="min",
+            dirpath="models/",
+            filename="best_fld-{epoch:02d}-{val_loss:.2f}",
+        )
+
+        fld_collator = FLDProofGenerationAllCollator(
+            "t5-base", log_examples=False,
+        )
+
+        train_dataloader = DataLoader(train_dataset, 4, collate_fn=fld_collator)
+        val_dataloader = DataLoader(val_dataset, 4, collate_fn=fld_collator)
+
+        pl_proofwriter = PLFLDAllAtOnceProver(
+            "t5-base", learning_rate=1e-4, weight_decay=0.1, warmup_steps=1000,
+        )
+
+        trainer = pl.Trainer(
+            callbacks=[checkpoint_callback],
+            auto_lr_find=False,
+            accelerator=DEVICE,
+            accumulate_grad_batches=16,
+            max_epochs=40,
+        )
+
+        trainer.fit(pl_proofwriter, train_dataloader, val_dataloader)
+
     elif MODEL == "ruletaker":
         train_dataset = RuleTakerDataset("depth-5", "train")
         val_dataset = RuleTakerDataset("depth-5", "val")
@@ -113,6 +149,7 @@ def main():
         )
 
         trainer.fit(pl_ruletaker, train_dataloader, val_dataloader)
+
 
     elif MODEL == "bertnot":
 

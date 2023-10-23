@@ -1,10 +1,14 @@
 from sklearn.metrics import accuracy_score
 from tqdm import tqdm
+import json
+import statistics
+from collections import defaultdict
 
 from logitorch.datasets.proof_qa.proofwriter_dataset import (
     PROOFWRITER_LABEL_TO_ID,
     ProofWriterDataset,
 )
+from logitorch.datasets.proof_qa.fld_dataset import FLDDataset
 from logitorch.datasets.qa.ruletaker_dataset import RuleTakerDataset
 from logitorch.datasets.te.mnli_dataset import MNLIDataset
 from logitorch.datasets.te.negated_mnli_dataset import NegatedMNLIDataset
@@ -15,7 +19,9 @@ from logitorch.datasets.te.snli_dataset import SNLIDataset
 from logitorch.pl_models.bertnot import PLBERTNOT
 from logitorch.pl_models.proofwriter import PLProofWriter
 from logitorch.pl_models.prover import PLPRover
+from logitorch.pl_models.fld import PLFLDAllAtOnceProver
 from logitorch.pl_models.ruletaker import PLRuleTaker
+from evaluate import load
 
 MODEL = "ruletaker"
 DEVICE = "cpu"
@@ -97,6 +103,41 @@ elif MODEL == "prover":
 
         with open(f"prover_{d}.txt", "w") as out:
             out.write(str(accuracy_score(y_preds, y_trues)))
+
+elif MODEL == "FLD":
+    model = PLFLDAllAtOnceProver.load_from_checkpoint(
+        "models/best_fld-epoch=12-val_loss=0.06.ckpt",
+        pretrained_model="t5-base",
+    )
+    model.to(DEVICE)
+    model.eval()
+
+    test_dataset = FLDDataset("FLD.v2", "test", "proof_generation_all", max_samples=10)
+
+    fld_metrics = load('hitachi-nlp/FLD_metrics')
+
+    metrics = defaultdict(list)
+    for i in tqdm(test_dataset):
+        pred = model.predict(i['prompt_serial'], device=DEVICE)
+
+        _metrics = fld_metrics.compute(
+            predictions=[pred],
+            references=[[i['proof_serial']]],
+            contexts=[i['context']],
+        )
+
+        depths = (['all', str(i['depth'])] if i.get('depth', None) is not None
+                  else ['all', 'None'])
+        for depth in depths:
+            for metric_name, metric_val in _metrics.items():
+                metrics[f"D-{depth}.{metric_name}"].append(metric_val)
+
+    results = {}
+    for metric_name, metric_vals in metrics.items():
+        results[f"{metric_name}"] = statistics.mean(metric_vals)
+
+    json.dump(results, open("fld_results.json", "w"),
+              ensure_ascii=False, indent=4, sort_keys=True, separators=(',', ': '))
 
 elif MODEL == "ruletaker":
     model = PLRuleTaker.load_from_checkpoint(

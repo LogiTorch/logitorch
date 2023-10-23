@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import Dict, List, Tuple, Union
+from typing import Dict, List, Tuple, Union, Optional
 
 from torch.utils.data import Dataset
 
@@ -55,5 +55,6 @@ class AbstractProofQADataset(BaseLogicDataset):
         Tuple[Dict[str, str], Dict[str, str], List[str], List[str], List[str]],
         Tuple[Dict[str, str], Dict[str, str], List[str], List[str]],
         Tuple[Dict[str, str], Dict[str, str], List[str]],
+        Dict[str, Union[Optional[str], Optional[int]]],
     ]:
         raise NotImplementedError()
