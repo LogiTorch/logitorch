@@ -63,6 +63,7 @@ Models implemented in LogiTorch:
 - [x]  [ProofWriter](https://arxiv.org/abs/2012.13048)
 - [x]  [BERTNOT](https://arxiv.org/abs/2105.03519)
 - [x]  [PRover](https://arxiv.org/abs/2010.02830)
+- [x]  [FLDProver](https://proceedings.mlr.press/v202/morishita23a.html)
 - [ ]  [TINA](https://suchanek.name/work/publications/emnlp-2022.pdf)
 - [ ]  [FaiRR](https://arxiv.org/abs/2203.10261)
 - [ ]  [LReasoner](https://arxiv.org/abs/2105.03659)
