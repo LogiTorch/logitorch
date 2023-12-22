@@ -9,6 +9,13 @@ from logitorch.models.exceptions import LossError, TaskError
 
 class BERTNOT(nn.Module):
     def __init__(self, pretrained_bert_model: str, num_labels: int = 2) -> None:
+        """
+        BERTNOT model for fine-tuning BERT for various tasks.
+
+        Args:
+            pretrained_bert_model (str): Path or identifier of the pre-trained BERT model.
+            num_labels (int, optional): Number of labels for the classification task. Defaults to 2.
+        """
         super().__init__()
         self.model = BertForMaskedLM.from_pretrained(pretrained_bert_model)
 
@@ -38,6 +45,18 @@ class BERTNOT(nn.Module):
         xavier_normal_(self.sequence_classifier.weight)
 
     def forward(self, x, y=None, task="mlm", loss="cross_entropy"):
+        """
+        Forward pass of the BERTNOT model.
+
+        Args:
+            x (dict): Input dictionary containing the input tensors.
+            y (torch.Tensor, optional): Target tensor. Defaults to None.
+            task (str, optional): Task type. Defaults to "mlm".
+            loss (str, optional): Loss type. Defaults to "cross_entropy".
+
+        Returns:
+            tuple: Tuple containing the loss and logits if y is not None, otherwise returns logits.
+        """
         try:
             if task not in self.tasks:
                 raise TaskError(self.tasks)
@@ -90,6 +109,18 @@ class BERTNOT(nn.Module):
             print(err.message)
 
     def predict(self, context: str, hypothesis: str = None, task="mlm", device="cpu"):
+        """
+        Perform prediction using the BERTNOT model.
+
+        Args:
+            context (str): Input context string.
+            hypothesis (str, optional): Input hypothesis string. Defaults to None.
+            task (str, optional): Task type. Defaults to "mlm".
+            device (str, optional): Device to run the model on. Defaults to "cpu".
+
+        Returns:
+            str or int: Predicted token or label.
+        """
         try:
             if task not in self.tasks:
                 raise TaskError(self.tasks)

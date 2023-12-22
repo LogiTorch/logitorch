@@ -31,6 +31,25 @@ def proofwriter_pipeline(
     accelerator: str = "cpu",
     gpus: int = 0,
 ):
+    """
+    Executes the proofwriter pipeline for training a proof generation model.
+
+    Args:
+        model (nn.Module): The proof generation model.
+        dataset_name (str): The name of the dataset.
+        task (str, optional): The task to perform. Defaults to "proof_generation_all".
+        open_world_assumption (bool, optional): Whether to use open world assumption. Defaults to False.
+        saved_model_path (str, optional): The path to save the trained model. Defaults to "/".
+        saved_model_name (str, optional): The name of the saved model. Defaults to "best_model".
+        batch_size (int, optional): The batch size for training. Defaults to 1.
+        epochs (int, optional): The number of training epochs. Defaults to 1.
+        accelerator (str, optional): The accelerator to use (e.g., "cpu", "gpu"). Defaults to "cpu".
+        gpus (int, optional): The number of GPUs to use. Defaults to 0.
+
+    Raises:
+        ModelNotCompatibleError: If the provided model is not compatible with the proofwriter pipeline.
+
+    """
     try:
         if isinstance(model, PROOFWRITER_COMPATIBLE_MODELS):
             train_dataset = ProofWriterDataset(
@@ -90,6 +109,25 @@ def fld_pipeline(
     accelerator: str = "cpu",
     gpus: int = 0,
 ):
+    """
+    Executes the fld pipeline for training a proof generation model.
+
+    Args:
+        model (nn.Module): The proof generation model.
+        dataset_name (str): The name of the dataset.
+        task (str, optional): The task to perform. Defaults to "proof_generation_all".
+        saved_model_path (str, optional): The path to save the trained model. Defaults to "/".
+        saved_model_name (str, optional): The name of the saved model. Defaults to "best_model".
+        batch_size (int, optional): The batch size for training. Defaults to 4.
+        accum_steps (int, optional): The number of accumulation steps. Defaults to 16.
+        epochs (int, optional): The number of training epochs. Defaults to 40.
+        accelerator (str, optional): The accelerator to use (e.g., "cpu", "gpu"). Defaults to "cpu".
+        gpus (int, optional): The number of GPUs to use. Defaults to 0.
+
+    Raises:
+        ModelNotCompatibleError: If the provided model is not compatible with the fld pipeline.
+
+    """
     try:
         if isinstance(model, FLD_COMPATIBLE_MODELS):
             train_dataset = FLDDataset(

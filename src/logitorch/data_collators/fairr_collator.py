@@ -3,9 +3,24 @@ from transformers import RobertaTokenizer
 
 class RuleSelectionProofWriterIterCollator:
     def __init__(self, pretrained_roberta_tokenizer: str) -> None:
+        """
+        Initializes the RuleSelectionProofWriterIterCollator.
+
+        Args:
+            pretrained_roberta_tokenizer (str): The name or path of the pretrained Roberta tokenizer.
+        """
         self.tokenizer = RobertaTokenizer.from_pretrained(pretrained_roberta_tokenizer)
 
     def __call__(self, batch):
+        """
+        Processes a batch of data.
+
+        Args:
+            batch: The input batch.
+
+        Returns:
+            tuple: A tuple containing the processed batch input and the corresponding labels.
+        """
         batch_x = []
         batch_y = []
         y_indices = []

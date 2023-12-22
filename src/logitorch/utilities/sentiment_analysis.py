@@ -10,14 +10,15 @@ class SentimentAnalysisTextBlob:
         self.textblob_analyzer = TextBlob
 
     def sentiment(self, passage: str, threshold_polarity: float = 0.0) -> Optional[str]:
-        """_summary_
+        """
+        Analyzes the sentiment of a given passage using TextBlob.
 
-        :param passage: _description_
-        :type passage: str
-        :param threshold_polarity: _description_, defaults to 0.0
-        :type threshold_polarity: float, optional
-        :return: _description_
-        :rtype: str
+        Args:
+            passage (str): The text passage to analyze.
+            threshold_polarity (float, optional): The threshold polarity value. Defaults to 0.0.
+
+        Returns:
+            Optional[str]: The sentiment of the passage, either "Positive" or "Negative", or None if an error occurs.
         """
         try:
             if threshold_polarity < -1.0 or threshold_polarity > 1.0:

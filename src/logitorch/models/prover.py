@@ -11,6 +11,12 @@ from logitorch.data_collators.prover_collator import PRoverProofWriterCollator
 
 class _NodeClassificationHead(nn.Module):
     def __init__(self, config):
+        """
+        Initializes the node classification head module.
+
+        Args:
+            config: The configuration object.
+        """
         super().__init__()
         self.dense = nn.Linear(config.hidden_size, config.hidden_size)
         self.dropout = nn.Dropout(config.hidden_dropout_prob)
@@ -20,6 +26,15 @@ class _NodeClassificationHead(nn.Module):
         xavier_normal_(self.out_proj.weight)
 
     def forward(self, features, **kwargs):
+        """
+        Forward pass of the node classification head module.
+
+        Args:
+            features: The input features.
+
+        Returns:
+            The output tensor.
+        """
         x = self.dropout(features)
         x = self.dense(x)
         x = torch.tanh(x)
@@ -30,6 +45,12 @@ class _NodeClassificationHead(nn.Module):
 
 class _EdgeClassificationHead(nn.Module):
     def __init__(self, config):
+        """
+        Initializes the edge classification head module.
+
+        Args:
+            config: The configuration object.
+        """
         super().__init__()
         self.dense = nn.Linear(3 * config.hidden_size, config.hidden_size)
         self.dropout = nn.Dropout(config.hidden_dropout_prob)
@@ -39,6 +60,15 @@ class _EdgeClassificationHead(nn.Module):
         xavier_normal_(self.out_proj.weight)
 
     def forward(self, features, **kwargs):
+        """
+        Forward pass of the edge classification head module.
+
+        Args:
+            features: The input features.
+
+        Returns:
+            The output tensor.
+        """
         x = self.dropout(features)
         x = self.dense(x)
         x = torch.tanh(x)
@@ -49,6 +79,13 @@ class _EdgeClassificationHead(nn.Module):
 
 class PRover(nn.Module):
     def __init__(self, pretrained_roberta_model: str, num_labels: int = 2) -> None:
+        """
+        Initializes the PRover model.
+
+        Args:
+            pretrained_roberta_model: The path or name of the pretrained RoBERTa model.
+            num_labels: The number of labels for classification.
+        """
         super().__init__()
         self.num_labels = num_labels
         self.num_labels_edge = num_labels
@@ -59,10 +96,6 @@ class PRover(nn.Module):
         self.classifier = RobertaClassificationHead(self.config)
         self.classifier_node = _NodeClassificationHead(self.config)
         self.classifier_edge = _EdgeClassificationHead(self.config)
-
-        # xavier_normal(self.naf_layer)
-        # xavier_normal(self.classifier_node)
-        # xavier_normal(self.classifier_edge)
 
     def forward(
         self,
@@ -75,6 +108,22 @@ class PRover(nn.Module):
         max_edge_length=None,
         device: str = "cpu",
     ):
+        """
+        Forward pass of the PRover model.
+
+        Args:
+            x: The input tensor.
+            proof_offsets: The proof offsets.
+            node_labels: The node labels.
+            edge_labels: The edge labels.
+            qa_labels: The QA labels.
+            max_node_length: The maximum node length.
+            max_edge_length: The maximum edge length.
+            device: The device to run the model on.
+
+        Returns:
+            The model outputs.
+        """
         outputs = self.encoder(**x)
         sequence_outputs = outputs[0]
         cls_outputs = sequence_outputs[:, 0, :]
@@ -93,10 +142,6 @@ class PRover(nn.Module):
             batch_size = node_labels.shape[0]
         embedding_dim = sequence_outputs.shape[2]
 
-        # print(max_node_length)
-        # print(max_edge_length)
-        # print(batch_size)
-        # print(embedding_dim)
         batch_node_embedding = torch.zeros(
             (batch_size, max_node_length, embedding_dim)
         ).to(device)
@@ -125,7 +170,6 @@ class PRover(nn.Module):
                             (sample_node_embedding, rf_embedding), dim=0
                         )
 
-            # Add the NAF output at the end
             sample_node_embedding = torch.cat(
                 (sample_node_embedding, naf_outputs[batch_index].unsqueeze(0)), dim=0
             )
@@ -144,7 +188,6 @@ class PRover(nn.Module):
             )
 
             if sample_node_embedding.shape[0] < max_node_length:
-                # Append 0s at the end (these will be ignored for loss)
                 sample_node_embedding = torch.cat(
                     (
                         sample_node_embedding,
@@ -154,10 +197,6 @@ class PRover(nn.Module):
                     ),
                     dim=0,
                 )
-            # print(sample_node_embedding.shape)
-
-            # print(max_edge_length)
-            # print(sample_edge_embedding.shape[0])
 
             sample_edge_embedding = torch.cat(
                 (
@@ -172,10 +211,6 @@ class PRover(nn.Module):
                 dim=0,
             )
 
-            # print(max_edge_length)
-            # print(len(sample_edge_embedding))
-            # print(sample_edge_embedding.shape)
-
             batch_node_embedding[batch_index, :, :] = sample_node_embedding
             batch_edge_embedding[batch_index, :, :] = sample_edge_embedding
 
@@ -189,8 +224,6 @@ class PRover(nn.Module):
             node_loss = loss_fct(
                 node_logits.view(-1, self.num_labels), node_labels.view(-1)
             )
-            # print(edge_logits.view(-1, self.num_labels_edge))
-            # print(edge_labels.view(-1))
             edge_loss = loss_fct(
                 edge_logits.view(-1, self.num_labels_edge), edge_labels.view(-1)
             )
@@ -200,6 +233,18 @@ class PRover(nn.Module):
         return outputs
 
     def predict(self, triples, rules, question, device: str = "cpu"):
+        """
+        Predicts the label for a given question.
+
+        Args:
+            triples: The triples.
+            rules: The rules.
+            question: The question.
+            device: The device to run the model on.
+
+        Returns:
+            The predicted label.
+        """
         with torch.no_grad():
             context_tokens = []
             proof_offset = []

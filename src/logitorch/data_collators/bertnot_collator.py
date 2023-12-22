@@ -6,23 +6,28 @@ from transformers import AutoTokenizer
 
 
 class BERTNOTWiki20KCollator:
-    def __init__(self, pretrained_tokenizer: str) -> None:
-        """
-        It takes in a pretrained tokenizer
+    """
+    Collator for BERTNOTWiki20K dataset.
 
-        :param pretrained_tokenizer: The name of the pretrained tokenizer to use
-        :type pretrained_tokenizer: str
-        """
+    Args:
+        pretrained_tokenizer (str): Pretrained tokenizer name or path.
+
+    Returns:
+        Tuple[Dict[str, torch.Tensor], torch.Tensor]: Batch of tokenized sentences and labels.
+    """
+
+    def __init__(self, pretrained_tokenizer: str) -> None:
         self.tokenizer = AutoTokenizer.from_pretrained(pretrained_tokenizer)
 
     def __call__(self, batch) -> Tuple[Dict[str, torch.Tensor], torch.Tensor]:
         """
-        The function takes in a batch of data, and returns a tuple of two elements: a dictionary of
-        tensors, and a tensor
+        Tokenizes and collates a batch of sentences and labels.
 
-        :param batch: A list of tuples of the form (sentence, label)
-        :return: A tuple of two tensors. The first tensor is the input tensor, and the second tensor is
-        the output tensor.
+        Args:
+            batch: List of tuples containing sentence and label.
+
+        Returns:
+            Tuple[Dict[str, torch.Tensor], torch.Tensor]: Batch of tokenized sentences and labels.
         """
         sentences = []
         labels = []
@@ -52,23 +57,28 @@ class BERTNOTWiki20KCollator:
 
 
 class BERTNOTTextualEntailmentCollator:
-    def __init__(self, pretrained_tokenizer: str) -> None:
-        """
-        It takes in a pretrained tokenizer
+    """
+    Collator for BERTNOTTextualEntailment dataset.
 
-        :param pretrained_tokenizer: The name of the pre-trained tokenizer to use
-        :type pretrained_tokenizer: str
-        """
+    Args:
+        pretrained_tokenizer (str): Pretrained tokenizer name or path.
+
+    Returns:
+        Tuple[Dict[str, torch.Tensor], torch.Tensor]: Batch of tokenized premises, hypotheses, and labels.
+    """
+
+    def __init__(self, pretrained_tokenizer: str) -> None:
         self.tokenizer = AutoTokenizer.from_pretrained(pretrained_tokenizer)
 
     def __call__(self, batch) -> Tuple[Dict[str, torch.Tensor], torch.Tensor]:
         """
-        The function takes in a batch of data, and returns a tuple of two elements: a dictionary of
-        tensors, and a tensor
+        Tokenizes and collates a batch of premises, hypotheses, and labels.
 
-        :param batch: A list of tuples of the form (premise, hypothesis, label)
-        :return: A tuple of two tensors. The first tensor is the input tensor, and the second tensor is
-        the output tensor.
+        Args:
+            batch: List of tuples containing premise, hypothesis, and label.
+
+        Returns:
+            Tuple[Dict[str, torch.Tensor], torch.Tensor]: Batch of tokenized premises, hypotheses, and labels.
         """
         premises = []
         hypotheses = []

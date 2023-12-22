@@ -7,22 +7,32 @@ from logitorch.datasets.proof_qa.proofwriter_dataset import PROOFWRITER_LABEL_TO
 
 
 class RuleTakerCollator:
+    """
+    A collator class for RuleTaker model.
+
+    This collator is used to preprocess and collate data for RuleTaker model training or inference.
+
+    Args:
+        None
+
+    Returns:
+        Tuple[Dict[str, torch.Tensor], torch.Tensor]: A tuple containing the batch inputs and labels.
+    """
+
     def __init__(self) -> None:
-        """
-        The function __init__() is a constructor that initializes the tokenizer variable to the
-        RobertaTokenizer.from_pretrained() function
-        """
         self.tokenizer = RobertaTokenizer.from_pretrained(
             "LIAMF-USP/roberta-large-finetuned-race"
         )
 
     def __call__(self, batch) -> Tuple[Dict[str, torch.Tensor], torch.Tensor]:
         """
-        The function takes in a batch of data, and returns a tuple of two elements: the first element is
-        a dictionary of tensors, and the second element is a tensor
+        Preprocesses and collates the batch data.
 
-        :param batch: A list of tuples of the form (context, question, label, depth)
-        :return: A tuple of two tensors.
+        Args:
+            batch: A list of tuples containing the context, question, label, and additional information.
+
+        Returns:
+            Tuple[Dict[str, torch.Tensor], torch.Tensor]: A tuple containing the batch inputs and labels.
         """
         contexts = []
         questions = []
@@ -38,22 +48,32 @@ class RuleTakerCollator:
 
 
 class RuleTakerProofWriterCollator:
+    """
+    A collator class for RuleTaker with ProofWriter model.
+
+    This collator is used to preprocess and collate data for RuleTaker with ProofWriter model training or inference.
+
+    Args:
+        None
+
+    Returns:
+        Tuple[Dict[str, torch.Tensor], torch.Tensor]: A tuple containing the batch inputs and labels.
+    """
+
     def __init__(self) -> None:
-        """
-        The function __init__() is a constructor that initializes the tokenizer variable to the
-        RobertaTokenizer.from_pretrained() function
-        """
         self.tokenizer = RobertaTokenizer.from_pretrained(
             "LIAMF-USP/roberta-large-finetuned-race"
         )
 
     def __call__(self, batch) -> Tuple[Dict[str, torch.Tensor], torch.Tensor]:
         """
-        It takes a batch of data and returns a tuple of two tensors. The first tensor is a dictionary of
-        tensors, and the second tensor is a tensor of labels.
+        Preprocesses and collates the batch data.
 
-        :param batch: A list of tuples of the form (context, question, label)
-        :return: A tuple of two tensors.
+        Args:
+            batch: A list of tuples containing the context, question, label, and additional information.
+
+        Returns:
+            Tuple[Dict[str, torch.Tensor], torch.Tensor]: A tuple containing the batch inputs and labels.
         """
         contexts = []
         questions = []

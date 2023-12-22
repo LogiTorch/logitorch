@@ -21,6 +21,23 @@ def ruletaker_pipeline(
     accelerator: str = "cpu",
     gpus: int = 0,
 ):
+    """
+    Runs the RuleTaker pipeline for training a model.
+
+    Args:
+        model (nn.Module): The model to be trained.
+        dataset_name (str): The name of the dataset.
+        saved_model_path (str): The path to save the trained model.
+        saved_model_name (str): The name of the saved model file.
+        batch_size (int): The batch size for training.
+        epochs (int): The number of training epochs.
+        accelerator (str, optional): The accelerator to use for training. Defaults to "cpu".
+        gpus (int, optional): The number of GPUs to use for training. Defaults to 0.
+
+    Raises:
+        ModelNotCompatibleError: If the model is not compatible with RuleTaker.
+
+    """
     try:
         if isinstance(model, RULETAKER_COMPATIBLE_MODELS):
             if isinstance(model, PLRuleTaker):

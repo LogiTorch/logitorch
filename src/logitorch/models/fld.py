@@ -7,12 +7,13 @@ from transformers.modeling_outputs import SequenceClassifierOutput
 
 
 class FLDAllAtOnceProver(nn.Module):
-    """A T5-based prover that generates whole a proof all at once.
-
-       Note that this prover is slightly different from the "step-wise" prover used in paper,
-       which generates a proof step-by-step. This simple prover yields slightly better performance.
-    """
     def __init__(self, pretrained_t5_model: str) -> None:
+        """
+        Initializes the FLDAllAtOnceProver model.
+
+        Args:
+            pretrained_t5_model (str): The name or path of the pretrained T5 model.
+        """
         super().__init__()
         self.model = T5ForConditionalGeneration.from_pretrained(pretrained_t5_model)
         self.tokenizer = T5Tokenizer.from_pretrained(pretrained_t5_model)
@@ -20,6 +21,16 @@ class FLDAllAtOnceProver(nn.Module):
     def forward(
         self, x: Dict[str, torch.Tensor], y: torch.Tensor = None
     ) -> SequenceClassifierOutput:
+        """
+        Performs a forward pass of the model.
+
+        Args:
+            x (Dict[str, torch.Tensor]): The input tensors.
+            y (torch.Tensor, optional): The labels tensor. Defaults to None.
+
+        Returns:
+            SequenceClassifierOutput: The output of the model.
+        """
         if y is not None:
             return self.model(**x, labels=y)
         return self.model(**x)
@@ -31,6 +42,18 @@ class FLDAllAtOnceProver(nn.Module):
         max_length: int = 1000,
         device: str = "cpu",
     ) -> List[str]:
+        """
+        Generates predictions based on the given prompt.
+
+        Args:
+            prompt (str): The input prompt.
+            num_beams (int, optional): The number of beams for beam search. Defaults to 5.
+            max_length (int, optional): The maximum length of the generated sequence. Defaults to 1000.
+            device (str, optional): The device to run the model on. Defaults to "cpu".
+
+        Returns:
+            List[str]: The generated predictions.
+        """
         with torch.no_grad():
             tokenized_x = self.tokenizer(
                 prompt, padding=True, return_tensors="pt"

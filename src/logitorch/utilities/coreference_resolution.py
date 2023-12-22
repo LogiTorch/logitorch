@@ -11,10 +11,16 @@ class CoreferenceResolution:
     def __init__(self) -> None:
         self.model = pretrained.load_predictor("coref-spanbert")
 
-    def predict(self, passage: str) -> Dict[Tuple[int, int], str]:
-        pass
-
     def coref_resolved(self, passage: str) -> str:
+        """
+        Resolves coreferences in the given passage.
+
+        Args:
+            passage (str): The input passage containing coreferences.
+
+        Returns:
+            str: The passage with resolved coreferences.
+        """
         return self.model.coref_resolved(passage)
 
 

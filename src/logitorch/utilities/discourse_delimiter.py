@@ -109,6 +109,10 @@ PUNCTUATION_DELIMETERS = {".", ",", ";", ":"}
 
 
 class DiscourseDelimiter:
+    """
+    A class that provides methods to split a passage into educational units (EDUs) based on explicit connectives and punctuation delimiters.
+    """
+
     def __init__(self) -> None:
         self.regex_explicit_connectives = "|".join(
             rf"\b{conn}\b" for conn in EXCPLICIT_CONNECTIVES
@@ -118,6 +122,15 @@ class DiscourseDelimiter:
         )
 
     def split_edu(self, passage: str) -> str:
+        """
+        Splits the passage into educational units (EDUs) by replacing explicit connectives with "<CONNECTIVE>" and punctuation delimiters with "<PUNCT>".
+
+        Args:
+            passage (str): The passage to be split into EDUs.
+
+        Returns:
+            str: The passage with explicit connectives and punctuation delimiters replaced by "<CONNECTIVE>" and "<PUNCT>" respectively.
+        """
         edu_explicit_connectives = "<CONNECTIVE>".join(
             edu for edu in self.split_explicit_connectives(passage)
         )
@@ -127,11 +140,29 @@ class DiscourseDelimiter:
         return edus
 
     def split_explicit_connectives(self, passage: str) -> List[str]:
+        """
+        Splits the passage into segments based on explicit connectives.
+
+        Args:
+            passage (str): The passage to be split.
+
+        Returns:
+            List[str]: A list of segments split based on explicit connectives.
+        """
         split_passage = re.split(self.regex_explicit_connectives, passage)
         split_passage = [x for x in split_passage if x.strip()]
         return split_passage
 
     def split_punctuation_delimiters(self, passage: str) -> List[str]:
+        """
+        Splits the passage into segments based on punctuation delimiters.
+
+        Args:
+            passage (str): The passage to be split.
+
+        Returns:
+            List[str]: A list of segments split based on punctuation delimiters.
+        """
         split_passage = re.split(self.regex_punctuation_delimiters, passage)
         split_passage = [x for x in split_passage if x.strip()]
         return split_passage
