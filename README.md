@@ -49,7 +49,7 @@ Datasets implemented in LogiTorch:
 - [x] [FOLIO](https://arxiv.org/abs/2209.00840) <sub>(CC-BY-SA-4.0 LICENSE)</sub>
 - [x] [FLD](https://proceedings.mlr.press/v202/morishita23a.html)  <sub>(CC-BY-SA-4.0 LICENSE)</sub>
 - [ ] [LogiQA2.0](https://arxiv.org/abs/2007.08124)
-- [ ] [LogiQA20 NLI](https://arxiv.org/abs/2007.08124) 
+- [ ] [LogiQA2.0 NLI](https://arxiv.org/abs/2007.08124) 
 - [ ] [HELP](https://aclanthology.org/S19-1027.pdf) 
 - [ ] [SimpleLogic](https://arxiv.org/abs/2205.11502)
 - [ ] [RobustLR](https://arxiv.org/abs/2205.12598)
