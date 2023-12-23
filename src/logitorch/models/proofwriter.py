@@ -40,11 +40,11 @@ class ProofWriter(nn.Module):
         Performs forward pass of the model.
 
         Args:
-            |x (Dict[str, torch.Tensor]): The input tensors for the model.
-            |y (torch.Tensor, optional): The labels for the model. Defaults to None.
+            | x (Dict[str, torch.Tensor]): The input tensors for the model.
+            | y (torch.Tensor, optional): The labels for the model. Defaults to None.
 
         Returns:
-            |SequenceClassifierOutput: The output of the model.
+            | SequenceClassifierOutput: The output of the model.
         """
         if y is not None:
             return self.model(**x, labels=y)
