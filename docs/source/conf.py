@@ -39,7 +39,7 @@ extensions = [
 ]
 
 autoapi_type = "python"
-autoapi_dirs = ["../../logitorch"]
+autoapi_dirs = ["../../src"]
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ["_templates"]
