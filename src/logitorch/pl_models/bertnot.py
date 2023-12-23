@@ -12,6 +12,28 @@ from logitorch.models.bertnot import BERTNOT
 
 
 class PLBERTNOT(pl.LightningModule):
+    """
+    PyTorch Lightning module for BERTNOT model.
+
+    Args:
+        pretrained_model (str): Pretrained model name or path.
+        task (str): Task type, either "mlm" (masked language modeling) or "te" (text entailment).
+        num_labels (int): Number of labels for the classification task.
+        learning_rate (float): Learning rate for the optimizer.
+        weight_decay (float): Weight decay for the optimizer.
+        batch_size (int): Batch size for the data loader.
+        gamma (float): Gamma value for the loss calculation.
+
+    Attributes:
+        model (BERTNOT): BERTNOT model instance.
+        pretrained_model (str): Pretrained model name or path.
+        learning_rate (float): Learning rate for the optimizer.
+        weight_decay (float): Weight decay for the optimizer.
+        batch_size (int): Batch size for the data loader.
+        gamma (float): Gamma value for the loss calculation.
+        task (str): Task type, either "mlm" (masked language modeling) or "te" (text entailment).
+    """
+
     def __init__(
         self,
         pretrained_model: str,
@@ -34,7 +56,18 @@ class PLBERTNOT(pl.LightningModule):
         if self.task == "mlm":
             self.automatic_optimization = False
 
-    def forward(self, x, y=None, loss="cross_entropy"):  # type: ignore
+    def forward(self, x, y=None, loss="cross_entropy"):
+        """
+        Forward pass of the PLBERTNOT model.
+
+        Args:
+            x: Input data.
+            y: Target labels.
+            loss (str): Loss function type.
+
+        Returns:
+            torch.Tensor: Model output.
+        """
         if self.task == "mlm":
             if y is not None:
                 return self.model(x, y, task="mlm", loss=loss)
@@ -45,7 +78,12 @@ class PLBERTNOT(pl.LightningModule):
             return self.model(x, task="te")
 
     def configure_optimizers(self):
+        """
+        Configure the optimizer and learning rate scheduler.
 
+        Returns:
+            Tuple[List[torch.optim.Optimizer], List[torch.optim.lr_scheduler._LRScheduler]]: Optimizers and schedulers.
+        """
         paramaters = [
             {"params": self.model.model.parameters()},
             {"params": self.model.sequence_classifier.parameters()},
@@ -64,7 +102,12 @@ class PLBERTNOT(pl.LightningModule):
         return [optimizer], [scheduler]
 
     def train_dataloader(self):
+        """
+        Get the training data loader.
 
+        Returns:
+            Dict[str, DataLoader]: Dictionary of data loaders.
+        """
         negated_wiki20k_dataset = Wiki20KDataset("negated_lm_wiki20k")
         positive_wiki20k_dataset = Wiki20KDataset("positive_lm_wiki20k")
         wiki20k_dataset = Wiki20KDataset("lm_wiki20k")
@@ -87,8 +130,17 @@ class PLBERTNOT(pl.LightningModule):
             "wiki20k": loader_wiki20k,
         }
 
-    def training_step(self, train_batch: Tuple[Dict[str, torch.Tensor], torch.Tensor], batch_idx: int):  # type: ignore
+    def training_step(self, train_batch: Tuple[Dict[str, torch.Tensor], torch.Tensor], batch_idx: int):
+        """
+        Training step of the PLBERTNOT model.
 
+        Args:
+            train_batch: Batch of training data.
+            batch_idx (int): Batch index.
+
+        Returns:
+            torch.Tensor: Loss value.
+        """
         if self.task == "mlm":
             optimizer = self.optimizers()
             x, y = train_batch["negated_wiki20k"]
@@ -124,7 +176,14 @@ class PLBERTNOT(pl.LightningModule):
             self.log_dict({"train_loss": loss}, prog_bar=True, on_epoch=True)
             return loss
 
-    def validation_step(self, val_batch: Tuple[Dict[str, torch.Tensor], torch.Tensor], batch_idx: int) -> None:  # type: ignore
+    def validation_step(self, val_batch: Tuple[Dict[str, torch.Tensor], torch.Tensor], batch_idx: int):
+        """
+        Validation step of the PLBERTNOT model.
+
+        Args:
+            val_batch: Batch of validation data.
+            batch_idx (int): Batch index.
+        """
         if self.task == "mlm":
             x, y = val_batch["negated_wiki20k"]
             loss_ul_negated_wiki20k, _ = self(x, y, loss="unlikelihood")
@@ -147,49 +206,16 @@ class PLBERTNOT(pl.LightningModule):
             self.log_dict({"val_loss": loss}, prog_bar=True, on_epoch=True)
 
     def predict(self, context: str, hypothesis: str = None, task="mlm", device="cpu"):
+        """
+        Make predictions using the PLBERTNOT model.
+
+        Args:
+            context (str): Input context.
+            hypothesis (str): Input hypothesis (optional).
+            task (str): Task type, either "mlm" (masked language modeling) or "te" (text entailment).
+            device (str): Device to run the model on.
+
+        Returns:
+            torch.Tensor: Model predictions.
+        """
         return self.model.predict(context, hypothesis, task, device)
-
-
-# class PLBERTNOT(pl.LightningModule):
-#     def __init__(
-#         self,
-#         load_path_model: str = None,
-#         pretrained_model: str = "bert-base-uncased",
-#         num_labels=2,
-#         learning_rate: float = 2e-5,
-#         batch_size: int = 32,
-#     ) -> None:
-#         super().__init__()
-#         if load_path_model is not None:
-#             self.model = torch.load(load_path_model)
-#         else:
-#             self.model = BERTNOT(pretrained_model, num_labels)
-#         self.num_labels = num_labels
-#         self.learning_rate = learning_rate
-#         self.batch_size = batch_size
-
-#     def forward(self, x, y=None):  # type: ignore
-#         if y is not None:
-#             return self.model(x, y, task="te")
-#         return self.model(x, y, task="te")
-
-#     def predict(self, context: str, hypothesis: str = None, task="mlm", device="cpu"):
-#         return self.model.predict(context, hypothesis, task, device)
-
-#     def configure_optimizers(self):
-#         paramaters = [
-#             {"params": self.model.model.parameters()},
-#             {"params": self.model.sequence_classifier.parameters()},
-#         ]
-#         return Adam(paramaters, lr=self.learning_rate)
-
-#     def training_step(self, train_batch: Tuple[Dict[str, torch.Tensor], torch.Tensor], batch_idx: int):  # type: ignore
-#         x, y = train_batch
-#         loss, _ = self(x, y)
-#         self.log_dict({"train_loss": loss}, prog_bar=True, on_epoch=True)
-#         return loss
-
-#     def validation_step(self, val_batch: Tuple[Dict[str, torch.Tensor], torch.Tensor], batch_idx: int) -> None:  # type: ignore
-#         x, y = val_batch
-#         loss, _ = self(x, y)
-#         self.log_dict({"val_loss": loss}, prog_bar=True, on_epoch=True)
