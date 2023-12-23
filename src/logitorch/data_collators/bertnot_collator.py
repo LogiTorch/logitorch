@@ -10,10 +10,10 @@ class BERTNOTWiki20KCollator:
     Collator for BERTNOTWiki20K dataset.
 
     Args:
-        pretrained_tokenizer (str): Pretrained tokenizer name or path.
+        | pretrained_tokenizer (str): Pretrained tokenizer name or path.
 
     Returns:
-        Tuple[Dict[str, torch.Tensor], torch.Tensor]: Batch of tokenized sentences and labels.
+        | Tuple[Dict[str, torch.Tensor], torch.Tensor]: Batch of tokenized sentences and labels.
     """
 
     def __init__(self, pretrained_tokenizer: str) -> None:
@@ -24,10 +24,10 @@ class BERTNOTWiki20KCollator:
         Tokenizes and collates a batch of sentences and labels.
 
         Args:
-            batch: List of tuples containing sentence and label.
+            | batch: List of tuples containing sentence and label.
 
         Returns:
-            Tuple[Dict[str, torch.Tensor], torch.Tensor]: Batch of tokenized sentences and labels.
+            | Tuple[Dict[str, torch.Tensor], torch.Tensor]: Batch of tokenized sentences and labels.
         """
         sentences = []
         labels = []
@@ -61,10 +61,10 @@ class BERTNOTTextualEntailmentCollator:
     Collator for BERTNOTTextualEntailment dataset.
 
     Args:
-        pretrained_tokenizer (str): Pretrained tokenizer name or path.
+        | pretrained_tokenizer (str): Pretrained tokenizer name or path.
 
     Returns:
-        Tuple[Dict[str, torch.Tensor], torch.Tensor]: Batch of tokenized premises, hypotheses, and labels.
+        | Tuple[Dict[str, torch.Tensor], torch.Tensor]: Batch of tokenized premises, hypotheses, and labels.
     """
 
     def __init__(self, pretrained_tokenizer: str) -> None:
@@ -75,10 +75,10 @@ class BERTNOTTextualEntailmentCollator:
         Tokenizes and collates a batch of premises, hypotheses, and labels.
 
         Args:
-            batch: List of tuples containing premise, hypothesis, and label.
+            | batch: List of tuples containing premise, hypothesis, and label.
 
         Returns:
-            Tuple[Dict[str, torch.Tensor], torch.Tensor]: Batch of tokenized premises, hypotheses, and labels.
+            | Tuple[Dict[str, torch.Tensor], torch.Tensor]: Batch of tokenized premises, hypotheses, and labels.
         """
         premises = []
         hypotheses = []

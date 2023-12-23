@@ -7,7 +7,7 @@ class RuleSelectionProofWriterIterCollator:
         Initializes the RuleSelectionProofWriterIterCollator.
 
         Args:
-            pretrained_roberta_tokenizer (str): The name or path of the pretrained Roberta tokenizer.
+            | pretrained_roberta_tokenizer (str): The name or path of the pretrained Roberta tokenizer.
         """
         self.tokenizer = RobertaTokenizer.from_pretrained(pretrained_roberta_tokenizer)
 
@@ -16,10 +16,10 @@ class RuleSelectionProofWriterIterCollator:
         Processes a batch of data.
 
         Args:
-            batch: The input batch.
+            | batch: The input batch.
 
         Returns:
-            tuple: A tuple containing the processed batch input and the corresponding labels.
+            | tuple: A tuple containing the processed batch input and the corresponding labels.
         """
         batch_x = []
         batch_y = []

@@ -21,22 +21,22 @@ class PRoverProofWriterCollator:
     A collator class for processing data in the PRoverProofWriter format.
 
     Args:
-        pretrained_roberta_tokenizer (str): The name or path of the pretrained RoBERTa tokenizer.
+        | pretrained_roberta_tokenizer (str): The name or path of the pretrained RoBERTa tokenizer.
 
     Attributes:
-        tokenizer (RobertaTokenizer): The pretrained RoBERTa tokenizer.
+        | tokenizer (RobertaTokenizer): The pretrained RoBERTa tokenizer.
 
     Methods:
-        get_proof_graph_with_fail(proof_str: str) -> Tuple[List[str], List[str]]:
+        | get_proof_graph_with_fail(proof_str: str) -> Tuple[List[str], List[str]]:
             Extracts the proof graph and edges from a proof string with a "FAIL" node.
         
-        get_proof_graph(proof_str: str) -> Tuple[List[str], List[Tuple[str, str]]]:
+        | get_proof_graph(proof_str: str) -> Tuple[List[str], List[Tuple[str, str]]]:
             Extracts the proof graph and edges from a proof string.
         
-        get_node_edge_label_constrained(x: str) -> Tuple[List[int], List[np.ndarray]]:
+        | get_node_edge_label_constrained(x: str) -> Tuple[List[int], List[np.ndarray]]:
             Generates node and edge labels for a given input.
         
-        __call__(batch) -> Tuple[Dict[str, torch.Tensor], torch.Tensor, torch.Tensor, torch.Tensor, torch.Tensor]:
+        | __call__(batch) -> Tuple[Dict[str, torch.Tensor], torch.Tensor, torch.Tensor, torch.Tensor, torch.Tensor]:
             Collates a batch of data into tokenized tensors.
 
     """
@@ -49,10 +49,10 @@ class PRoverProofWriterCollator:
         Extracts the proof graph and edges from a proof string with a "FAIL" node.
 
         Args:
-            proof_str (str): The proof string.
+            | proof_str (str): The proof string.
 
         Returns:
-            Tuple[List[str], List[str]]: A tuple containing the list of nodes and the list of edges.
+            | Tuple[List[str], List[str]]: A tuple containing the list of nodes and the list of edges.
         """
         proof_str = proof_str[:-2].split("=")[1].strip()[1:-1]
         nodes = proof_str.split(" <- ")
@@ -73,10 +73,10 @@ class PRoverProofWriterCollator:
         Extracts the proof graph and edges from a proof string.
 
         Args:
-            proof_str (str): The proof string.
+            | proof_str (str): The proof string.
 
         Returns:
-            Tuple[List[str], List[Tuple[str, str]]]: A tuple containing the list of nodes and the list of edges.
+            | Tuple[List[str], List[Tuple[str, str]]]: A tuple containing the list of nodes and the list of edges.
         """
         stack = []
         last_open = 0
@@ -145,10 +145,10 @@ class PRoverProofWriterCollator:
         Generates node and edge labels for a given input.
 
         Args:
-            x (str): The input.
+            | x (str): The input.
 
         Returns:
-            Tuple[List[int], List[np.ndarray]]: A tuple containing the list of node labels and the list of edge labels.
+            | Tuple[List[int], List[np.ndarray]]: A tuple containing the list of node labels and the list of edge labels.
         """
         proofs = x[4]
         nrule = len(x[1])
@@ -225,10 +225,10 @@ class PRoverProofWriterCollator:
         Collates a batch of data into tokenized tensors.
 
         Args:
-            batch: The batch of data.
+            | batch: The batch of data.
 
         Returns:
-            Tuple[Dict[str, torch.Tensor], torch.Tensor, torch.Tensor, torch.Tensor, torch.Tensor]: A tuple containing the tokenized batch, proof offsets, node labels, edge labels, and labels.
+            | Tuple[Dict[str, torch.Tensor], torch.Tensor, torch.Tensor, torch.Tensor, torch.Tensor]: A tuple containing the tokenized batch, proof offsets, node labels, edge labels, and labels.
         """
         contexts = []
         proofs_offsets = []

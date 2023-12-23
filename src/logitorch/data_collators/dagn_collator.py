@@ -10,7 +10,7 @@ class DAGNCollator:
         Initializes the DAGNCollator object.
 
         Args:
-            pretrained_tokenizer (str): The name or path of the pretrained tokenizer to be used.
+            | pretrained_tokenizer (str): The name or path of the pretrained tokenizer to be used.
         """
         self.tokenizer = RobertaTokenizer.from_pretrained(pretrained_tokenizer)
 
@@ -19,10 +19,10 @@ class DAGNCollator:
         Processes a batch of data.
 
         Args:
-            batch: The input batch of data.
+            | batch: The input batch of data.
 
         Returns:
-            A tuple containing the processed batch inputs and the corresponding labels.
+            | A tuple containing the processed batch inputs and the corresponding labels.
         """
         contexts = []
         questions = []
@@ -43,12 +43,12 @@ def find_explicit_connectives(context: str, question: str, answers_list: List[st
     Finds explicit connectives in the given context, question, and answers.
 
     Args:
-        context (str): The context text.
-        question (str): The question text.
-        answers_list (List[str]): The list of answer options.
+        | context (str): The context text.
+        | question (str): The question text.
+        | answers_list (List[str]): The list of answer options.
 
     Returns:
-        None
+        | None
     """
     tokenizer = RobertaTokenizer.from_pretrained("roberta-large")
     tokenized_context = tokenizer.tokenize(context)

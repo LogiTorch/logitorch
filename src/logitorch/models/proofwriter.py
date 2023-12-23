@@ -62,14 +62,14 @@ class ProofWriter(nn.Module):
         Generates proof given context and question.
 
         Args:
-            context (str): The context for proof generation.
-            question (str): The question for proof generation.
-            num_beams (int, optional): The number of beams for beam search. Defaults to 5.
-            max_length (int, optional): The maximum length of the generated proof. Defaults to 120.
-            device (str, optional): The device to run the model on. Defaults to "cpu".
+            | context (str): The context for proof generation.
+            | question (str): The question for proof generation.
+            | num_beams (int, optional): The number of beams for beam search. Defaults to 5.
+            | max_length (int, optional): The maximum length of the generated proof. Defaults to 120.
+            | device (str, optional): The device to run the model on. Defaults to "cpu".
 
         Returns:
-            List[str]: The generated proof.
+            | List[str]: The generated proof.
         """
         with torch.no_grad():
             tokenized_x = self.tokenizer(

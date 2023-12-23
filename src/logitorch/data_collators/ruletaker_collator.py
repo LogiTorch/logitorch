@@ -11,12 +11,6 @@ class RuleTakerCollator:
     A collator class for RuleTaker model.
 
     This collator is used to preprocess and collate data for RuleTaker model training or inference.
-
-    Args:
-        None
-
-    Returns:
-        Tuple[Dict[str, torch.Tensor], torch.Tensor]: A tuple containing the batch inputs and labels.
     """
 
     def __init__(self) -> None:
@@ -29,10 +23,10 @@ class RuleTakerCollator:
         Preprocesses and collates the batch data.
 
         Args:
-            batch: A list of tuples containing the context, question, label, and additional information.
+            | batch: A list of tuples containing the context, question, label, and additional information.
 
         Returns:
-            Tuple[Dict[str, torch.Tensor], torch.Tensor]: A tuple containing the batch inputs and labels.
+            | Tuple[Dict[str, torch.Tensor], torch.Tensor]: A tuple containing the batch inputs and labels.
         """
         contexts = []
         questions = []
@@ -50,14 +44,8 @@ class RuleTakerCollator:
 class RuleTakerProofWriterCollator:
     """
     A collator class for RuleTaker with ProofWriter model.
-
+    
     This collator is used to preprocess and collate data for RuleTaker with ProofWriter model training or inference.
-
-    Args:
-        None
-
-    Returns:
-        Tuple[Dict[str, torch.Tensor], torch.Tensor]: A tuple containing the batch inputs and labels.
     """
 
     def __init__(self) -> None:
@@ -70,10 +58,10 @@ class RuleTakerProofWriterCollator:
         Preprocesses and collates the batch data.
 
         Args:
-            batch: A list of tuples containing the context, question, label, and additional information.
+            | batch: A list of tuples containing the context, question, label, and additional information.
 
         Returns:
-            Tuple[Dict[str, torch.Tensor], torch.Tensor]: A tuple containing the batch inputs and labels.
+            | Tuple[Dict[str, torch.Tensor], torch.Tensor]: A tuple containing the batch inputs and labels.
         """
         contexts = []
         questions = []

@@ -18,10 +18,10 @@ class FLDProofGenerationAllCollator:
         Initializes the FLDProofGenerationAllCollator.
 
         Args:
-            pretrained_t5_tokenizer (str): The path or name of the pretrained T5 tokenizer.
-            max_src_length (int, optional): The maximum length of the source sequence. Defaults to 1024.
-            max_tgt_length (int, optional): The maximum length of the target sequence. Defaults to 512.
-            log_examples (bool, optional): Whether to log the examples during collation. Defaults to False.
+            | pretrained_t5_tokenizer (str): The path or name of the pretrained T5 tokenizer.
+            | max_src_length (int, optional): The maximum length of the source sequence. Defaults to 1024.
+            | max_tgt_length (int, optional): The maximum length of the target sequence. Defaults to 512.
+            | log_examples (bool, optional): Whether to log the examples during collation. Defaults to False.
         """
         self.tokenizer = T5Tokenizer.from_pretrained(pretrained_t5_tokenizer)
         self.log_examples = log_examples
@@ -33,10 +33,10 @@ class FLDProofGenerationAllCollator:
         Collates a batch of examples.
 
         Args:
-            batch (List[Dict]): A list of dictionaries representing the examples.
+            | batch (List[Dict]): A list of dictionaries representing the examples.
 
         Returns:
-            Tuple[Dict[str, torch.Tensor], torch.Tensor]: A tuple containing the collated source sequences and target sequences.
+            | Tuple[Dict[str, torch.Tensor], torch.Tensor]: A tuple containing the collated source sequences and target sequences.
         """
         xs: List[str] = []
         ys: List[str] = []

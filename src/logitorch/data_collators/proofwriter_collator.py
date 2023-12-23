@@ -10,7 +10,7 @@ class ProofWriterQACollator:
         Initializes the ProofWriterQACollator.
 
         Args:
-            pretrained_t5_tokenizer (str): The name or path of the pretrained T5 tokenizer.
+            | pretrained_t5_tokenizer (str): The name or path of the pretrained T5 tokenizer.
         """
         self.tokenizer = T5Tokenizer.from_pretrained(pretrained_t5_tokenizer)
 
@@ -19,10 +19,10 @@ class ProofWriterQACollator:
         Processes a batch of data.
 
         Args:
-            batch: The input batch.
+            | batch: The input batch.
 
         Returns:
-            Tuple[Dict[str, torch.Tensor], torch.Tensor]: The processed batch.
+            | Tuple[Dict[str, torch.Tensor], torch.Tensor]: The processed batch.
         """
         contexts = []
         questions = []
@@ -56,7 +56,7 @@ class ProofWriterProofGenerationAllCollator:
         Initializes the ProofWriterProofGenerationAllCollator.
 
         Args:
-            pretrained_t5_tokenizer (str): The name or path of the pretrained T5 tokenizer.
+            | pretrained_t5_tokenizer (str): The name or path of the pretrained T5 tokenizer.
         """
         self.tokenizer = T5Tokenizer.from_pretrained(pretrained_t5_tokenizer)
 
@@ -65,10 +65,10 @@ class ProofWriterProofGenerationAllCollator:
         Processes a batch of data.
 
         Args:
-            batch: The input batch.
+            | batch: The input batch.
 
         Returns:
-            Tuple[Dict[str, torch.Tensor], torch.Tensor]: The processed batch.
+            | Tuple[Dict[str, torch.Tensor], torch.Tensor]: The processed batch.
         """
         contexts = []
         questions = []
