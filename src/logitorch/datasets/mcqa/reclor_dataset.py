@@ -18,12 +18,17 @@ RECLOR_DATASET_FOLDER = f"{DATASETS_FOLDER}/{RECLOR_DATASET}"
 
 
 class ReClorDataset(AbstractMCQADataset):
+    """A dataset class for ReClor, a Multiple Choice Question Answering dataset."""
+
     def __init__(self, split_set: str) -> None:
         """
-        The constructor takes in a string as an argument and checks if it is in the list of split sets
+        Initialize the ReClorDataset.
 
-        :param split_set: The split set to use
-        :type split_set: str
+        Args:
+            split_set (str): The split set of the dataset (train, val, or test).
+
+        Raises:
+            SplitSetError: If an invalid split set is provided.
         """
         super().__init__()
         try:
@@ -48,17 +53,17 @@ class ReClorDataset(AbstractMCQADataset):
         self, contexts_key: str, questions_key: str, answers_key: str, labels_key: str
     ) -> Tuple[List[str], List[str], List[List[str]], List[int]]:
         """
-        This function reads a json file and returns a tuple of 4 lists: contexts, questions, answers, and labels
+        Read the ReClor dataset.
 
-        :param cnotexts_key: The key in the JSON file that contains the context
-        :type contexts_key: str
-        :param questions_key: The key in the JSON file that contains the questions
-        :type questions_key: str
-        :param answers_key: The key in the JSON file that contains the answers
-        :type answers_key: str
-        :param labels_key: The key in the JSON file that contains the labels
-        :type labels_key: str
-        :return: A tuple of lists.
+        Args:
+            contexts_key (str): The key for the contexts in the JSON file.
+            questions_key (str): The key for the questions in the JSON file.
+            answers_key (str): The key for the answers in the JSON file.
+            labels_key (str): The key for the labels in the JSON file.
+
+        Returns:
+            Tuple[List[str], List[str], List[List[str]], List[int]]: A tuple containing the contexts, questions,
+            answers, and labels of the dataset.
         """
         data = read_json(self.dataset_path)
         contexts_list = []
@@ -83,12 +88,14 @@ class ReClorDataset(AbstractMCQADataset):
         self, index: int
     ) -> Union[Tuple[str, str, List[str], int], Tuple[str, str, List[str]]]:
         """
-        This function returns a tuple of the context, question, and answer for the test set, and a tuple
-        of the context, question, answer, and label for the train and dev sets
+        Get an item from the dataset.
 
-        :param index: The index of the data point we want to access
-        :type index: int
-        :return: A tuple of the context, question, answer, and label
+        Args:
+            index (int): The index of the item.
+
+        Returns:
+            Union[Tuple[str, str, List[str], int], Tuple[str, str, List[str]]]: A tuple containing the context,
+            question, answers, and label (if available) of the item.
         """
         if self.split_set == "test":
             return self.contexts[index], self.questions[index], self.answers[index]
@@ -102,17 +109,18 @@ class ReClorDataset(AbstractMCQADataset):
 
     def __str__(self) -> str:
         """
-        This function returns a string that contains the name of the split set and the number of
-        instances in the split set
+        Get a string representation of the dataset.
 
-        :return: The number of instances in the dataset.
+        Returns:
+            str: A string representation of the dataset.
         """
         return f"The {self.split_set} set of ReClor has {self.__len__()} instances"
 
     def __len__(self) -> int:
         """
-        This function returns the length of the contexts list
+        Get the length of the dataset.
 
-        :return: The length of the contexts list.
+        Returns:
+            int: The length of the dataset.
         """
         return len(self.contexts)

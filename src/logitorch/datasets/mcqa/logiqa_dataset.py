@@ -15,12 +15,17 @@ LOGIQA_ID_TO_LABEL = {0: "a", 1: "b", 2: "c", 3: "d"}
 
 
 class LogiQADataset(AbstractMCQADataset):
+    """A dataset class for LogiQA, a multiple-choice question answering dataset."""
+
     def __init__(self, split_set: str) -> None:
         """
-        The constructor takes in a string as an argument and checks if it is in the list of split sets
+        Initialize the LogiQADataset.
 
-        :param split_set: The split set to use
-        :type split_set: str
+        Args:
+            split_set (str): The split set of the dataset to use.
+
+        Raises:
+            SplitSetError: If the split set is not valid.
         """
         super().__init__()
         try:
@@ -43,9 +48,10 @@ class LogiQADataset(AbstractMCQADataset):
 
     def __read_dataset(self) -> Tuple[List[str], List[str], List[List[str]], List[int]]:
         """
-        This function reads the dataset and returns a tuple of 4 lists: contexts, questions, answers, and labels
+        Read the LogiQA dataset.
 
-        :return: A tuple of lists
+        Returns:
+            Tuple[List[str], List[str], List[List[str]], List[int]]: The dataset as a tuple of lists.
         """
         with open(self.dataset_path, "r", encoding="utf-8") as out:
             data = out.read().split("\n\n")
@@ -67,11 +73,13 @@ class LogiQADataset(AbstractMCQADataset):
 
     def __getitem__(self, index: int) -> Tuple[str, str, List[str], int]:
         """
-        This function returns a tuple of the context, question, answer, and label for the given index
+        Get an item from the dataset.
 
-        :param index: The index of the data point in the dataset
-        :type index: int
-        :return: A tuple of the context, question, answer, and label
+        Args:
+            index (int): The index of the item to retrieve.
+
+        Returns:
+            Tuple[str, str, List[str], int]: The item as a tuple of context, question, answers, and label.
         """
         return (
             self.contexts[index],
@@ -82,17 +90,18 @@ class LogiQADataset(AbstractMCQADataset):
 
     def __str__(self) -> str:
         """
-        This function returns a string that contains the name of the split set and the number of
-        instances in the split set
+        Get a string representation of the dataset.
 
-        :return: The number of instances in the dataset
+        Returns:
+            str: The string representation of the dataset.
         """
         return f"The {self.split_set} set of LogiQA has {self.__len__()} instances"
 
     def __len__(self) -> int:
         """
-        This function returns the length of the contexts list
+        Get the length of the dataset.
 
-        :return: The length of the contexts list
+        Returns:
+            int: The length of the dataset.
         """
         return len(self.contexts)
