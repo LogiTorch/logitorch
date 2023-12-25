@@ -118,6 +118,6 @@ class ARLSATDataset(AbstractMCQADataset):
         Returns the number of instances in the dataset.
 
         Returns:
-            int: The length of the dataset.
+            int: The number of instances in the dataset.
         """
         return len(self.contexts)
