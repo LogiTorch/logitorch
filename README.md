@@ -1,6 +1,6 @@
 # LogiTorch
 
-![image](docs/assets/logo.jpg)
+![image](docs/source/_static/logo_with_text.jpg)
 
 [![Downloads](https://static.pepy.tech/badge/logitorch)](https://pepy.tech/project/logitorch)
 
