@@ -18,7 +18,9 @@ RECLOR_DATASET_FOLDER = f"{DATASETS_FOLDER}/{RECLOR_DATASET}"
 
 
 class ReClorDataset(AbstractMCQADataset):
-    """A dataset class for ReClor, a Multiple Choice Question Answering dataset."""
+    """
+    A dataset class for ReClor, a Multiple Choice Question Answering dataset.
+    """
 
     def __init__(self, split_set: str) -> None:
         """
@@ -118,7 +120,7 @@ class ReClorDataset(AbstractMCQADataset):
 
     def __len__(self) -> int:
         """
-        Get the length of the dataset.
+        Returns the number of instances in the dataset.
 
         Returns:
             int: The length of the dataset.

@@ -15,7 +15,9 @@ LOGIQA_ID_TO_LABEL = {0: "a", 1: "b", 2: "c", 3: "d"}
 
 
 class LogiQADataset(AbstractMCQADataset):
-    """A dataset class for LogiQA, a multiple-choice question answering dataset."""
+    """
+    A dataset class for LogiQA, a multiple-choice question answering dataset.
+    """
 
     def __init__(self, split_set: str) -> None:
         """
@@ -99,7 +101,7 @@ class LogiQADataset(AbstractMCQADataset):
 
     def __len__(self) -> int:
         """
-        Get the length of the dataset.
+        Returns the number of instances in the dataset.
 
         Returns:
             int: The length of the dataset.

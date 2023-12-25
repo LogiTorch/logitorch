@@ -13,7 +13,36 @@ WIKI20K_DATASET_FOLDER = f"{DATASETS_FOLDER}/{WIKI20K_DATASET}"
 
 
 class Wiki20KDataset:
+    """
+    A class representing the Wiki20K dataset for RuleTaker.
+
+    Attributes:
+        dataset_name (str): The name of the dataset.
+        dataset_path (str): The path to the dataset file.
+        sentences (List[str]): The list of sentences in the dataset.
+        labels (List[str]): The list of labels in the dataset.
+
+    Methods:
+        __init__(self, dataset_name: str, size: int = None) -> None:
+            Initializes a Wiki20KDataset object.
+        __read_dataset(self, sentences_key: str, labels_key: str, size: int = None) -> Tuple[List[str], List[str], List[int]]:
+            Reads the dataset file and returns the sentences and labels.
+        __getitem__(self, index: int) -> Tuple[str, str, int]:
+            Returns the sentence, label, and index at the given index.
+        __str__(self) -> str:
+            Returns a string representation of the dataset.
+        __len__(self) -> int:
+            Returns the number of instances in the dataset.
+    """
+
     def __init__(self, dataset_name: str, size: int = None) -> None:
+        """
+        Initializes a Wiki20KDataset object.
+
+        Args:
+            dataset_name (str): The name of the dataset.
+            size (int, optional): The number of instances to load from the dataset. Defaults to None.
+        """
         super().__init__()
         try:
             if dataset_name not in WIKI20K_SUB_DATASETS:
@@ -33,6 +62,17 @@ class Wiki20KDataset:
     def __read_dataset(
         self, sentences_key: str, labels_key: str, size: int = None
     ) -> Tuple[List[str], List[str], List[int]]:
+        """
+        Reads the Wiki20K dataset.
+
+        Args:
+            sentences_key (str): The key for the sentences in the dataset file.
+            labels_key (str): The key for the labels in the dataset file.
+            size (int, optional): The number of instances to read from the dataset. Defaults to None.
+
+        Returns:
+            Tuple[List[str], List[str], List[int]]: A tuple containing the sentences, labels, and indices.
+        """
         data = read_jsonl(self.dataset_path)
         sentences_list = []
         labels_list = []
@@ -47,12 +87,33 @@ class Wiki20KDataset:
         return sentences_list, labels_list
 
     def __getitem__(self, index: int) -> Tuple[str, str, int]:
+        """
+        Returns the sentence, label, and index at the given index.
+
+        Args:
+            index (int): The index of the instance to retrieve.
+
+        Returns:
+            Tuple[str, str, int]: A tuple containing the sentence, label, and index.
+        """
         return self.sentences[index], self.labels[index]
 
     def __str__(self) -> str:
+        """
+        Returns a string representation of the dataset.
+
+        Returns:
+            str: A string representation of the dataset.
+        """
         return (
             f"The set of {self.dataset_name}'s RuleTaker has {self.__len__()} instances"
         )
 
     def __len__(self) -> int:
+        """
+        Returns the number of instances in the dataset.
+
+        Returns:
+            int: The number of instances in the dataset.
+        """
         return len(self.sentences)

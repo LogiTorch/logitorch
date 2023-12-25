@@ -20,7 +20,9 @@ ARLSAT_ID_TO_LABEL = {0: "A", 1: "B", 2: "C", 3: "D", 4: "E"}
 
 
 class ARLSATDataset(AbstractMCQADataset):
-    """ARLSAT dataset for multiple-choice question answering."""
+    """
+    ARLSAT dataset for multiple-choice question answering.
+    """
 
     def __init__(self, split_set: str) -> None:
         super().__init__()
@@ -52,7 +54,8 @@ class ARLSATDataset(AbstractMCQADataset):
         answers_key: str,
         labels_key: str,
     ) -> Tuple[List[str], List[str], List[List[str]], List[int]]:
-        """Reads the ARLSAT dataset.
+        """
+        Reads the ARLSAT dataset.
 
         Args:
             contexts_key (str): The key for the contexts in the JSON file.
@@ -84,7 +87,8 @@ class ARLSATDataset(AbstractMCQADataset):
         return contexts_list, questions_list, answers_list, labels_list
 
     def __getitem__(self, index: int) -> Tuple[str, str, List[str], int]:
-        """Returns the item at the given index.
+        """
+        Returns the item at the given index.
 
         Args:
             index (int): The index of the item.
@@ -101,7 +105,8 @@ class ARLSATDataset(AbstractMCQADataset):
         )
 
     def __str__(self) -> str:
-        """Returns a string representation of the dataset.
+        """
+        Returns a string representation of the dataset.
 
         Returns:
             str: A string representation of the dataset.
@@ -109,7 +114,8 @@ class ARLSATDataset(AbstractMCQADataset):
         return f"The {self.split_set} set of ARLSAT has {self.__len__()} instances"
 
     def __len__(self) -> int:
-        """Returns the length of the dataset.
+        """
+        Returns the number of instances in the dataset.
 
         Returns:
             int: The length of the dataset.
