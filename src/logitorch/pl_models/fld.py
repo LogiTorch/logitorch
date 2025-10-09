@@ -1,8 +1,9 @@
 from typing import Dict, Tuple, Optional
 
-import pytorch_lightning as pl
+import lightning.pytorch as pl
 import torch
-from transformers import get_linear_schedule_with_warmup, AdamW
+from torch.optim import AdamW
+from transformers import get_linear_schedule_with_warmup
 from transformers.modeling_outputs import SequenceClassifierOutput
 from logitorch.models.fld import FLDAllAtOnceProver
 

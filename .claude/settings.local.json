@@ -1,0 +1,14 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(pip index versions:*)",
+      "Bash(source:*)",
+      "Bash(python -m pytest tests/ -v --tb=short)",
+      "Bash(python:*)",
+      "WebFetch(domain:lightning.ai)",
+      "Bash(pip install:*)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}

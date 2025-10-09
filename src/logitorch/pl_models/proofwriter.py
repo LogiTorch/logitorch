@@ -1,6 +1,6 @@
 from typing import Dict, Tuple
 
-import pytorch_lightning as pl
+import lightning.pytorch as pl
 import torch
 from transformers import Adafactor, get_linear_schedule_with_warmup
 from transformers.modeling_outputs import SequenceClassifierOutput

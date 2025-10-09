@@ -12,7 +12,7 @@ skip = ["build",".tox","env"]
 line_length = 88
 
 [tool.mypy]
-python_version = "3.8"
+python_version = "3.12"
 ignore_missing_imports = true
 show_error_codes = true
 exclude = "(docs)/"

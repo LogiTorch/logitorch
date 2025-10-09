@@ -1,6 +1,6 @@
-import pytorch_lightning as pl
+import lightning.pytorch as pl
 import torch.nn as nn
-from pytorch_lightning.callbacks import ModelCheckpoint
+from lightning.pytorch.callbacks import ModelCheckpoint
 from torch.utils.data.dataloader import DataLoader
 
 from logitorch.data_collators.ruletaker_collator import RuleTakerCollator

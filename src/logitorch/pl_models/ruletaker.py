@@ -1,8 +1,9 @@
 from typing import Dict, Tuple
 
-import pytorch_lightning as pl
+import lightning.pytorch as pl
 import torch
-from transformers import AdamW, get_linear_schedule_with_warmup
+from torch.optim import AdamW
+from transformers import get_linear_schedule_with_warmup
 
 from logitorch.models.ruletaker import RuleTaker
 

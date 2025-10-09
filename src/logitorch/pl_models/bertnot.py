@@ -1,10 +1,10 @@
 from typing import Dict, Tuple
 
-import pytorch_lightning as pl
+import lightning.pytorch as pl
 import torch
-from torch.optim import Adam
+from torch.optim import AdamW
 from torch.utils.data.dataloader import DataLoader
-from transformers import AdamW, get_linear_schedule_with_warmup
+from transformers import get_linear_schedule_with_warmup
 
 from logitorch.data_collators.bertnot_collator import BERTNOTWiki20KCollator
 from logitorch.datasets.mlm.wiki20k_dataset import Wiki20KDataset
