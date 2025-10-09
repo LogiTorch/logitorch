@@ -18,11 +18,11 @@
 # -- Project information -----------------------------------------------------
 
 project = "LogiTorch"
-copyright = "2021, Chadi Helwe"
+copyright = "2021-2025, Chadi Helwe"
 author = "Chadi Helwe"
 
 # The full version, including alpha/beta/rc tags
-release = "0.0.1a1"
+release = "0.0.1a2"
 
 
 # -- General configuration ---------------------------------------------------
@@ -38,8 +38,21 @@ extensions = [
     "autoapi.extension",
 ]
 
+# AutoAPI Configuration
 autoapi_type = "python"
 autoapi_dirs = ["../../src"]
+autoapi_options = [
+    "members",
+    "undoc-members",
+    "show-inheritance",
+    "show-module-summary",
+    "imported-members",
+]
+autoapi_ignore = ["*/migrations/*"]
+autoapi_add_toctree_entry = True
+autoapi_python_class_content = "both"
+autoapi_member_order = "groupwise"
+autoapi_keep_files = False
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ["_templates"]
@@ -63,8 +76,7 @@ html_theme = "furo"
 html_static_path = ["_static"]
 html_logo = "_static/logo.png"
 html_theme_options = {
-    'logo_only': True,
-    'display_version': False,
+    # Furo theme options
 }
 
 master_doc = "index"
