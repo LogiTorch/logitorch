@@ -1,6 +1,64 @@
 [build-system]
-requires = ["setuptools", "wheel"]
+requires = ["setuptools>=61.0", "wheel"]
 build-backend = "setuptools.build_meta"
+
+[project]
+name = "logitorch"
+version = "0.0.1a2"
+authors = [
+    {name = "Chadi Helwe", email = "chadi.helwe@gmail.com"}
+]
+description = "LogiTorch is a pytorch-based library for logical reasoning in natural language"
+readme = "README.md"
+requires-python = ">=3.8"
+license = {text = "Apache License 2.0"}
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+]
+dependencies = [
+    "torch~=2.8.0",
+    "lightning~=2.5.0",
+    "transformers~=4.57.0",
+    "requests~=2.32.0",
+    "tqdm~=4.66.0",
+    "textblob~=0.18.0",
+    "nltk~=3.9.0",
+    "protobuf~=6.32.0",
+    "datasets~=4.1.0",
+    "evaluate~=0.4.6",
+]
+
+[project.optional-dependencies]
+dev = [
+    "tox~=4.23.0",
+    "isort~=5.13.0",
+    "mypy~=1.13.0",
+    "black~=24.10.0",
+    "pytest~=8.3.0",
+    "flake8~=7.1.0",
+    "pre-commit~=4.0.0",
+    "types-requests~=2.32.0",
+    "sphinx~=8.1.0",
+    "sphinx-autoapi~=3.4.0",
+    "astroid<4.0",  # Required by sphinx-autoapi 3.4.0
+    "furo~=2024.8.0",
+]
+
+[project.urls]
+Homepage = "https://github.com/ChadiHelwe/logitorch"
+
+[tool.setuptools]
+zip-safe = false
+include-package-data = true
+
+[tool.setuptools.packages.find]
+where = ["src"]
+exclude = ["test*"]
 
 [tool.isort]
 profile = "black"
